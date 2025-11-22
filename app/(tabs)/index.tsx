@@ -5,7 +5,6 @@ import { HelloWave } from "@/components/hello-wave";
 import ParallaxScrollView from "@/components/parallax-scroll-view";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
-import MandarinText from "@/components/ui/MandarinText";
 import { Link } from "expo-router";
 
 export default function HomeScreen() {
@@ -25,8 +24,6 @@ export default function HomeScreen() {
       </ThemedView>
       <ThemedView style={styles.stepContainer}>
         <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>텍스트 테스트</ThemedText>
-        <MandarinText>텍스트 테스트</MandarinText>
         <ThemedText>
           Edit{" "}
           <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText>{" "}
