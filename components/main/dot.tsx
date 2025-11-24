@@ -23,7 +23,7 @@ export default function Dot({ page }: DotProps) {
         ))}
       </View>
 
-      <Button label="다음" onPress={() => router.push("/signup")} />
+      <Button label="다음" onPress={() => router.push("/authhome")} />
     </View>
   );
 }
