@@ -6,6 +6,7 @@ interface MandarinButtonProps extends PressableProps {
   label: string;
   isLoading?: boolean;
   className?: string;
+  textClassName?: string;
 }
 
 export default function Button({
@@ -14,24 +15,21 @@ export default function Button({
   isLoading = false,
   disabled,
   className,
+  textClassName,
   ...props
 }: MandarinButtonProps) {
   return (
     <Pressable
       onPress={isLoading || disabled ? undefined : onPress}
       disabled={isLoading || disabled}
-      className={`w-full py-4 rounded-2xl items-center justify-center flex-row ${
-        disabled ? "bg-gray-300" : "bg-[#FF9D00] active:bg-orange-600"
-      } ${className}`}
+      className={`w-full py-4 rounded-2xl items-center justify-center flex-row bg-[#FF9D00] ${className}`}
       {...props}
     >
       {isLoading ? (
         <ActivityIndicator color="white" />
       ) : (
         <MandarinText
-          className={`text-lg font-bold ${
-            disabled ? "text-gray-500" : "text-white"
-          }`}
+          className={`text-lg font-bold ${textClassName || "text-white"}`}
         >
           {label}
         </MandarinText>

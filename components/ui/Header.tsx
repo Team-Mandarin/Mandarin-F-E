@@ -17,10 +17,8 @@ export default function Header({
   className,
 }: MandarinHeaderProps) {
   return (
-    <SafeAreaView>
-      <View
-        className={`w-full h-14 flex-row items-center justify-between px-4 bg-white ${className}`}
-      >
+    <SafeAreaView edges={["top"]} className={`bg-white ${className}`}>
+      <View className="w-full h-14 flex-row items-center justify-between px-4">
         <View className="w-10">
           {showBackButton && (
             <Pressable onPress={() => router.back()} className="p-2 -ml-2">
