@@ -1,4 +1,5 @@
 import MandarinText from "@/components/ui/MandarinText";
+import { router } from "expo-router";
 import { View } from "react-native";
 import Button from "../ui/Button";
 
@@ -16,9 +17,10 @@ export default function AuthMain() {
         <Button
           label="로그인하기"
           className="bg-[#FFE8C4]"
-          textClassName="text-[#000]"
+          textClassName="text-black"
+          onPress={() => router.push("/login")}
         />
-        <Button label="회원가입하기" />
+        <Button label="회원가입하기" onPress={() => router.push("/signup")} />
       </View>
     </View>
   );
