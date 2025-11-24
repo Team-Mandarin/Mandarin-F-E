@@ -1,6 +1,6 @@
 import { router } from "expo-router";
-import { Pressable, View } from "react-native";
-import MandarinText from "../ui/MandarinText";
+import { View } from "react-native";
+import Button from "../ui/Button";
 
 interface DotProps {
   page: number;
@@ -23,14 +23,7 @@ export default function Dot({ page }: DotProps) {
         ))}
       </View>
 
-      <Pressable
-        className="w-full bg-[#FF9D00] py-4 rounded-full items-center active:bg-orange-600"
-        onPress={() => router.push("/signup")}
-      >
-        <MandarinText className="text-white text-lg font-bold">
-          다음
-        </MandarinText>
-      </Pressable>
+      <Button label="다음" onPress={() => router.push("/signup")} />
     </View>
   );
 }
