@@ -38,7 +38,7 @@ export default function SignUpPage() {
               {name}님,
             </MandarinText>
             <MandarinText className="text-[40px] font-bold">
-              회원가입이{"\n"}
+              회원가입이
             </MandarinText>
             <MandarinText className="text-[40px] font-bold">
               완료되었습니다!{"\n"}{" "}
