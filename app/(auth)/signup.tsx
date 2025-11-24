@@ -1,10 +1,12 @@
-import MandarinText from "@/components/ui/MandarinText";
+import AuthMain from "@/components/auth/authmain";
+import Header from "@/components/ui/Header";
 import { View } from "react-native";
 
 export default function Signup() {
   return (
     <View>
-      <MandarinText>가입</MandarinText>
+      <Header />
+      <AuthMain />
     </View>
   );
 }
