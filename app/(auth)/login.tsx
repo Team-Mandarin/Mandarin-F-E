@@ -1,5 +1,12 @@
-import { Text } from "react-native";
+import LoginPage from "@/components/auth/loginpage";
+import Header from "@/components/ui/Header";
+import { View } from "react-native";
 
 export default function AuthLogin() {
-  return <Text>로그인</Text>;
+  return (
+    <View className="flex-1 bg-white w-full">
+      <Header title="로그인" />
+      <LoginPage />
+    </View>
+  );
 }
