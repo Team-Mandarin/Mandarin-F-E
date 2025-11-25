@@ -3,13 +3,13 @@ import { View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Button from "../ui/Button";
 import MandarinText from "../ui/MandarinText";
+import NumInput from "./idinput";
 import NameInput from "./nameinput";
-import NumInput from "./numinput";
 import PWInput from "./pwinput";
 
 export default function SignUpPage() {
   const [name, setName] = useState("");
-  const [number, setNumber] = useState("");
+  const [iD, setID] = useState("");
   const [password, setPassword] = useState("");
   const [step, setStep] = useState(1);
 
@@ -19,9 +19,7 @@ export default function SignUpPage() {
         <NameInput name={name} setName={setName} setStep={setStep} />
       )}
 
-      {step === 2 && (
-        <NumInput number={number} setNumber={setNumber} setStep={setStep} />
-      )}
+      {step === 2 && <NumInput iD={iD} setID={setID} setStep={setStep} />}
 
       {step === 3 && (
         <PWInput
