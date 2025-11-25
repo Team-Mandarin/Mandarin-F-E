@@ -1,9 +1,10 @@
-import { Text, View } from "react-native";
+import LoveTypePage from "@/components/auth/lovetypepage";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function AuthLoveType() {
   return (
-    <View className="flex-1 bg-white w-full">
-      <Text>Love Type Page</Text>
-    </View>
+    <SafeAreaView className="flex-1 bg-white">
+      <LoveTypePage />
+    </SafeAreaView>
   );
 }
