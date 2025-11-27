@@ -13,7 +13,7 @@ export const toastConfig: ToastConfig = {
         borderRadius: 30,
         width: 224,
         height: 50,
-        marginBottom: 100,
+        marginBottom: 130,
       }}
       contentContainerStyle={{
         paddingHorizontal: 15,

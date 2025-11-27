@@ -1,5 +1,7 @@
+import { router } from "expo-router";
 import { useState } from "react";
 import { View } from "react-native";
+import Toast from "react-native-toast-message";
 import { questions } from "../../constants/lovetypeData";
 import Button from "../ui/Button";
 import MandarinText from "../ui/MandarinText";
@@ -39,7 +41,28 @@ export default function LoveTypePage() {
     if (currentQuestionIndex < questions.length - 1) {
       setCurrentQuestionIndex((prevIndex) => prevIndex + 1);
     } else {
-      console.log("설문 완료!");
+      const allAnswered = Object.values(answers).every(
+        (answer) => answer !== null
+      );
+      if (!allAnswered) {
+        Toast.show({
+          type: "login",
+          text1: "모든 질문에 답변해주세요",
+          visibilityTime: 4000,
+        });
+        return;
+      }
+
+      const type1 = answers[6]! + answers[11]! - answers[1]! >= 2 ? 1 : 0; // 1: Lead, 0: Follow
+      const type2 = answers[5]! + answers[12]! - answers[8]! >= 2 ? 1 : 0; // 1: Accept, 0: Cuddly
+      const type3 = answers[2]! + answers[9]! - answers[7]! >= 2 ? 1 : 0; // 1: Realistic, 0: Passionate
+      const type4 = answers[3]! + answers[10]! - answers[4]! >= 2 ? 1 : 0; // 1: Optimistic, 0: Earnest
+
+      const loveType = `${type1}${type2}${type3}${type4}`;
+
+      // 백엔드에 러브타입 저장
+
+      router.replace("/mylovetype");
     }
   };
 

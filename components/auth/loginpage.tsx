@@ -17,7 +17,8 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
 
   const login = () => {
-    if (iD == "01038268619" && password == "asdf") {
+    Keyboard.dismiss();
+    if (iD == "test" && password == "test") {
       // 나중에 if문 사용해서 러브타입 확인 후 페이지 이동(러브타입 설문 페이지 or 메인 페이지)
       router.replace("/lovetype");
     } else {
