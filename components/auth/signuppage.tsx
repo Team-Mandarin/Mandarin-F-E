@@ -1,3 +1,4 @@
+import { router } from "expo-router";
 import { useState } from "react";
 import { View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -52,7 +53,7 @@ export default function SignUpPage() {
             </MandarinText>
           </View>
           <View className="px-6 mb-10 w-full items-center">
-            <Button label="일단 로그인 하기" />
+            <Button label="일단 로그인 하기" onPress={() => router.replace("/login")} />
           </View>
         </View>
       )}
