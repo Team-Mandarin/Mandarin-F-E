@@ -62,7 +62,7 @@ export default function LoginPage() {
               />
             </View>
 
-            <View className="w-[325px] items-center">
+            <View className="w-[350px] items-center">
               <Button label="로그인" onPress={login} className="w-[325px]" />
             </View>
           </View>

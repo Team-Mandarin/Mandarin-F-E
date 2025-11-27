@@ -1,3 +1,4 @@
+import { router } from "expo-router";
 import { useState } from "react";
 import { View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -7,11 +8,15 @@ import NumInput from "./idinput";
 import NameInput from "./nameinput";
 import PWInput from "./pwinput";
 
-export default function SignUpPage() {
+interface SignUpPageProps {
+  step: number;
+  setStep: (step: number) => void;
+}
+
+export default function SignUpPage({ step, setStep }: SignUpPageProps) {
   const [name, setName] = useState("");
   const [iD, setID] = useState("");
   const [password, setPassword] = useState("");
-  const [step, setStep] = useState(1);
 
   return (
     <SafeAreaView className="flex-1">
@@ -52,7 +57,7 @@ export default function SignUpPage() {
             </MandarinText>
           </View>
           <View className="px-6 mb-10 w-full items-center">
-            <Button label="일단 로그인 하기" />
+            <Button label="일단 로그인 하기" onPress={() => router.replace("/login")} />
           </View>
         </View>
       )}
