@@ -7,11 +7,15 @@ import NumInput from "./idinput";
 import NameInput from "./nameinput";
 import PWInput from "./pwinput";
 
-export default function SignUpPage() {
+interface SignUpPageProps {
+  step: number;
+  setStep: (step: number) => void;
+}
+
+export default function SignUpPage({ step, setStep }: SignUpPageProps) {
   const [name, setName] = useState("");
   const [iD, setID] = useState("");
   const [password, setPassword] = useState("");
-  const [step, setStep] = useState(1);
 
   return (
     <SafeAreaView className="flex-1">

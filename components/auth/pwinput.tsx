@@ -24,8 +24,11 @@ export default function PWInput({
   const [err, setErr] = useState("");
 
   const next = () => {
-    if (password != tempPassword) {
-      setErr("아이디는 공백 제외 영문, 숫자만을 포함해 1~20자로 입력해주세요.");
+    const regex = /^[a-zA-Z0-9]+$/;
+    if (password.length < 1 || password.length > 20 || !regex.test(password)) {
+      setErr("패스워드는 공백 제외 영문, 숫자만을 포함해 1~20자로 입력해주세요.");
+    } else if (password !== tempPassword) {
+      setErr("패스워드가 일치하지 않습니다.");
     } else {
       setStep(4);
     }
