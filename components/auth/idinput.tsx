@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
   Keyboard,
   KeyboardAvoidingView,
@@ -15,6 +16,17 @@ interface NumInputProps {
 }
 
 export default function IDInput({ iD, setID, setStep }: NumInputProps) {
+  const [err, setErr] = useState("");
+
+  const next = () => {
+    const regex = /^[a-zA-Z0-9]+$/;
+    if (iD.length < 1 || iD.length > 20 || !regex.test(iD)) {
+      setErr("아이디는 공백 제외 영문, 숫자만을 포함해 1~20자로 입력해주세요.");
+    } else {
+      setStep(3);
+    }
+  };
+
   return (
     <KeyboardAvoidingView
       behavior={"padding"}
@@ -35,7 +47,9 @@ export default function IDInput({ iD, setID, setStep }: NumInputProps) {
               value={iD}
               onChangeText={(text) => {
                 setID(text);
+                setErr("");
               }}
+              errorMessage={err}
               placeholder="아이디"
             />
           </View>
@@ -43,7 +57,7 @@ export default function IDInput({ iD, setID, setStep }: NumInputProps) {
           <View className="w-[325px] items-center">
             <Button
               label="계속하기"
-              onPress={() => setStep(3)}
+              onPress={next}
               className="w-[325px]"
             />
           </View>
