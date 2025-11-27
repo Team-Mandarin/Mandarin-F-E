@@ -17,7 +17,7 @@ export default function AuthSignUp() {
 
   return (
     <View className="flex-1 bg-white w-full">
-      <Header title="회원가입" onBack={handleBack} />
+      <Header title="회원가입" onBack={handleBack} showBackButton={step !== 4} />
       <SignUpPage step={step} setStep={setStep} />
     </View>
   );
