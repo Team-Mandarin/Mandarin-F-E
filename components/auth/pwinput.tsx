@@ -25,7 +25,7 @@ export default function PWInput({
 
   const next = () => {
     if (password != tempPassword) {
-      setErr("비밀번호가 일치하지 않습니다.");
+      setErr("아이디는 공백 제외 영문, 숫자만을 포함해 1~20자로 입력해주세요.");
     } else {
       setStep(4);
     }
@@ -50,6 +50,7 @@ export default function PWInput({
               value={password}
               onChangeText={(text) => {
                 setPassword(text);
+                setErr("");
               }}
               secureTextEntry={true}
               placeholder="패스워드"
