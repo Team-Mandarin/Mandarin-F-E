@@ -27,7 +27,7 @@ export default function Input({
       </View>
 
       {errorMessage && (
-        <MandarinText className="text-red-500 text-xs mt-1 ml-2">
+        <MandarinText className="text-red-500 text-xs mt-2 ml-0">
           {errorMessage}
         </MandarinText>
       )}
