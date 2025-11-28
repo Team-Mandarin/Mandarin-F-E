@@ -1,3 +1,4 @@
+import { router } from "expo-router";
 import { Image, ScrollView, View } from "react-native";
 import { loveTypeInfo } from "../../constants/loveTypeInfo";
 import Button from "../ui/Button";
@@ -97,12 +98,11 @@ export default function MyLoveTypePage() {
         </View>
       </ScrollView>
 
-      {/* 하단 고정 버튼 */}
       <View className="px-6 py-2">
         <Button
           label="확인"
           onPress={() => {
-            // TODO: 버튼 클릭 시 동작 추가
+            router.replace("/chat");
           }}
         />
       </View>

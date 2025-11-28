@@ -17,8 +17,7 @@ export default function LoginPage() {
 
   const login = () => {
     Keyboard.dismiss();
-    // 일단 로그인 버튼 누르면 chat 탭으로 이동
-    router.replace("/(tabs)/chat");
+    router.replace("/lovetype");
   };
 
   return (
