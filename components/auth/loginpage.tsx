@@ -7,7 +7,6 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import Toast from "react-native-toast-message";
 import Button from "../ui/Button";
 import Input from "../ui/Input";
 import MandarinText from "../ui/MandarinText";
@@ -18,18 +17,8 @@ export default function LoginPage() {
 
   const login = () => {
     Keyboard.dismiss();
-    if (iD == "test" && password == "test") {
-      // 나중에 if문 사용해서 러브타입 확인 후 페이지 이동(러브타입 설문 페이지 or 메인 페이지)
-      router.replace("/lovetype");
-    } else {
-      Toast.show({
-        type: "login",
-        position: "bottom",
-        text1: "회원 정보가 없거나",
-        text2: "ID 혹은 PW가 잘못되었습니다",
-        visibilityTime: 4000,
-      });
-    }
+    // 일단 로그인 버튼 누르면 chat 탭으로 이동
+    router.replace("/(tabs)/chat");
   };
 
   return (

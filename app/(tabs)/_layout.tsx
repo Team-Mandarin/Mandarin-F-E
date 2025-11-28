@@ -10,8 +10,8 @@ export default function TabLayout() {
         tabBarActiveTintColor: "#FF9D00",
         tabBarInactiveTintColor: "#999999",
         tabBarStyle: {
-          height: 70,
-          paddingTop: 10,
+          height: 75,
+          paddingTop: 0,
           paddingBottom: 10,
           backgroundColor: "#FFFFFF",
           borderTopWidth: 1,
@@ -32,10 +32,10 @@ export default function TabLayout() {
             <Image
               source={
                 focused
-                  ? require("../../assets/images/chat_icon_selected.png")
-                  : require("../../assets/images/chat_icon_unselected.png")
+                  ? require("../../assets/images/chat_selected_icon.png")
+                  : require("../../assets/images/chat_unselected_icon.png")
               }
-              style={{ width: 24, height: 24 }}
+              style={{ width: 20, height: 20 }}
               resizeMode="contain"
             />
           ),
@@ -49,10 +49,10 @@ export default function TabLayout() {
             <Image
               source={
                 focused
-                  ? require("../../assets/images/report_icon_selected.png")
-                  : require("../../assets/images/report_icon_unselected.png")
+                  ? require("../../assets/images/report_selected_icon.png")
+                  : require("../../assets/images/report_unselected_icon.png")
               }
-              style={{ width: 24, height: 24 }}
+              style={{ width: 20, height: 20 }}
               resizeMode="contain"
             />
           ),
@@ -66,10 +66,10 @@ export default function TabLayout() {
             <Image
               source={
                 focused
-                  ? require("../../assets/images/profile_icon_selected.png")
-                  : require("../../assets/images/profile_icon_unselected.png")
+                  ? require("../../assets/images/profile_selected_icon.png")
+                  : require("../../assets/images/profile_unselected_icon.png")
               }
-              style={{ width: 24, height: 24 }}
+              style={{ width: 20, height: 20 }}
               resizeMode="contain"
             />
           ),
