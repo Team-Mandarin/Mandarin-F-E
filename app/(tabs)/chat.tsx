@@ -1,6 +1,7 @@
 import ChatListItem from "@/components/ui/CharacterListItem";
 import MandarinText from "@/components/ui/MandarinText";
 import TabHeader from "@/components/ui/TabHeader";
+import { router } from "expo-router";
 import React, { useState } from "react";
 import { FlatList, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -30,6 +31,7 @@ export default function ChatTab() {
     console.log("캐릭터 생성 화면으로 이동");
     // 추후 캐릭터 생성 화면으로 이동하는 로직 구현
     // router.push("/chat_create");
+    router.push("/char_add1");
   }
 
   // 캐릭터 상세 화면으로 이동하는 함수

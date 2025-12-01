@@ -28,7 +28,7 @@ export default function Header({
 
   return (
     <SafeAreaView edges={["top"]} className={`bg-white ${className}`}>
-      <View className="w-full h-14 flex-row items-center justify-between px-4">
+      <View className="w-full py-2.5 flex-row items-center justify-between px-4">
         <View className="w-10">
           {showBackButton && (
             <Pressable onPress={handleBack} className="p-2 -ml-2">
