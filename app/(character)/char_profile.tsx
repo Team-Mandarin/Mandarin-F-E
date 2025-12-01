@@ -219,8 +219,7 @@ export default function CharacterProfileScreen() {
     // router.push(`/chat_room?id=${characterId}`);
   };
 
-  const defaultImage = require("@/assets/images/default_profile_img.png");
-  const displayImage = profile?.imageUrl ? { uri: profile.imageUrl } : defaultImage;
+  const hasImage = profile?.imageUrl;
 
   if (isLoading || !profile) {
     return (
@@ -245,12 +244,16 @@ export default function CharacterProfileScreen() {
       <ScrollView className="flex-1" contentContainerStyle={{ paddingBottom: 120 }}>
         {/* 프로필 이미지 */}
         <View className="items-center mt-4 mb-4">
-          <View className="w-[140px] h-[140px] rounded-full overflow-hidden bg-gray-200">
-            <Image
-              source={displayImage}
-              className="w-full h-full"
-              resizeMode="cover"
-            />
+          <View className="w-[140px] h-[140px] rounded-full overflow-hidden bg-gray-200 items-center justify-center">
+            {hasImage ? (
+              <Image
+                source={{ uri: profile.imageUrl }}
+                className="w-full h-full"
+                resizeMode="cover"
+              />
+            ) : (
+              <Ionicons name="person" size={60} color="#9CA3AF" />
+            )}
           </View>
         </View>
 
