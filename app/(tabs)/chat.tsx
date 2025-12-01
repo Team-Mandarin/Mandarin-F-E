@@ -17,7 +17,7 @@ interface Character {
 // 백엔드 연동 전 임시 데이터 (3개)
 const sampleCharacters : Character[] = [
   { id: 1, name: "안도현", imageUrl: "https://via.placeholder.com/150" },
-  { id: 2, name: "성윤수", imageUrl: undefined },
+  { id: 2, name: "성윤수", imageUrl: "https://via.placeholder.com/150" },
   { id: 3, name: "이동근", imageUrl: "https://via.placeholder.com/150" },
 ];
 
