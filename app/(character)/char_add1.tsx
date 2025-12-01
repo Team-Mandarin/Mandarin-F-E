@@ -4,7 +4,7 @@ import { Ionicons } from "@expo/vector-icons";
 import DateTimePicker from "@react-native-community/datetimepicker"; // 📅 날짜 선택 라이브러리
 import * as ImagePicker from "expo-image-picker"; // 📷 이미지 선택 라이브러리
 import { router } from "expo-router";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Image, Platform, Pressable, ScrollView, TextInput, View } from "react-native";
 import RNPickerSelect from "react-native-picker-select"; // 🎡 나이 선택 라이브러리
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -58,7 +58,7 @@ const RelationshipButton: React.FC<RelationshipButtonProps> = ({
 
 export default function CharacterAdd1() {
   const insets = useSafeAreaInsets();
-  const { resetData } = useCharacterCreate();
+  const { data, updateData, resetData, isEditMode } = useCharacterCreate();
   
   // 폼 상태 관리
   const [name, setName] = useState("");
@@ -70,6 +70,17 @@ export default function CharacterAdd1() {
   const [showDatePicker, setShowDatePicker] = useState(false); // DatePicker 표시 여부
   const [characterImage, setCharacterImage] = useState<string | null>(null); // 캐릭터 이미지
   const [showExitDialog, setShowExitDialog] = useState(false); // 나가기 다이얼로그 표시 여부
+
+  // 편집 모드일 때 기존 데이터 로드
+  useEffect(() => {
+    if (isEditMode && data) {
+      setName(data.name || "");
+      setAge(data.age || null);
+      setRelationshipType(data.relationshipType || null);
+      setDateMet(data.dateMet || null);
+      setCharacterImage(data.characterImage || null);
+    }
+  }, [isEditMode]);
 
   // 갤러리에서 이미지 선택
   const pickImage = async () => {
@@ -117,15 +128,16 @@ export default function CharacterAdd1() {
       return;
     }
 
-    const characterData = { 
-      name, 
-      age: age ? parseInt(age) : null, 
-      relationshipType, 
-      dateMet: dateMet?.toISOString().split('T')[0],
+    // Context에 데이터 저장
+    updateData({
+      name,
+      age,
+      relationshipType,
+      dateMet,
       characterImage,
-    };
+    });
     
-    console.log("폼 데이터:", characterData); 
+    console.log("폼 데이터:", { name, age, relationshipType, dateMet, characterImage }); 
     
     // char_add2로 이동
     router.push("/char_add2");
@@ -159,7 +171,7 @@ export default function CharacterAdd1() {
         {/* 1. 제목 및 설명 */}
         <View className="mt-5 mb-8 pl-5">
           <MandarinText className="text-[32px] font-bold mb-1">
-            캐릭터 생성
+            {isEditMode ? "캐릭터 수정" : "캐릭터 생성"}
           </MandarinText>
           <MandarinText className="text-[12px] text-[#737373] leading-4">
             [user_name]님의 연인에 대해 말해주세요.{"\n"}
@@ -302,7 +314,10 @@ export default function CharacterAdd1() {
       <ConfirmDialog
         visible={showExitDialog}
         title="정말 나가시나요?"
-        message={`지금 나가시면 캐릭터 생성을 처음부터\n다시 시작해야해요.`}
+        message={isEditMode 
+          ? `지금 나가시면 캐릭터 수정을 처음부터\n다시 시작해야해요.`
+          : `지금 나가시면 캐릭터 생성을 처음부터\n다시 시작해야해요.`
+        }
         confirmText="나가기"
         cancelText="취소"
         onConfirm={handleExitConfirm}
