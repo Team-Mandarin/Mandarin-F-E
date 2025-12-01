@@ -1,4 +1,4 @@
-// app/char_add2.tsx
+// app/(character)/char_add2.tsx
 
 import { router } from "expo-router";
 import React from "react";
@@ -112,3 +112,4 @@ export default function CharacterAdd2() {
     </View>
   );
 }
+
