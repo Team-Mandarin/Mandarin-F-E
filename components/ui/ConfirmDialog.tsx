@@ -31,7 +31,7 @@ export default function ConfirmDialog({
       onRequestClose={onCancel}
     >
       <View className="flex-1 justify-center items-center bg-black/50">
-        <View className="w-[320px] bg-[#FFFBEF] rounded-[20px] px-6 py-8">
+        <View className="w-[320px] bg-[#FFFFFF] rounded-[20px] px-6 py-8">
           {/* 제목 */}
           <MandarinText className="text-[24px] font-bold text-center mb-4">
             {title}
