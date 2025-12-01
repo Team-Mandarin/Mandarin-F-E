@@ -37,8 +37,10 @@ export default function ChatTab() {
   // 캐릭터 상세 화면으로 이동하는 함수
   const handleCharacterDetail = (characterId: number) => {
     console.log(`캐릭터 ${characterId} 상세 화면으로 이동`);
-    // 추후 캐릭터 상세 화면으로 이동하는 로직 구현
-    // router.push(`/chat/${characterId}번 캐릭터와의 채팅 화면`);
+    router.push({
+      pathname: "/char_profile" as const,
+      params: { id: String(characterId) },
+    } as any);
   }
 
   return (
