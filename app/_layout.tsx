@@ -7,6 +7,7 @@ import "react-native-reanimated";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import Toast from "react-native-toast-message";
 import { toastConfig } from "../components/ui/ToastConfig";
+import { CharacterCreateProvider } from "../contexts/CharacterCreateContext";
 import "../global.css";
 
 SplashScreen.preventAutoHideAsync();
@@ -42,8 +43,10 @@ export default function RootLayout() {
   return (
     <SafeAreaProvider>
       <ThemeProvider value={DefaultTheme}>
-        <Stack screenOptions={{ headerShown: false }} />
-        <Toast config={toastConfig} />
+        <CharacterCreateProvider>
+          <Stack screenOptions={{ headerShown: false }} />
+          <Toast config={toastConfig} />
+        </CharacterCreateProvider>
       </ThemeProvider>
     </SafeAreaProvider>
   );

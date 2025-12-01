@@ -12,8 +12,10 @@ import Toast from "react-native-toast-message";
 
 // 커스텀 컴포넌트 임포트
 import Button from "@/components/ui/Button";
+import ConfirmDialog from "@/components/ui/ConfirmDialog";
 import Header from "@/components/ui/Header";
 import MandarinText from "@/components/ui/MandarinText";
+import { useCharacterCreate } from "@/contexts/CharacterCreateContext";
 
 // --- 상수 및 도우미 컴포넌트 ---
 
@@ -56,6 +58,7 @@ const RelationshipButton: React.FC<RelationshipButtonProps> = ({
 
 export default function CharacterAdd1() {
   const insets = useSafeAreaInsets();
+  const { resetData } = useCharacterCreate();
   
   // 폼 상태 관리
   const [name, setName] = useState("");
@@ -66,6 +69,7 @@ export default function CharacterAdd1() {
   const [dateMet, setDateMet] = useState<Date | null>(null); // 만난 날짜
   const [showDatePicker, setShowDatePicker] = useState(false); // DatePicker 표시 여부
   const [characterImage, setCharacterImage] = useState<string | null>(null); // 캐릭터 이미지
+  const [showExitDialog, setShowExitDialog] = useState(false); // 나가기 다이얼로그 표시 여부
 
   // 갤러리에서 이미지 선택
   const pickImage = async () => {
@@ -129,6 +133,13 @@ export default function CharacterAdd1() {
 
   // 뒤로가기 처리
   const handleBack = () => {
+    setShowExitDialog(true);
+  };
+
+  // 나가기 확인
+  const handleExitConfirm = () => {
+    setShowExitDialog(false);
+    resetData(); // 모든 캐릭터 생성 데이터 초기화
     router.back();
   };
 
@@ -286,6 +297,17 @@ export default function CharacterAdd1() {
         </View>
         
       </ScrollView>
+
+      {/* 나가기 확인 다이얼로그 */}
+      <ConfirmDialog
+        visible={showExitDialog}
+        title="정말 나가시나요?"
+        message={`지금 나가시면 캐릭터 생성을 처음부터\n다시 시작해야해요.`}
+        confirmText="나가기"
+        cancelText="취소"
+        onConfirm={handleExitConfirm}
+        onCancel={() => setShowExitDialog(false)}
+      />
     </View>
   );
 }
