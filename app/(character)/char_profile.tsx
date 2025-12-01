@@ -44,7 +44,7 @@ const MOCK_CHARACTER_PROFILES: Record<number, CharacterProfile> = {
     id: 1,
     name: "안도현",
     age: 25,
-    imageUrl: "https://via.placeholder.com/150",
+    imageUrl: undefined,
     dateMet: "2024-11-23",
     relationshipType: "썸",
     loveType: "블러드 오렌지",
@@ -62,7 +62,7 @@ const MOCK_CHARACTER_PROFILES: Record<number, CharacterProfile> = {
     id: 3,
     name: "이동근",
     age: 24,
-    imageUrl: "https://via.placeholder.com/150",
+    imageUrl: undefined,
     dateMet: "2024-06-01",
     relationshipType: "결별",
     loveType: "자몽",
@@ -71,7 +71,7 @@ const MOCK_CHARACTER_PROFILES: Record<number, CharacterProfile> = {
     id: 4,
     name: "정민서",
     age: 26,
-    imageUrl: "https://via.placeholder.com/150",
+    imageUrl: undefined,
     dateMet: "2024-09-10",
     relationshipType: "연애",
     loveType: "만다린",
@@ -237,7 +237,7 @@ export default function CharacterProfileScreen() {
           <Ionicons name="chevron-back" size={24} color="black" />
         </Pressable>
         <Pressable onPress={handleEdit}>
-          <MandarinText className="text-[16px] text-black">편집</MandarinText>
+          <MandarinText className="text-[18px] text-black">편집</MandarinText>
         </Pressable>
       </View>
 
