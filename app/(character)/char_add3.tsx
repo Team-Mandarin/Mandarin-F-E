@@ -1,4 +1,4 @@
-// app/char_add3.tsx
+// app/(character)/char_add3.tsx
 
 import { router } from "expo-router";
 import React, { useState } from "react";
@@ -103,3 +103,4 @@ export default function CharacterAdd3() {
     </View>
   );
 }
+

@@ -1,4 +1,4 @@
-// app/char_add1.tsx
+// app/(character)/char_add1.tsx
 
 import { Ionicons } from "@expo/vector-icons";
 import DateTimePicker from "@react-native-community/datetimepicker"; // 📅 날짜 선택 라이브러리

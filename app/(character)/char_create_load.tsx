@@ -1,4 +1,4 @@
-// app/char_create_load.tsx
+// app/(character)/char_create_load.tsx
 
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
