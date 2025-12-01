@@ -3,21 +3,43 @@
 import { Ionicons } from "@expo/vector-icons";
 import * as DocumentPicker from "expo-document-picker";
 import { router } from "expo-router";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Pressable, ScrollView, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Toast from "react-native-toast-message";
 
 import Button from "@/components/ui/Button";
+import ConfirmDialog from "@/components/ui/ConfirmDialog";
 import Header from "@/components/ui/Header";
 import MandarinText from "@/components/ui/MandarinText";
+import { useCharacterCreate } from "@/contexts/CharacterCreateContext";
 
 export default function CharacterAdd4() {
   const insets = useSafeAreaInsets();
+  const { data, updateData, isEditMode, resetData } = useCharacterCreate();
   const [uploadedFile, setUploadedFile] = useState<string | null>(null);
+  const [showExitDialog, setShowExitDialog] = useState(false);
+
+  // 편집 모드일 때 기존 데이터 로드
+  useEffect(() => {
+    if (isEditMode && data.uploadedFile) {
+      setUploadedFile(data.uploadedFile);
+    }
+  }, [isEditMode]);
 
   const handleBack = () => {
-    router.back();
+    if (isEditMode) {
+      setShowExitDialog(true);
+    } else {
+      router.back();
+    }
+  };
+
+  const handleExitConfirm = () => {
+    setShowExitDialog(false);
+    resetData();
+    // 모든 편집 화면 나가기
+    router.replace("/(tabs)/chat");
   };
 
   const handleFilePick = async () => {
@@ -37,12 +59,18 @@ export default function CharacterAdd4() {
   };
 
   const handleCreate = () => {
-    // 캐릭터 생성 완료
+    // Context에 데이터 저장
+    updateData({ uploadedFile });
+
+    // 캐릭터 생성/수정 완료
     Toast.show({
       type: "login",
-      text1: "캐릭터 생성이 완료되었습니다",
+      text1: isEditMode ? "캐릭터 수정이 완료되었습니다" : "캐릭터 생성이 완료되었습니다",
       visibilityTime: 3000,
     });
+
+    // 데이터 초기화
+    resetData();
 
     // chat.tsx로 이동 (탭 네비게이션의 chat으로)
     router.replace("/(tabs)/chat");
@@ -110,15 +138,26 @@ export default function CharacterAdd4() {
           <Ionicons name="add" size={24} color="black" />
         </Pressable>
 
-        {/* 3. 생성하기 버튼 */}
+        {/* 3. 생성하기/저장하기 버튼 */}
         <View className="w-[325px] self-center mt-auto pt-10 mb-10">
           <Button
             textClassName="text-white"
-            label="생성하기"
+            label={isEditMode ? "저장하기" : "생성하기"}
             onPress={handleCreate}
           />
         </View>
       </ScrollView>
+
+      {/* 나가기 확인 다이얼로그 (편집 모드) */}
+      <ConfirmDialog
+        visible={showExitDialog}
+        title="정말 나가시나요?"
+        message={`지금 나가시면 캐릭터 수정을 처음부터\n다시 시작해야해요.`}
+        confirmText="나가기"
+        cancelText="취소"
+        onConfirm={handleExitConfirm}
+        onCancel={() => setShowExitDialog(false)}
+      />
     </View>
   );
 }

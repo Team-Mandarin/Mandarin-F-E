@@ -1,23 +1,45 @@
 // app/(character)/char_add3.tsx
 
 import { router } from "expo-router";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { ScrollView, TextInput, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Toast from "react-native-toast-message";
 
 import Button from "@/components/ui/Button";
+import ConfirmDialog from "@/components/ui/ConfirmDialog";
 import Header from "@/components/ui/Header";
 import MandarinText from "@/components/ui/MandarinText";
+import { useCharacterCreate } from "@/contexts/CharacterCreateContext";
 
 const MAX_CHARACTERS = 2000;
 
 export default function CharacterAdd3() {
   const insets = useSafeAreaInsets();
+  const { data, updateData, isEditMode, resetData } = useCharacterCreate();
   const [history, setHistory] = useState("");
+  const [showExitDialog, setShowExitDialog] = useState(false);
+
+  // 편집 모드일 때 기존 데이터 로드
+  useEffect(() => {
+    if (isEditMode && data.history) {
+      setHistory(data.history);
+    }
+  }, [isEditMode]);
 
   const handleBack = () => {
-    router.back();
+    if (isEditMode) {
+      setShowExitDialog(true);
+    } else {
+      router.back();
+    }
+  };
+
+  const handleExitConfirm = () => {
+    setShowExitDialog(false);
+    resetData();
+    // 모든 편집 화면 나가기
+    router.replace("/(tabs)/chat");
   };
 
   const handleNext = () => {
@@ -30,6 +52,8 @@ export default function CharacterAdd3() {
       return;
     }
 
+    // Context에 데이터 저장
+    updateData({ history });
     console.log("히스토리:", history);
     
     // char_add4로 이동
@@ -100,6 +124,17 @@ export default function CharacterAdd3() {
           />
         </View>
       </ScrollView>
+
+      {/* 나가기 확인 다이얼로그 (편집 모드) */}
+      <ConfirmDialog
+        visible={showExitDialog}
+        title="정말 나가시나요?"
+        message={`지금 나가시면 캐릭터 수정을 처음부터\n다시 시작해야해요.`}
+        confirmText="나가기"
+        cancelText="취소"
+        onConfirm={handleExitConfirm}
+        onCancel={() => setShowExitDialog(false)}
+      />
     </View>
   );
 }

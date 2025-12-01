@@ -8,6 +8,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 import Button from "@/components/ui/Button";
 import MandarinText from "@/components/ui/MandarinText";
+import { useCharacterCreate } from "@/contexts/CharacterCreateContext";
 
 // ============================================
 // 타입 정의 (추후 백엔드 연동 시 별도 파일로 분리 가능)
@@ -153,6 +154,7 @@ type TabType = "profile" | "relation";
 export default function CharacterProfileScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const characterId = parseInt(id || "1", 10);
+  const { setEditMode, initializeEditData } = useCharacterCreate();
 
   // 상태 관리
   const [activeTab, setActiveTab] = useState<TabType>("profile");
@@ -186,9 +188,29 @@ export default function CharacterProfileScreen() {
   };
 
   const handleEdit = () => {
+    if (!profile) return;
+    
+    // 편집 모드 설정
+    setEditMode(true, characterId);
+    
+    // 기존 캐릭터 데이터를 Context에 저장
+    // relationshipType 변환 (한글 -> 영문)
+    const relationshipTypeMap: Record<string, "SUM" | "LOVE" | "BREAKUP"> = {
+      "썸": "SUM",
+      "연애": "LOVE",
+      "결별": "BREAKUP",
+    };
+    
+    initializeEditData({
+      name: profile.name,
+      age: String(profile.age),
+      relationshipType: relationshipTypeMap[profile.relationshipType] || null,
+      dateMet: profile.dateMet ? new Date(profile.dateMet) : null,
+      characterImage: profile.imageUrl || null,
+    });
+    
     console.log("편집 화면으로 이동");
-    // TODO: 추후 편집 화면 구현
-    // router.push(`/char_edit?id=${characterId}`);
+    router.push("/char_add1");
   };
 
   const handleStartSimulation = () => {

@@ -1,13 +1,14 @@
 // app/(character)/char_add2.tsx
 
 import { router } from "expo-router";
-import React from "react";
+import React, { useState } from "react";
 import { ScrollView, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Toast from "react-native-toast-message";
 
 import LoveTypeButton from "@/components/auth/lovetypebutton";
 import Button from "@/components/ui/Button";
+import ConfirmDialog from "@/components/ui/ConfirmDialog";
 import Header from "@/components/ui/Header";
 import MandarinText from "@/components/ui/MandarinText";
 import { questions as allQuestions } from "@/constants/lovetypeData";
@@ -21,8 +22,9 @@ const questions = selectedQuestionIds.map(
 
 export default function CharacterAdd2() {
   const insets = useSafeAreaInsets();
-  const { data, updateData } = useCharacterCreate();
+  const { data, updateData, isEditMode, resetData } = useCharacterCreate();
   const answers = data.loveTypeAnswers;
+  const [showExitDialog, setShowExitDialog] = useState(false);
 
   const handleAnswerSelect = (questionId: number, selectedAnswer: number) => {
     updateData({
@@ -55,7 +57,18 @@ export default function CharacterAdd2() {
   };
 
   const handleBack = () => {
+    if (isEditMode) {
+      setShowExitDialog(true);
+    } else {
+      router.back();
+    }
+  };
+
+  const handleExitConfirm = () => {
+    setShowExitDialog(false);
+    resetData();
     router.back();
+    router.back(); // char_add1도 나가기
   };
 
   return (
@@ -109,6 +122,17 @@ export default function CharacterAdd2() {
           />
         </View>
       </ScrollView>
+
+      {/* 나가기 확인 다이얼로그 (편집 모드) */}
+      <ConfirmDialog
+        visible={showExitDialog}
+        title="정말 나가시나요?"
+        message={`지금 나가시면 캐릭터 수정을 처음부터\n다시 시작해야해요.`}
+        confirmText="나가기"
+        cancelText="취소"
+        onConfirm={handleExitConfirm}
+        onCancel={() => setShowExitDialog(false)}
+      />
     </View>
   );
 }
