@@ -26,7 +26,9 @@ export default function PWInput({
   const next = () => {
     const regex = /^[a-zA-Z0-9]+$/;
     if (password.length < 7 || password.length > 20 || !regex.test(password)) {
-      setErr("패스워드는 공백 제외 영문, 숫자만을 포함해 7~20자로 입력해주세요.");
+      setErr(
+        "패스워드는 공백 제외 영문, 숫자만을 포함해 7~20자로 입력해주세요."
+      );
     } else if (password !== tempPassword) {
       setErr("패스워드가 일치하지 않습니다.");
     } else {
@@ -46,7 +48,7 @@ export default function PWInput({
             <MandarinText className="text-black text-[27px]">
               사용할 패스워드를
             </MandarinText>
-            <MandarinText className="text-black text-[27px] mb-10">
+            <MandarinText className="text-black text-[27px] mb-16">
               입력해주세요
             </MandarinText>
             <Input

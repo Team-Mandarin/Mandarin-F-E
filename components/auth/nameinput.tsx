@@ -34,9 +34,9 @@ export default function NameInput({ name, setName, setStep }: NameInputProps) {
       keyboardVerticalOffset={90}
     >
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <View className="flex-1 w-full items-center justify-between pb-6">
+        <View className="flex-1 w-full items-center justify-between">
           <View className="w-full items-center mt-20">
-            <MandarinText className="text-black text-[27px] mb-10">
+            <MandarinText className="text-black text-[27px] mb-32">
               이름을 입력해주세요
             </MandarinText>
 

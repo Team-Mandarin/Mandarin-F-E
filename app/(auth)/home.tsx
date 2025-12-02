@@ -1,12 +1,12 @@
 import AuthMain from "@/components/auth/authmain";
 import Header from "@/components/ui/Header";
-import { View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function AuthHome() {
   return (
-    <View>
+    <SafeAreaView className="bg-white">
       <Header />
       <AuthMain />
-    </View>
+    </SafeAreaView>
   );
 }

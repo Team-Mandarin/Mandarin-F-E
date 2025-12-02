@@ -2,7 +2,6 @@ import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import React from "react";
 import { Pressable, View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
 import MandarinText from "./MandarinText";
 
 interface MandarinHeaderProps {
@@ -27,8 +26,8 @@ export default function Header({
   };
 
   return (
-    <SafeAreaView edges={["top"]} className={`bg-white ${className}`}>
-      <View className="w-full py-2.5 flex-row items-center justify-between px-4">
+    <View>
+      <View className="w-full h-14 flex-row items-center justify-between px-4">
         <View className="w-10">
           {showBackButton && (
             <Pressable onPress={handleBack} className="p-2 -ml-2">
@@ -47,6 +46,6 @@ export default function Header({
 
         <View className="w-10" />
       </View>
-    </SafeAreaView>
+    </View>
   );
 }
