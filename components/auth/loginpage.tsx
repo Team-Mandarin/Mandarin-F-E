@@ -6,14 +6,15 @@ import {
   TouchableWithoutFeedback,
   View,
 } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
 import Button from "../ui/Button";
+import CheckBox from "../ui/CheckBox";
 import Input from "../ui/Input";
 import MandarinText from "../ui/MandarinText";
 
 export default function LoginPage() {
   const [iD, setID] = useState("");
   const [password, setPassword] = useState("");
+  const [autoLogin, setAutoLogin] = useState(false);
 
   const login = () => {
     Keyboard.dismiss();
@@ -21,7 +22,7 @@ export default function LoginPage() {
   };
 
   return (
-    <SafeAreaView className="flex-1">
+    <View className="flex-1">
       <KeyboardAvoidingView
         behavior={"padding"}
         className="flex-1 w-full"
@@ -48,6 +49,15 @@ export default function LoginPage() {
                 secureTextEntry={true}
                 placeholder="패스워드"
               />
+              <View className="w-full items-start ml-16">
+                <CheckBox
+                  label="자동 로그인"
+                  checked={autoLogin}
+                  onCheckedChange={(checked) => {
+                    setAutoLogin(checked);
+                  }}
+                />
+              </View>
             </View>
 
             <View className="w-[350px] items-center">
@@ -56,6 +66,6 @@ export default function LoginPage() {
           </View>
         </TouchableWithoutFeedback>
       </KeyboardAvoidingView>
-    </SafeAreaView>
+    </View>
   );
 }

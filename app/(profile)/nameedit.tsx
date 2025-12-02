@@ -1,4 +1,4 @@
-import ProfileEditPage from "@/components/profile/profileeditpage";
+import NameEditPage from "@/components/profile/nameeditpage";
 import Header from "@/components/ui/Header";
 import MandarinText from "@/components/ui/MandarinText";
 import { router } from "expo-router";
@@ -13,25 +13,16 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-export default function ProfileEdit() {
+export default function NameEdit() {
   const [showModal, setShowModal] = useState(false);
 
-  const handleModal = () => {
+  const handleBack = () => {
     setShowModal(true);
   };
 
-  const handleWithdraw = async () => {
-    // TODO: 회원 탈퇴 API 호출
-    // try {
-    //   await api.withdraw();
-    //   router.replace("/login");
-    // } catch (error) {
-    //   console.error(error);
-    // }
-
+  const confirmExit = () => {
     setShowModal(false);
-    // 탈퇴 성공 후 로그인 화면으로 이동
-    router.replace("/home");
+    router.back();
   };
 
   return (
@@ -39,11 +30,11 @@ export default function ProfileEdit() {
       <KeyboardAvoidingView behavior="padding" className="flex-1">
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <View className="flex-1">
-            <Header />
+            <Header onBack={handleBack} />
             <MandarinText className="text-[32px] font-bold ml-8 mt-4">
-              회원 정보 관리
+              이름 변경
             </MandarinText>
-            <ProfileEditPage handleModal={handleModal} />
+            <NameEditPage />
           </View>
         </TouchableWithoutFeedback>
       </KeyboardAvoidingView>
@@ -52,18 +43,21 @@ export default function ProfileEdit() {
         <View className="flex-1 bg-black/50 justify-center items-center">
           <View className="bg-white rounded-2xl p-6 mx-8 w-[280px]">
             <MandarinText className="text-lg font-bold text-center mb-2">
-              정말 탈퇴하시겠어요?
+              정말 나가시나요?
+            </MandarinText>
+            <MandarinText className="text-sm text-gray-500 text-center">
+              지금 나가시면 이름 수정을 처음부터
             </MandarinText>
             <MandarinText className="text-sm text-gray-500 text-center mb-6">
-              탈퇴하시면 모든 데이터가 삭제되며{"\n"}복구할 수 없습니다.
+              다시 시작해야해요.
             </MandarinText>
             <View className="flex-row gap-3">
               <Pressable
-                onPress={handleWithdraw}
-                className="flex-1 py-3 rounded-xl bg-[#FF8A8A]"
+                onPress={confirmExit}
+                className="flex-1 py-3 rounded-xl bg-[#FF9D00]"
               >
                 <MandarinText className="text-center text-white">
-                  탈퇴하기
+                  나가기
                 </MandarinText>
               </Pressable>
               <Pressable

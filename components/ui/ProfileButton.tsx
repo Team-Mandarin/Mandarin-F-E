@@ -28,7 +28,9 @@ export default function ProfileButton({
     <Pressable
       onPress={isLoading || disabled ? undefined : onPress}
       disabled={isLoading || disabled}
-      className={`w-[95%] py-4 rounded-2xl items-center justify-center flex-row bg-white ${className}`}
+      className={`w-[95%] py-4 rounded-2xl items-center justify-center flex-row h-[61px] ${
+        className || "bg-white"
+      }`}
       {...props}
     >
       {isLoading ? (

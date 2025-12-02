@@ -15,11 +15,9 @@ export default function Input({
 }: MandarinInputProps) {
   return (
     <View className={`w-[335px] mb-3 ${containerClassName}`}>
-      <View
-        className={`w-full h-14 flex-row items-end border-b-2 border-black pb-1`}
-      >
+      <View className={`w-full flex-row bg-[#f2f2f2] rounded-xl p-4`}>
         <TextInput
-          className={`flex-1 p-0 text-[25px] text-black ${className}`}
+          className={`flex-1 p-0 text-[20px] text-black ${className}`}
           placeholderTextColor="rgba(0, 0, 0, 0.50)"
           autoCapitalize="none"
           {...props}

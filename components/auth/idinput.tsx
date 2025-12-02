@@ -39,7 +39,7 @@ export default function IDInput({ iD, setID, setStep }: NumInputProps) {
             <MandarinText className="text-black text-[27px]">
               사용할 아이디를
             </MandarinText>
-            <MandarinText className="text-black text-[27px] mb-10">
+            <MandarinText className="text-black text-[27px] mb-32">
               입력해주세요
             </MandarinText>
 
@@ -55,11 +55,7 @@ export default function IDInput({ iD, setID, setStep }: NumInputProps) {
           </View>
 
           <View className="w-[325px] items-center">
-            <Button
-              label="계속하기"
-              onPress={next}
-              className="w-[325px]"
-            />
+            <Button label="계속하기" onPress={next} className="w-[325px]" />
           </View>
         </View>
       </TouchableWithoutFeedback>

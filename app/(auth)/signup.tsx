@@ -2,7 +2,7 @@ import SignUpPage from "@/components/auth/signuppage";
 import Header from "@/components/ui/Header";
 import { router } from "expo-router";
 import { useState } from "react";
-import { View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function AuthSignUp() {
   const [step, setStep] = useState(1);
@@ -16,9 +16,13 @@ export default function AuthSignUp() {
   };
 
   return (
-    <View className="flex-1 bg-white w-full">
-      <Header title="회원가입" onBack={handleBack} showBackButton={step !== 4} />
+    <SafeAreaView className="flex-1 bg-white">
+      <Header
+        title="회원가입"
+        onBack={handleBack}
+        showBackButton={step !== 4}
+      />
       <SignUpPage step={step} setStep={setStep} />
-    </View>
+    </SafeAreaView>
   );
 }

@@ -19,7 +19,7 @@ export default function ProfilePage() {
         <MandarinText className="text-[25px] font-bold mr-2 ml-4">
           {userName}님
         </MandarinText>
-        <Pressable onPress={() => router.push("/profileedit")}>
+        <Pressable onPress={() => router.push("/nameedit")}>
           <PencilIcon />
         </Pressable>
       </View>
@@ -37,15 +37,7 @@ export default function ProfilePage() {
           onPress={() => router.push("/profileedit")}
         />
         <ProfileButton
-          label="개인정보처리방침"
-          onPress={() => router.push("/profileedit")}
-        />
-        <ProfileButton
-          label="저작권"
-          onPress={() => router.push("/profileedit")}
-        />
-        <ProfileButton
-          label="연애 타입 참고"
+          label="자료 출처"
           onPress={() => router.push("/profileedit")}
         />
       </View>
