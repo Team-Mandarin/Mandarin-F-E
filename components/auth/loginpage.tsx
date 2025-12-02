@@ -18,7 +18,7 @@ export default function LoginPage() {
 
   const login = () => {
     Keyboard.dismiss();
-    router.replace("/lovetype");
+    router.replace("/chat");
   };
 
   return (

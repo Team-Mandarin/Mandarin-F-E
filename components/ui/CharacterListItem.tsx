@@ -19,8 +19,7 @@ export default function CharacterListItem({
     onPress 
 }: CharacterListItemProps) {
 
-    const defaultImage = require("@/assets/images/default_profile_img.png");
-    const displayImage = imageUrl ? { uri : imageUrl } : defaultImage;
+    const hasImage = imageUrl && imageUrl.length > 0;
 
     return (
         <Pressable
@@ -28,12 +27,16 @@ export default function CharacterListItem({
             className="flex-row items-center px-4 py-3 bg-white rounded-[15px]">
 
             {/* 1. 프로필 이미지 : 원형, 크기 60x60 px */}
-            <View className="w-[60px] h-[60px] rounded-full overflow-hidden mr-4 bg-gray-200">
-                <Image
-                    source={displayImage}
-                    className="w-[60px] h-[60px]"
-                    resizeMode="cover"
-                />
+            <View className="w-[60px] h-[60px] rounded-full overflow-hidden mr-4 bg-gray-200 items-center justify-center">
+                {hasImage ? (
+                    <Image
+                        source={{ uri: imageUrl }}
+                        className="w-[60px] h-[60px]"
+                        resizeMode="cover"
+                    />
+                ) : (
+                    <Ionicons name="person" size={30} color="#9CA3AF" />
+                )}
             </View>
 
             {/* 2. 캐릭터 이름 정보 영역 */}
