@@ -40,6 +40,10 @@ export default function ProfilePage() {
           label="자료 출처"
           onPress={() => router.push("/datasource")}
         />
+        <ProfileButton
+          label="개인정보 처리방침"
+          onPress={() => router.push("/privacypolicy")}
+        />
       </View>
     </View>
   );
