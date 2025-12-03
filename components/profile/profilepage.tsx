@@ -29,8 +29,8 @@ export default function ProfilePage() {
       </MandarinText>
       <View className="flex-1 items-center w-full mt-8 gap-4">
         <ProfileButton
-          label="프로필 수정"
-          onPress={() => router.push("/profileedit")}
+          label="회원 정보 관리"
+          onPress={() => router.push("/checkpw")}
         />
         <ProfileButton
           label="나의 연애 타입 테스트 다시하기"
