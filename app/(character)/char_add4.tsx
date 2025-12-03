@@ -3,12 +3,13 @@
 import { Ionicons } from "@expo/vector-icons";
 import * as DocumentPicker from "expo-document-picker";
 import { router } from "expo-router";
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Pressable, ScrollView, View } from "react-native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
 import Toast from "react-native-toast-message";
 
 import Button from "@/components/ui/Button";
+import CheckBox from "@/components/ui/CheckBox";
 import ConfirmDialog from "@/components/ui/ConfirmDialog";
 import Header from "@/components/ui/Header";
 import MandarinText from "@/components/ui/MandarinText";
@@ -19,6 +20,7 @@ export default function CharacterAdd4() {
   const { data, updateData, isEditMode, resetData } = useCharacterCreate();
   const [uploadedFile, setUploadedFile] = useState<string | null>(null);
   const [showExitDialog, setShowExitDialog] = useState(false);
+  const [isPrivacyAgreed, setIsPrivacyAgreed] = useState(false);
 
   // 편집 모드일 때 기존 데이터 로드
   useEffect(() => {
@@ -59,6 +61,16 @@ export default function CharacterAdd4() {
   };
 
   const handleCreate = () => {
+    // 파일이 업로드된 경우 체크박스 동의 필수
+    if (uploadedFile && !isPrivacyAgreed) {
+      Toast.show({
+        type: "login",
+        text1: "파일 첨부 시 개인정보 처리 동의는\n필수입니다.",
+        visibilityTime: 3000,
+      });
+      return;
+    }
+
     // Context에 데이터 저장
     updateData({ uploadedFile });
 
@@ -77,7 +89,7 @@ export default function CharacterAdd4() {
   };
 
   return (
-    <View className="flex-1 bg-[#FCFCFC]">
+    <SafeAreaView className="flex-1 bg-[#FCFCFC]" edges={["top"]}>
       <Header 
         showBackButton={true} 
         onBack={handleBack} 
@@ -99,15 +111,11 @@ export default function CharacterAdd4() {
           </MandarinText>
 
           <MandarinText className="text-[14px] text-black leading-5 mb-4">
-            해당 절차는 선택사항이며 필수사항이 아닙니다.
+            해당 절차는 선택사항이며 필수사항이 아니지만,{"\n"}AI 말투 학습에 사용되는 주요 데이터이므로 높은 몰입감을 경험{"\n"}하고 싶으신 분은 업로드를 추천해요.
           </MandarinText>
 
           <MandarinText className="text-[14px] text-black leading-5 mb-4">
-            하지만 AI 말투 학습에 사용되는 주요 데이터이므로 높은 몰입감을 경험하고 싶으신 분은 업로드를 추천드립니다.
-          </MandarinText>
-
-          <MandarinText className="text-[14px] text-black leading-5 mb-4">
-            대화에 포함된 주요 개인정보는 모두 마스킹하여 안전하게{"\n"}처리되니 안심하셔도 돼요.
+            대화에 포함된 주요 개인정보는 모두 마스킹하여 안전하게{"\n"}처리 및 관리되며 저희를 포함한 그 누구도 확인할 수 없으니{"\n"}안심하셔도 돼요.
           </MandarinText>
 
           <MandarinText className="text-[14px] text-black leading-5 mb-1">
@@ -138,15 +146,28 @@ export default function CharacterAdd4() {
           <Ionicons name="add" size={24} color="black" />
         </Pressable>
 
-        {/* 3. 생성하기/저장하기 버튼 */}
-        <View className="w-[325px] self-center mt-auto pt-10 mb-10">
-          <Button
-            textClassName="text-white"
-            label={isEditMode ? "저장하기" : "생성하기"}
-            onPress={handleCreate}
+        {/* 2-1. 개인정보 처리 동의 체크박스 */}
+        <View className="mx-5 mt-5 px-4">
+          <CheckBox
+            label="[필수] 연애 상대방과의 관계 분석을 위해 대화 텍스트 데이터 사용 및 마스킹 처리에 동의합니다."
+            checked={isPrivacyAgreed}
+            onCheckedChange={setIsPrivacyAgreed}
+            labelClassName="text-[13px]"
           />
         </View>
       </ScrollView>
+
+      {/* 3. 생성하기/저장하기 버튼 - 하단 고정 */}
+      <View 
+        className="w-[325px] self-center mb-10"
+        style={{ paddingBottom: insets.bottom }}
+      >
+        <Button
+          textClassName="text-white"
+          label={isEditMode ? "저장하기" : "생성하기"}
+          onPress={handleCreate}
+        />
+      </View>
 
       {/* 나가기 확인 다이얼로그 (편집 모드) */}
       <ConfirmDialog
@@ -158,7 +179,7 @@ export default function CharacterAdd4() {
         onConfirm={handleExitConfirm}
         onCancel={() => setShowExitDialog(false)}
       />
-    </View>
+    </SafeAreaView>
   );
 }
 

@@ -7,7 +7,7 @@ import { router } from "expo-router";
 import React, { useEffect, useState } from "react";
 import { Image, Platform, Pressable, ScrollView, TextInput, View } from "react-native";
 import RNPickerSelect from "react-native-picker-select"; // 🎡 나이 선택 라이브러리
-import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
 import Toast from "react-native-toast-message";
 
 // 커스텀 컴포넌트 임포트
@@ -156,7 +156,7 @@ export default function CharacterAdd1() {
   };
 
   return (
-    <View className="flex-1 bg-[#FCFCFC]">
+    <SafeAreaView className="flex-1 bg-[#FCFCFC]" edges={["top"]}>
       <Header 
         showBackButton={true} 
         onBack={handleBack} 
@@ -323,7 +323,7 @@ export default function CharacterAdd1() {
         onConfirm={handleExitConfirm}
         onCancel={() => setShowExitDialog(false)}
       />
-    </View>
+    </SafeAreaView>
   );
 }
 

@@ -11,18 +11,21 @@ export const toastConfig: ToastConfig = {
         borderLeftColor: "#484845",
         backgroundColor: "#484845",
         borderRadius: 30,
-        width: 224,
-        height: 50,
+        width: "auto",
+        minWidth: 224,
+        height: "auto",
+        minHeight: 50,
+        paddingVertical: 12,
         marginBottom: 130,
       }}
       contentContainerStyle={{
-        paddingHorizontal: 15,
+        paddingHorizontal: 20,
         justifyContent: "center",
       }}
       text1Style={{
         fontSize: FONT_SIZE_TEXT1,
         color: "#EDEDED",
-        fontWeight: "none",
+        fontWeight: "normal",
         textAlign: "center",
       }}
       text2Style={{
@@ -30,6 +33,8 @@ export const toastConfig: ToastConfig = {
         color: "#EDEDED",
         textAlign: "center",
       }}
+      text1NumberOfLines={3}
+      text2NumberOfLines={2}
       text1={text1}
       text2={text2}
     />

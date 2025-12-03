@@ -3,7 +3,7 @@
 import { router } from "expo-router";
 import React, { useState } from "react";
 import { ScrollView, View } from "react-native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
 import Toast from "react-native-toast-message";
 
 import LoveTypeButton from "@/components/auth/lovetypebutton";
@@ -72,7 +72,7 @@ export default function CharacterAdd2() {
   };
 
   return (
-    <View className="flex-1 bg-[#FCFCFC]">
+    <SafeAreaView className="flex-1 bg-[#FCFCFC]" edges={["top"]}>
       <Header 
         showBackButton={true} 
         onBack={handleBack} 
@@ -133,7 +133,7 @@ export default function CharacterAdd2() {
         onConfirm={handleExitConfirm}
         onCancel={() => setShowExitDialog(false)}
       />
-    </View>
+    </SafeAreaView>
   );
 }
 
