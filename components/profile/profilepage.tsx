@@ -38,7 +38,7 @@ export default function ProfilePage() {
         />
         <ProfileButton
           label="자료 출처"
-          onPress={() => router.push("/profileedit")}
+          onPress={() => router.push("/datasource")}
         />
       </View>
     </View>
