@@ -3,10 +3,13 @@
 import { router } from "expo-router";
 import React, { useState } from "react";
 import { ScrollView, View } from "react-native";
-import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
+import {
+  SafeAreaView,
+  useSafeAreaInsets,
+} from "react-native-safe-area-context";
 import Toast from "react-native-toast-message";
 
-import LoveTypeButton from "@/components/auth/lovetypebutton";
+import LoveTypeButton from "@/components/lovetype/lovetypebutton";
 import Button from "@/components/ui/Button";
 import ConfirmDialog from "@/components/ui/ConfirmDialog";
 import Header from "@/components/ui/Header";
@@ -40,7 +43,7 @@ export default function CharacterAdd2() {
     const allAnswered = Object.values(answers).every(
       (answer) => answer !== null
     );
-    
+
     if (!allAnswered) {
       Toast.show({
         type: "login",
@@ -51,7 +54,7 @@ export default function CharacterAdd2() {
     }
 
     console.log("상대방 연애 타입 답변:", answers);
-    
+
     // char_add3로 이동
     router.push("/char_add3");
   };
@@ -73,14 +76,14 @@ export default function CharacterAdd2() {
 
   return (
     <SafeAreaView className="flex-1 bg-[#FCFCFC]" edges={["top"]}>
-      <Header 
-        showBackButton={true} 
-        onBack={handleBack} 
-        className="bg-[#FCFCFC]" 
+      <Header
+        showBackButton={true}
+        onBack={handleBack}
+        className="bg-[#FCFCFC]"
       />
-      
-      <ScrollView 
-        className="flex-1 px-5" 
+
+      <ScrollView
+        className="flex-1 px-5"
         contentContainerStyle={{ paddingBottom: insets.bottom + 40 }}
       >
         {/* 1. 제목 및 설명 */}
@@ -101,7 +104,7 @@ export default function CharacterAdd2() {
             <MandarinText className="text-[20px] w-full self-center text-center font-semibold px-4">
               {question.text}
             </MandarinText>
-            
+
             {/* 선택 버튼 (LoveTypeButton 내부 mt-20 상쇄) */}
             <View style={{ marginTop: -60 }}>
               <LoveTypeButton
@@ -136,4 +139,3 @@ export default function CharacterAdd2() {
     </SafeAreaView>
   );
 }
-

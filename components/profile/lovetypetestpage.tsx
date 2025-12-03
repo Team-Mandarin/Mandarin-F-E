@@ -23,7 +23,7 @@ const initialAnswers = {
   12: null,
 };
 
-export default function LoveTypePage() {
+export default function LoveTypeTestPage() {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const currentQuestion = questions[currentQuestionIndex];
   const [answers, setAnswers] = useState(initialAnswers);
@@ -62,13 +62,16 @@ export default function LoveTypePage() {
 
       // 백엔드에 러브타입 저장
 
-      router.replace("/mylovetype");
+      router.replace("/newlovetype");
     }
   };
 
   const goToPrevQuestion = () => {
     if (currentQuestionIndex > 0) {
       setCurrentQuestionIndex((prevIndex) => prevIndex - 1);
+    }
+    if (currentQuestionIndex === 0) {
+      router.replace("/profile");
     }
   };
 
