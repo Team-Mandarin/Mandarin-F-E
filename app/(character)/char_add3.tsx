@@ -3,7 +3,7 @@
 import { router } from "expo-router";
 import React, { useState, useEffect } from "react";
 import { ScrollView, TextInput, View } from "react-native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
 import Toast from "react-native-toast-message";
 
 import Button from "@/components/ui/Button";
@@ -67,7 +67,7 @@ export default function CharacterAdd3() {
   };
 
   return (
-    <View className="flex-1 bg-[#FCFCFC]">
+    <SafeAreaView className="flex-1 bg-[#FCFCFC]" edges={["top"]}>
       <Header 
         showBackButton={true} 
         onBack={handleBack} 
@@ -135,7 +135,7 @@ export default function CharacterAdd3() {
         onConfirm={handleExitConfirm}
         onCancel={() => setShowExitDialog(false)}
       />
-    </View>
+    </SafeAreaView>
   );
 }
 
