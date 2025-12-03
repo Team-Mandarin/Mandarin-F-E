@@ -34,7 +34,7 @@ export default function ProfilePage() {
         />
         <ProfileButton
           label="나의 연애 타입 테스트 다시하기"
-          onPress={() => router.push("/profileedit")}
+          onPress={() => router.push("/newlovetypetest")}
         />
         <ProfileButton
           label="자료 출처"
