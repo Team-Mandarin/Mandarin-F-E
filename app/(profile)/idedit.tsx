@@ -1,4 +1,4 @@
-import NameEditPage from "@/components/profile/nameeditpage";
+import IdEditPage from "@/components/profile/ideditpage";
 import ConfirmDialog from "@/components/ui/ConfirmDialog";
 import Header from "@/components/ui/Header";
 import MandarinText from "@/components/ui/MandarinText";
@@ -12,7 +12,7 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-export default function NameEdit() {
+export default function IdEdit() {
   const [showModal, setShowModal] = useState(false);
 
   const handleBack = () => {
@@ -25,15 +25,15 @@ export default function NameEdit() {
   };
 
   return (
-    <SafeAreaView className="bg-white flex-1">
+    <SafeAreaView className="flex-1 bg-white w-full">
       <KeyboardAvoidingView behavior="padding" className="flex-1">
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <View className="flex-1">
             <Header onBack={handleBack} />
-            <MandarinText className="text-[32px] font-bold ml-8 mt-4">
-              이름 변경
+            <MandarinText className="text-4xl font-bold text-black ml-8 mt-2">
+              아이디 변경
             </MandarinText>
-            <NameEditPage />
+            <IdEditPage />
           </View>
         </TouchableWithoutFeedback>
       </KeyboardAvoidingView>
@@ -41,7 +41,7 @@ export default function NameEdit() {
       <ConfirmDialog
         visible={showModal}
         title="정말 나가시나요?"
-        message="지금 나가시면 이름 수정을 처음부터 다시 시작해야해요."
+        message="지금 나가시면 아이디 변경을 처음부터 다시 시작해야해요."
         onConfirm={confirmExit}
         onCancel={() => setShowModal(false)}
       />

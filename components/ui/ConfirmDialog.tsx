@@ -5,6 +5,7 @@ import { Modal, Pressable, View } from "react-native";
 import MandarinText from "./MandarinText";
 
 interface ConfirmDialogProps {
+  className?: string;
   visible: boolean;
   title: string;
   message: string;
@@ -22,6 +23,7 @@ export default function ConfirmDialog({
   cancelText = "취소",
   onConfirm,
   onCancel,
+  className,
 }: ConfirmDialogProps) {
   return (
     <Modal
@@ -47,7 +49,9 @@ export default function ConfirmDialog({
             {/* 확인 버튼 */}
             <Pressable
               onPress={onConfirm}
-              className="flex-1 bg-[#F5A623] py-4 rounded-[10px]"
+              className={`flex-1 py-4 rounded-[10px] ${
+                className || "bg-[#F5A623]"
+              }`}
             >
               <MandarinText className="text-white text-[18px] font-bold text-center">
                 {confirmText}
@@ -69,4 +73,3 @@ export default function ConfirmDialog({
     </Modal>
   );
 }
-

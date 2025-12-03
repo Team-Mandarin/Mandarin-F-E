@@ -16,6 +16,7 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [autoLogin, setAutoLogin] = useState(false);
 
+  // 토스트 메시지 추가
   const login = () => {
     Keyboard.dismiss();
     router.replace("/chat");
