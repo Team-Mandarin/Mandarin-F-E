@@ -23,13 +23,14 @@ export default function ProfileEditPage({
         />
         <ProfileButton
           label="패스워드 변경"
-          onPress={() => router.push("/idedit")}
+          onPress={() => router.push("/pwedit")}
           className="bg-[#f2f2f2]"
         />
         <ProfileButton
           label="회원 탈퇴"
           onPress={handleModal}
           className="bg-[#FF8A8A]"
+          textClassName="text-white"
         />
       </View>
     </View>

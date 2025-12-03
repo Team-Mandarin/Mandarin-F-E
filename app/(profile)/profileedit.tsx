@@ -1,4 +1,5 @@
 import ProfileEditPage from "@/components/profile/profileeditpage";
+import ConfirmDialog from "@/components/ui/ConfirmDialog";
 import Header from "@/components/ui/Header";
 import MandarinText from "@/components/ui/MandarinText";
 import { router } from "expo-router";
@@ -6,8 +7,6 @@ import { useState } from "react";
 import {
   Keyboard,
   KeyboardAvoidingView,
-  Modal,
-  Pressable,
   TouchableWithoutFeedback,
   View,
 } from "react-native";
@@ -48,34 +47,15 @@ export default function ProfileEdit() {
         </TouchableWithoutFeedback>
       </KeyboardAvoidingView>
 
-      <Modal visible={showModal} transparent animationType="fade">
-        <View className="flex-1 bg-black/50 justify-center items-center">
-          <View className="bg-white rounded-2xl p-6 mx-8 w-[280px]">
-            <MandarinText className="text-lg font-bold text-center mb-2">
-              정말 탈퇴하시나요?
-            </MandarinText>
-            <MandarinText className="text-sm text-gray-500 text-center mb-6">
-              탈퇴하면 기존에 있던 모든 정보가{"\n"} 사라져요.
-            </MandarinText>
-            <View className="flex-row gap-3">
-              <Pressable
-                onPress={handleWithdraw}
-                className="flex-1 py-3 rounded-xl bg-[#FF8A8A]"
-              >
-                <MandarinText className="text-center text-white">
-                  탈퇴하기
-                </MandarinText>
-              </Pressable>
-              <Pressable
-                onPress={() => setShowModal(false)}
-                className="flex-1 py-3 rounded-xl bg-gray-200"
-              >
-                <MandarinText className="text-center">취소</MandarinText>
-              </Pressable>
-            </View>
-          </View>
-        </View>
-      </Modal>
+      <ConfirmDialog
+        visible={showModal}
+        title="정말 탈퇴하시나요?"
+        message="탈퇴하면 기존에 있던 모든 정보가 사라져요."
+        confirmText="탈퇴하기"
+        onConfirm={handleWithdraw}
+        onCancel={() => setShowModal(false)}
+        className="bg-[#FF8A8A]"
+      />
     </SafeAreaView>
   );
 }
