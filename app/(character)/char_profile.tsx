@@ -215,8 +215,10 @@ export default function CharacterProfileScreen() {
 
   const handleStartSimulation = () => {
     console.log("시뮬레이션 시작:", characterId);
-    // TODO: 추후 채팅/시뮬레이션 화면으로 이동
-    // router.push(`/chat_room?id=${characterId}`);
+    router.push({
+      pathname: "/chat_load",
+      params: { id: String(characterId) },
+    });
   };
 
   const hasImage = profile?.imageUrl;
