@@ -58,7 +58,8 @@ export default function LoveTypePage() {
       const type3 = answers[2]! + answers[9]! - answers[7]! >= 2 ? 1 : 0; // 1: Realistic, 0: Passionate
       const type4 = answers[3]! + answers[10]! - answers[4]! >= 2 ? 1 : 0; // 1: Optimistic, 0: Earnest
 
-      const loveType = `${type1}${type2}${type3}${type4}`;
+      // 이진수를 0-15 정수로 변환
+      const loveType = type1 * 8 + type2 * 4 + type3 * 2 + type4;
 
       // 백엔드에 러브타입 저장
 

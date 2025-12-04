@@ -6,7 +6,7 @@ import MandarinText from "../ui/MandarinText";
 
 export default function ProfileLoveTypePage() {
   // 저장된 사용자 정보 가져온 뒤 출력 진행
-  const loveType = "1000"; // TODO: 백엔드에서 가져온 러브타입으로 교체
+  const loveType = 8; // TODO: 백엔드에서 가져온 러브타입으로 교체 (0-15)
   const userName = "만다린"; // TODO: 백엔드에서 가져온 사용자 이름으로 교체
 
   const typeInfo = loveTypeInfo[loveType];
