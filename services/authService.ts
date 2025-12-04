@@ -16,15 +16,10 @@ export const authService = {
   login: async (data: LoginRequest): Promise<LoginResponse> => {
     const response = await api.post<LoginResponse>('/auth/login', data);
     
-    // 토큰 저장
-    if (response.data.accessToken) {
-      await AsyncStorage.setItem('accessToken', response.data.accessToken);
-    }
-    if (response.data.refreshToken) {
-      await AsyncStorage.setItem('refreshToken', response.data.refreshToken);
-    }
-    if (response.data.userId) {
-      await AsyncStorage.setItem('userId', String(response.data.userId));
+    // 로그인 성공 시 userId 저장
+    if (response.data.success) {
+      await AsyncStorage.setItem('userId', data.userId);
+      await AsyncStorage.setItem('isLoggedIn', 'true');
     }
     
     return response.data;
@@ -66,10 +61,10 @@ export const authService = {
   },
 
   /**
-   * 로그아웃 (로컬 토큰 삭제)
+   * 로그아웃 (로컬 데이터 삭제)
    */
   logout: async (): Promise<void> => {
-    await AsyncStorage.multiRemove(['accessToken', 'refreshToken', 'userId', 'autoLogin']);
+    await AsyncStorage.multiRemove(['userId', 'isLoggedIn', 'autoLogin']);
   },
 
   /**
@@ -90,17 +85,17 @@ export const authService = {
   /**
    * 저장된 userId 조회
    */
-  getUserId: async (): Promise<number | null> => {
+  getUserId: async (): Promise<string | null> => {
     const userId = await AsyncStorage.getItem('userId');
-    return userId ? parseInt(userId, 10) : null;
+    return userId;
   },
 
   /**
    * 로그인 상태 확인
    */
   isLoggedIn: async (): Promise<boolean> => {
-    const token = await AsyncStorage.getItem('accessToken');
-    return !!token;
+    const loggedIn = await AsyncStorage.getItem('isLoggedIn');
+    return loggedIn === 'true';
   },
 };
 

@@ -4,16 +4,15 @@
 
 // 로그인 요청
 export interface LoginRequest {
-  id: string;
+  userId: string;
   password: string;
+  loveType?: number; // optional (0-15)
 }
 
 // 로그인 응답
 export interface LoginResponse {
-  accessToken: string;
-  refreshToken: string;
-  userId: number;
-  nickname?: string;
+  success: boolean;
+  message: string;
 }
 
 // 회원가입 요청
@@ -40,18 +39,16 @@ export interface AutoLoginResponse {
 // 유저 관련 타입
 // ============================================
 
-// Love Type 설문 요청
-export interface LoveTypeRequest {
-  q1: string;
-  q2: string;
-  q3: string;
-  q4: string;
+// Love Type 업데이트 요청
+export interface UpdateLoveTypeRequest {
+  userId: string;
+  loveType: number; // 0-15
 }
 
 // Love Type 응답
 export interface LoveTypeResponse {
-  loveType: string;
-  description?: string;
+  success: boolean;
+  message?: string;
 }
 
 // 유저 정보
@@ -60,7 +57,7 @@ export interface User {
   nickname: string;
   age?: number;
   gender?: string;
-  loveType?: string;
+  loveType?: number; // 0-15
 }
 
 // ============================================

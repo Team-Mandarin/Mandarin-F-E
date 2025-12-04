@@ -1,3 +1,5 @@
+import { authService } from "@/services/authService";
+import { userService } from "@/services/userService";
 import { router } from "expo-router";
 import { useState } from "react";
 import { View } from "react-native";
@@ -25,6 +27,7 @@ const initialAnswers = {
 
 export default function LoveTypePage() {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const currentQuestion = questions[currentQuestionIndex];
   const [answers, setAnswers] = useState(initialAnswers);
   const selectedAnswer =
@@ -37,7 +40,7 @@ export default function LoveTypePage() {
     }));
   };
 
-  const goToNextQuestion = () => {
+  const goToNextQuestion = async () => {
     if (currentQuestionIndex < questions.length - 1) {
       setCurrentQuestionIndex((prevIndex) => prevIndex + 1);
     } else {
@@ -62,8 +65,20 @@ export default function LoveTypePage() {
       const loveType = type1 * 8 + type2 * 4 + type3 * 2 + type4;
 
       // 백엔드에 러브타입 저장
-
-      router.replace("/mylovetype");
+      setIsSubmitting(true);
+      try {
+        const userId = await authService.getUserId();
+        if (userId) {
+          await userService.updateLoveType(userId, loveType);
+        }
+        router.replace("/mylovetype");
+      } catch (error) {
+        console.error("러브타입 저장 실패:", error);
+        // 실패해도 결과 화면으로 이동 (오프라인 지원)
+        router.replace("/mylovetype");
+      } finally {
+        setIsSubmitting(false);
+      }
     }
   };
 

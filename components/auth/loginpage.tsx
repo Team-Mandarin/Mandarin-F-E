@@ -18,11 +18,15 @@ export default function LoginPage() {
   const [autoLogin, setAutoLogin] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
+  const [errorMessage, setErrorMessage] = useState("");
+
   const login = async () => {
     Keyboard.dismiss();
+    setErrorMessage("");
 
     // 입력값 검증
     if (!iD.trim() || !password.trim()) {
+      setErrorMessage("아이디와 비밀번호를 입력해주세요.");
       return;
     }
 
@@ -30,17 +34,24 @@ export default function LoginPage() {
 
     try {
       // 로그인 API 호출
-      await authService.login({
-        id: iD,
+      const response = await authService.login({
+        userId: iD,
         password: password,
       });
 
-      // 자동 로그인 설정 저장
-      await authService.setAutoLoginEnabled(autoLogin);
-
-      router.replace("/chat");
+      if (response.success) {
+        // 자동 로그인 설정 저장
+        await authService.setAutoLoginEnabled(autoLogin);
+        router.replace("/chat");
+      } else {
+        // 로그인 실패 메시지 표시
+        setErrorMessage(response.message || "로그인에 실패했습니다.");
+      }
     } catch (error: any) {
       console.error("로그인 실패:", error);
+      setErrorMessage(
+        error.response?.data?.message || "로그인에 실패했습니다. 아이디와 비밀번호를 확인해주세요."
+      );
     } finally {
       setIsLoading(false);
     }
@@ -85,6 +96,11 @@ export default function LoginPage() {
                   }}
                 />
               </View>
+              {errorMessage ? (
+                <MandarinText className="text-red-500 text-[14px] mt-4 text-center px-8">
+                  {errorMessage}
+                </MandarinText>
+              ) : null}
             </View>
 
             <View className="w-[350px] items-center">

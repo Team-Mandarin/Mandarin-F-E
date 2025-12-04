@@ -1,6 +1,6 @@
 import api from '@/lib/api';
 import type {
-  LoveTypeRequest,
+  UpdateLoveTypeRequest,
   LoveTypeResponse,
   User,
 } from '@/types/api';
@@ -16,11 +16,12 @@ export const userService = {
   },
 
   /**
-   * Love Type 설문 결과 저장
-   * POST /users/{user_id}/love-type
+   * Love Type 업데이트
+   * PUT /user/lovetype
    */
-  submitLoveType: async (userId: number, data: LoveTypeRequest): Promise<LoveTypeResponse> => {
-    const response = await api.post<LoveTypeResponse>(`/users/${userId}/love-type`, data);
+  updateLoveType: async (userId: string, loveType: number): Promise<LoveTypeResponse> => {
+    const request: UpdateLoveTypeRequest = { userId, loveType };
+    const response = await api.put<LoveTypeResponse>('/user/lovetype', request);
     return response.data;
   },
 
@@ -46,7 +47,7 @@ export const userService = {
    * 회원 탈퇴
    * DELETE /user/{userId}
    */
-  deleteUser: async (userId: number): Promise<void> => {
+  deleteUser: async (userId: string): Promise<void> => {
     await api.delete(`/user/${userId}`);
   },
 };
