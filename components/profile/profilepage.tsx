@@ -9,7 +9,7 @@ import LoveTypeCard from "./lovetypecard";
 export default function ProfilePage() {
   // 정보들은 추후 api를 통해 가져와서 입력
   const userName = "만다린";
-  const loveType = 1000;
+  const loveType = 8; // TODO: 백엔드에서 가져온 러브타입으로 교체 (0-15)
 
   const typeInfo = loveTypeInfo[loveType];
 

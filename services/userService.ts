@@ -44,10 +44,10 @@ export const userService = {
 
   /**
    * 회원 탈퇴
-   * DELETE /users/{user_id}
+   * DELETE /user/{userId}
    */
   deleteUser: async (userId: number): Promise<void> => {
-    await api.delete(`/users/${userId}`);
+    await api.delete(`/user/${userId}`);
   },
 };
 
