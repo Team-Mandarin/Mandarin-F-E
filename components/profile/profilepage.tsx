@@ -14,7 +14,7 @@ export default function ProfilePage() {
   const typeInfo = loveTypeInfo[loveType];
 
   return (
-    <View className="flex-1 mt-0">
+    <View className="flex-1 mt-2">
       <View className="flex-row items-center">
         <MandarinText className="text-[25px] font-bold mr-2 ml-4">
           {userName}님

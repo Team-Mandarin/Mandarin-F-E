@@ -5,14 +5,14 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function TabLayout() {
   return (
-    <SafeAreaView className="flex-1 bg-white">
+    <SafeAreaView className="flex-1">
       <Tabs
         screenOptions={{
           headerShown: false,
           tabBarActiveTintColor: "#FF9D00",
           tabBarInactiveTintColor: "#999999",
           tabBarStyle: {
-            height: 50,
+            height: 60,
             paddingTop: 2,
             paddingBottom: 10,
             backgroundColor: "#FFFFFF",

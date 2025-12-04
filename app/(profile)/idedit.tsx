@@ -30,10 +30,10 @@ export default function IdEdit() {
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <View className="flex-1">
             <Header onBack={handleBack} />
-            <MandarinText className="text-4xl font-bold text-black ml-8 mt-2">
-              아이디 변경
-            </MandarinText>
-            <IdEditPage />
+          <MandarinText className="text-4xl font-bold text-black ml-8 mt-2">
+            아이디 변경
+          </MandarinText>
+          <IdEditPage />
           </View>
         </TouchableWithoutFeedback>
       </KeyboardAvoidingView>

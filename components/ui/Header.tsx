@@ -38,7 +38,9 @@ export default function Header({
 
         <View className="flex-1 items-center">
           {title ? (
-            <MandarinText className="text-2xl font-bold text-black">
+            <MandarinText
+              className={`text-2xl font-bold text-black ${className}`}
+            >
               {title}
             </MandarinText>
           ) : null}
