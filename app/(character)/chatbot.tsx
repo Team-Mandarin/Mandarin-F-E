@@ -12,7 +12,9 @@ export default function Chatbot() {
   const { id } = useLocalSearchParams<{ id: string }>();
 
   const handleBack = () => {
-    router.back();
+    // chat_load에서 replace로 왔기 때문에 뒤로갈 화면이 없음
+    // 탭의 채팅 화면으로 이동
+    router.replace("/(tabs)/chat");
   };
 
   return (
