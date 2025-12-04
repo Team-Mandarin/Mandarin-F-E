@@ -1,3 +1,4 @@
+import { authService } from "@/services/authService";
 import { router } from "expo-router";
 import { useState } from "react";
 import {
@@ -15,11 +16,34 @@ export default function LoginPage() {
   const [iD, setID] = useState("");
   const [password, setPassword] = useState("");
   const [autoLogin, setAutoLogin] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
-  // 토스트 메시지 추가
-  const login = () => {
+  const login = async () => {
     Keyboard.dismiss();
-    router.replace("/chat");
+
+    // 입력값 검증
+    if (!iD.trim() || !password.trim()) {
+      return;
+    }
+
+    setIsLoading(true);
+
+    try {
+      // 로그인 API 호출
+      await authService.login({
+        id: iD,
+        password: password,
+      });
+
+      // 자동 로그인 설정 저장
+      await authService.setAutoLoginEnabled(autoLogin);
+
+      router.replace("/chat");
+    } catch (error: any) {
+      console.error("로그인 실패:", error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -41,6 +65,7 @@ export default function LoginPage() {
                   setID(text);
                 }}
                 placeholder="아이디"
+                editable={!isLoading}
               />
               <Input
                 value={password}
@@ -49,6 +74,7 @@ export default function LoginPage() {
                 }}
                 secureTextEntry={true}
                 placeholder="패스워드"
+                editable={!isLoading}
               />
               <View className="w-full items-start ml-16">
                 <CheckBox
@@ -62,7 +88,13 @@ export default function LoginPage() {
             </View>
 
             <View className="w-[350px] items-center">
-              <Button label="로그인" onPress={login} className="w-[325px]" />
+              <Button
+                label={isLoading ? "로그인 중..." : "로그인"}
+                onPress={login}
+                className="w-[325px]"
+                disabled={isLoading}
+                isLoading={isLoading}
+              />
             </View>
           </View>
         </TouchableWithoutFeedback>
