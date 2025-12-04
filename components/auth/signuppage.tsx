@@ -1,3 +1,4 @@
+import { authService } from "@/services/authService";
 import { router } from "expo-router";
 import { useState } from "react";
 import { View } from "react-native";
@@ -16,6 +17,37 @@ export default function SignUpPage({ step, setStep }: SignUpPageProps) {
   const [name, setName] = useState("");
   const [iD, setID] = useState("");
   const [password, setPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
+  // 회원가입 API 호출
+  const handleRegister = async () => {
+    setIsLoading(true);
+
+    try {
+      await authService.register({
+        userId: iD,
+        username: name,
+        password: password,
+      });
+
+      // 성공 시 step 4로 이동 (완료 화면)
+      setStep(4);
+    } catch (error: any) {
+      console.error("회원가입 실패:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // PWInput에서 호출될 setStep을 래핑
+  const handlePasswordComplete = (newStep: number) => {
+    if (newStep === 4) {
+      // step 4로 가기 전에 회원가입 API 호출
+      handleRegister();
+    } else {
+      setStep(newStep);
+    }
+  };
 
   return (
     <View className="flex-1">
@@ -29,11 +61,20 @@ export default function SignUpPage({ step, setStep }: SignUpPageProps) {
         <PWInput
           password={password}
           setPassword={setPassword}
-          setStep={setStep}
+          setStep={handlePasswordComplete}
         />
       )}
 
-      {step === 4 && (
+      {/* 로딩 중 화면 */}
+      {isLoading && (
+        <View className="flex-1 justify-center items-center">
+          <MandarinText className="text-[20px] text-gray-600">
+            회원가입 중...
+          </MandarinText>
+        </View>
+      )}
+
+      {step === 4 && !isLoading && (
         <View className="flex-1 justify-between">
           <View className="mt-10 px-8">
             <MandarinText className="text-[40px] font-bold">
