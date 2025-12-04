@@ -1,10 +1,22 @@
 import ProfilePage from "@/components/profile/profilepage";
-import { SafeAreaView } from "react-native-safe-area-context";
+import * as NavigationBar from "expo-navigation-bar";
+import { useEffect } from "react";
+import { Platform, StatusBar, View } from "react-native";
 
 export default function ProfileTab() {
+  useEffect(() => {
+    if (Platform.OS === "android") {
+      StatusBar.setBackgroundColor("#F6F5F3");
+      StatusBar.setBarStyle("dark-content");
+
+      NavigationBar.setBackgroundColorAsync("#FFFFFF");
+      NavigationBar.setButtonStyleAsync("dark");
+    }
+  }, []);
+
   return (
-    <SafeAreaView className="flex-1 bg-F6F5F3">
+    <View className="flex-1 bg-[#F6F5F3]">
       <ProfilePage />
-    </SafeAreaView>
+    </View>
   );
 }

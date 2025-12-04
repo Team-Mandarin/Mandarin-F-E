@@ -9,13 +9,13 @@ import Toast from "react-native-toast-message";
 
 // 백엔드 연동 전 임시 데이터 타입 정의
 interface Character {
-  id : number;
-  name : string;
-  imageUrl? : string;
+  id: number;
+  name: string;
+  imageUrl?: string;
 }
 
 // 백엔드 연동 전 임시 데이터 (3개)
-const sampleCharacters : Character[] = [
+const sampleCharacters: Character[] = [
   { id: 1, name: "안도현", imageUrl: undefined },
   { id: 2, name: "성윤수", imageUrl: undefined },
   { id: 3, name: "이동근", imageUrl: undefined },
@@ -44,7 +44,7 @@ export default function ChatTab() {
     // 추후 캐릭터 생성 화면으로 이동하는 로직 구현
     // router.push("/chat_create");
     router.push("/char_add1");
-  }
+  };
 
   // 캐릭터 상세 화면으로 이동하는 함수
   const handleCharacterDetail = (characterId: number) => {
@@ -53,13 +53,13 @@ export default function ChatTab() {
       pathname: "/char_profile" as const,
       params: { id: String(characterId) },
     } as any);
-  }
+  };
 
   return (
     <SafeAreaView className="flex-1 bg-[#FCFCFC]" edges={["top"]}>
       {/* 1. 상단 탭 헤더 */}
-      <TabHeader 
-        title="채팅" 
+      <TabHeader
+        title="채팅"
         showRightButton={true}
         onRightPress={handleCreateCharacter}
         className="bg-transparent"
@@ -90,4 +90,3 @@ export default function ChatTab() {
     </SafeAreaView>
   );
 }
-
