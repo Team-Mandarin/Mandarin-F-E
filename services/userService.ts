@@ -5,6 +5,7 @@ import type {
   User,
   VerifyPasswordRequest,
   VerifyPasswordResponse,
+  CheckIdResponse,
 } from '@/types/api';
 
 export const userService = {
@@ -60,6 +61,15 @@ export const userService = {
   verifyPassword: async (userId: string, password: string): Promise<VerifyPasswordResponse> => {
     const request: VerifyPasswordRequest = { userId, password };
     const response = await api.post<VerifyPasswordResponse>('/user/verify-password', request);
+    return response.data;
+  },
+
+  /**
+   * 아이디 중복 체크
+   * GET /user/check-id?userId={userId}
+   */
+  checkId: async (userId: string): Promise<CheckIdResponse> => {
+    const response = await api.get<CheckIdResponse>(`/user/check-id?userId=${userId}`);
     return response.data;
   },
 };
