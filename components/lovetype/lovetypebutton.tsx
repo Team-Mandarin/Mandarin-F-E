@@ -1,13 +1,13 @@
+import Line from "@/assets/svg/Line.svg";
+import Icon1 from "@/assets/svg/lovetypetest/Subtract1.svg";
+import FillIcon1 from "@/assets/svg/lovetypetest/Subtract1Fill.svg";
+import Icon2 from "@/assets/svg/lovetypetest/Subtract2.svg";
+import FillIcon2 from "@/assets/svg/lovetypetest/Subtract2Fill.svg";
+import Icon3 from "@/assets/svg/lovetypetest/Subtract3.svg";
+import FillIcon3 from "@/assets/svg/lovetypetest/Subtract3Fill.svg";
+import Icon4 from "@/assets/svg/lovetypetest/Subtract4.svg";
+import FillIcon4 from "@/assets/svg/lovetypetest/Subtract4Fill.svg";
 import { Pressable, View } from "react-native";
-import Line from "../../assets/svg/Line.svg";
-import Icon1 from "../../assets/svg/Subtract1.svg";
-import FillIcon1 from "../../assets/svg/Subtract1Fill.svg";
-import Icon2 from "../../assets/svg/Subtract2.svg";
-import FillIcon2 from "../../assets/svg/Subtract2Fill.svg";
-import Icon3 from "../../assets/svg/Subtract3.svg";
-import FillIcon3 from "../../assets/svg/Subtract3Fill.svg";
-import Icon4 from "../../assets/svg/Subtract4.svg";
-import FillIcon4 from "../../assets/svg/Subtract4Fill.svg";
 import MandarinText from "../ui/MandarinText";
 
 interface QuestionType {
