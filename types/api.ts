@@ -48,6 +48,13 @@ export interface VerifyPasswordResponse {
   message?: string;
 }
 
+// 아이디 중복 체크 응답
+export interface CheckIdResponse {
+  success: boolean;
+  message: string;
+  data: boolean; // true: 중복, false: 사용 가능
+}
+
 // ============================================
 // 유저 관련 타입
 // ============================================

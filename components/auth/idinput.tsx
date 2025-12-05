@@ -1,3 +1,4 @@
+import { userService } from "@/services/userService";
 import { useState } from "react";
 import {
   Keyboard,
@@ -17,13 +18,37 @@ interface NumInputProps {
 
 export default function IDInput({ iD, setID, setStep }: NumInputProps) {
   const [err, setErr] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
-  const next = () => {
+  const next = async () => {
+    Keyboard.dismiss();
+    setErr("");
+
+    // 아이디 형식 검증
     const regex = /^[a-zA-Z0-9]+$/;
     if (iD.length < 1 || iD.length > 20 || !regex.test(iD)) {
       setErr("아이디는 공백 제외 영문, 숫자만을 포함해 1~20자로 입력해주세요.");
-    } else {
-      setStep(3);
+      return;
+    }
+
+    setIsLoading(true);
+
+    try {
+      // 아이디 중복 체크 API 호출
+      const response = await userService.checkId(iD);
+
+      if (response.data === true) {
+        // 중복된 아이디
+        setErr("중복된 아이디에요");
+      } else {
+        // 사용 가능한 아이디 → 다음 단계로 이동
+        setStep(3);
+      }
+    } catch (error: any) {
+      console.error("아이디 중복 체크 실패:", error);
+      setErr("아이디 확인 중 오류가 발생했습니다.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -51,11 +76,18 @@ export default function IDInput({ iD, setID, setStep }: NumInputProps) {
               }}
               errorMessage={err}
               placeholder="아이디"
+              editable={!isLoading}
             />
           </View>
 
           <View className="w-[325px] items-center">
-            <Button label="계속하기" onPress={next} className="w-[325px]" />
+            <Button
+              label={isLoading ? "확인 중..." : "계속하기"}
+              onPress={next}
+              className="w-[325px]"
+              disabled={isLoading}
+              isLoading={isLoading}
+            />
           </View>
         </View>
       </TouchableWithoutFeedback>
