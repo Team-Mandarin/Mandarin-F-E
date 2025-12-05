@@ -15,10 +15,10 @@ export default function ProfilePage() {
   // 사용자 정보 가져오기
   useEffect(() => {
     const fetchUserInfo = async () => {
-      // userId 가져오기
-      const userId = await authService.getUserId();
-      if (userId) {
-        setUserName(userId);
+      // username 가져오기
+      const username = await authService.getUsername();
+      if (username) {
+        setUserName(username);
       }
 
       // loveType 가져오기
