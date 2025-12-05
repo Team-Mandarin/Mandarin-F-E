@@ -42,7 +42,15 @@ export default function LoginPage() {
       if (response.success) {
         // 자동 로그인 설정 저장
         await authService.setAutoLoginEnabled(autoLogin);
-        router.replace("/chat");
+
+        // loveType에 따라 분기 처리
+        // 0-15: 이미 테스트 완료 → 채팅 화면으로 이동
+        // 16: 테스트 필요 → 연애타입 검사 화면으로 이동
+        if (response.loveType !== undefined && response.loveType >= 0 && response.loveType <= 15) {
+          router.replace("/chat");
+        } else {
+          router.replace("/lovetype");
+        }
       } else {
         // 로그인 실패 메시지 표시
         setErrorMessage(response.message || "로그인에 실패했습니다.");

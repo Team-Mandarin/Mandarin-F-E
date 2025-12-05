@@ -16,10 +16,13 @@ export const authService = {
   login: async (data: LoginRequest): Promise<LoginResponse> => {
     const response = await api.post<LoginResponse>('/auth/login', data);
     
-    // 로그인 성공 시 userId 저장
+    // 로그인 성공 시 userId, loveType 저장
     if (response.data.success) {
       await AsyncStorage.setItem('userId', data.userId);
       await AsyncStorage.setItem('isLoggedIn', 'true');
+      if (response.data.loveType !== undefined) {
+        await AsyncStorage.setItem('loveType', String(response.data.loveType));
+      }
     }
     
     return response.data;
@@ -64,7 +67,7 @@ export const authService = {
    * 로그아웃 (로컬 데이터 삭제)
    */
   logout: async (): Promise<void> => {
-    await AsyncStorage.multiRemove(['userId', 'isLoggedIn', 'autoLogin']);
+    await AsyncStorage.multiRemove(['userId', 'isLoggedIn', 'autoLogin', 'loveType']);
   },
 
   /**
@@ -96,6 +99,21 @@ export const authService = {
   isLoggedIn: async (): Promise<boolean> => {
     const loggedIn = await AsyncStorage.getItem('isLoggedIn');
     return loggedIn === 'true';
+  },
+
+  /**
+   * 저장된 loveType 조회
+   */
+  getLoveType: async (): Promise<number | null> => {
+    const loveType = await AsyncStorage.getItem('loveType');
+    return loveType ? parseInt(loveType, 10) : null;
+  },
+
+  /**
+   * loveType 저장
+   */
+  setLoveType: async (loveType: number): Promise<void> => {
+    await AsyncStorage.setItem('loveType', String(loveType));
   },
 };
 
