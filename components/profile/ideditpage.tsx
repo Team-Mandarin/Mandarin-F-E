@@ -1,15 +1,26 @@
+import { authService } from "@/services/authService";
 import { router } from "expo-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { View } from "react-native";
 import Button from "../ui/Button";
 import Input from "../ui/Input";
 import MandarinText from "../ui/MandarinText";
 
 export default function IdEditPage() {
-  const userName = "만다린";
-  const userID = "mandarin";
+  const [userID, setUserID] = useState("");
   const [newID, setNewID] = useState("");
   const [isDuplicated, setIsDuplicated] = useState(false);
+
+  // 현재 로그인한 사용자의 아이디 가져오기
+  useEffect(() => {
+    const fetchUserId = async () => {
+      const userId = await authService.getUserId();
+      if (userId) {
+        setUserID(userId);
+      }
+    };
+    fetchUserId();
+  }, []);
 
   // 중복확인 로직 및 저장 로직 추가
   const checkDuplicate = () => {
@@ -24,7 +35,7 @@ export default function IdEditPage() {
     <View className="flex-1 justify-between pb-4 w-full">
       <View className="flex-1 ml-8 mt-4">
         <MandarinText className="text-sm">
-          {userName}님의 아이디를 변경해주세요
+          {userID}님의 아이디를 변경해주세요
         </MandarinText>
         <MandarinText className="text-3xl font-semibold mt-10">
           현재 사용중인 아이디
