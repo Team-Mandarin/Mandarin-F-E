@@ -14,6 +14,7 @@ export interface LoginResponse {
   success: boolean;
   message: string;
   loveType?: number; // 0-15: 이미 테스트 완료, 16: 테스트 필요
+  username?: string; // 사용자 이름
 }
 
 // 회원가입 요청

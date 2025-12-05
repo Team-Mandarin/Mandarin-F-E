@@ -1,15 +1,34 @@
 import PencilIcon from "@/assets/svg/pencil.svg";
 import { loveTypeInfo } from "@/constants/loveTypeInfo";
+import { authService } from "@/services/authService";
 import { router } from "expo-router";
+import { useEffect, useState } from "react";
 import { Pressable, View } from "react-native";
 import MandarinText from "../ui/MandarinText";
 import ProfileButton from "../ui/ProfileButton";
 import LoveTypeCard from "./lovetypecard";
 
 export default function ProfilePage() {
-  // 정보들은 추후 api를 통해 가져와서 입력
-  const userName = "만다린";
-  const loveType = 8; // TODO: 백엔드에서 가져온 러브타입으로 교체 (0-15)
+  const [userName, setUserName] = useState("");
+  const [loveType, setLoveType] = useState<number>(0);
+
+  // 사용자 정보 가져오기
+  useEffect(() => {
+    const fetchUserInfo = async () => {
+      // username 가져오기
+      const username = await authService.getUsername();
+      if (username) {
+        setUserName(username);
+      }
+
+      // loveType 가져오기
+      const storedLoveType = await authService.getLoveType();
+      if (storedLoveType !== null && storedLoveType >= 0 && storedLoveType <= 15) {
+        setLoveType(storedLoveType);
+      }
+    };
+    fetchUserInfo();
+  }, []);
 
   const typeInfo = loveTypeInfo[loveType];
 

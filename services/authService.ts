@@ -16,12 +16,15 @@ export const authService = {
   login: async (data: LoginRequest): Promise<LoginResponse> => {
     const response = await api.post<LoginResponse>('/auth/login', data);
     
-    // 로그인 성공 시 userId, loveType 저장
+    // 로그인 성공 시 userId, loveType, username 저장
     if (response.data.success) {
       await AsyncStorage.setItem('userId', data.userId);
       await AsyncStorage.setItem('isLoggedIn', 'true');
       if (response.data.loveType !== undefined) {
         await AsyncStorage.setItem('loveType', String(response.data.loveType));
+      }
+      if (response.data.username) {
+        await AsyncStorage.setItem('username', response.data.username);
       }
     }
     
@@ -67,7 +70,7 @@ export const authService = {
    * 로그아웃 (로컬 데이터 삭제)
    */
   logout: async (): Promise<void> => {
-    await AsyncStorage.multiRemove(['userId', 'isLoggedIn', 'autoLogin', 'loveType']);
+    await AsyncStorage.multiRemove(['userId', 'isLoggedIn', 'autoLogin', 'loveType', 'username']);
   },
 
   /**
@@ -114,6 +117,21 @@ export const authService = {
    */
   setLoveType: async (loveType: number): Promise<void> => {
     await AsyncStorage.setItem('loveType', String(loveType));
+  },
+
+  /**
+   * 저장된 username 조회
+   */
+  getUsername: async (): Promise<string | null> => {
+    const username = await AsyncStorage.getItem('username');
+    return username;
+  },
+
+  /**
+   * username 저장
+   */
+  setUsername: async (username: string): Promise<void> => {
+    await AsyncStorage.setItem('username', username);
   },
 };
 
