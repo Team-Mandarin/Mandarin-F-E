@@ -36,6 +36,18 @@ export interface AutoLoginResponse {
   nickname?: string;
 }
 
+// 비밀번호 확인 요청
+export interface VerifyPasswordRequest {
+  userId: string;
+  password: string;
+}
+
+// 비밀번호 확인 응답
+export interface VerifyPasswordResponse {
+  success: boolean;
+  message?: string;
+}
+
 // ============================================
 // 유저 관련 타입
 // ============================================

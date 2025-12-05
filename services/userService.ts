@@ -3,6 +3,8 @@ import type {
   UpdateLoveTypeRequest,
   LoveTypeResponse,
   User,
+  VerifyPasswordRequest,
+  VerifyPasswordResponse,
 } from '@/types/api';
 
 export const userService = {
@@ -49,6 +51,16 @@ export const userService = {
    */
   deleteUser: async (userId: string): Promise<void> => {
     await api.delete(`/user/${userId}`);
+  },
+
+  /**
+   * 비밀번호 확인
+   * POST /user/verify-password
+   */
+  verifyPassword: async (userId: string, password: string): Promise<VerifyPasswordResponse> => {
+    const request: VerifyPasswordRequest = { userId, password };
+    const response = await api.post<VerifyPasswordResponse>('/user/verify-password', request);
+    return response.data;
   },
 };
 
