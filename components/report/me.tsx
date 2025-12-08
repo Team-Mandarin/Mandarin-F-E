@@ -6,8 +6,8 @@ import Score from "./score";
 
 export default function Me() {
   // 예시 점수 데이터 (7개)
-  const scoreData = [65, 78, 72, 85, 80, 92, 88];
-  const scoreLabels = ["1일", "2일", "3일", "4일", "5일", "6일", "7일"];
+  const scoreData = [65, 78, 72, 85, 80, 92, 88, 50];
+  const scoreLabels = ["1일", "2일", "3일", "4일", "5일", "6일", "7일", "8일"];
 
   return (
     <ScrollView
