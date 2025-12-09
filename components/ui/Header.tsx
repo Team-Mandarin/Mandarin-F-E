@@ -9,6 +9,7 @@ interface MandarinHeaderProps {
   showBackButton?: boolean;
   className?: string;
   onBack?: () => void;
+  children?: React.ReactNode;
 }
 
 export default function Header({
@@ -16,6 +17,7 @@ export default function Header({
   showBackButton = true,
   className,
   onBack,
+  children,
 }: MandarinHeaderProps) {
   const handleBack = () => {
     if (onBack) {
@@ -46,7 +48,7 @@ export default function Header({
           ) : null}
         </View>
 
-        <View className="w-10" />
+        <View className="w-10">{children}</View>
       </View>
     </View>
   );

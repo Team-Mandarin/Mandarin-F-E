@@ -2,7 +2,7 @@
 
 import { router, useLocalSearchParams } from "expo-router";
 import React, { useEffect, useState } from "react";
-import { ImageBackground, View, Dimensions } from "react-native";
+import { Dimensions, ImageBackground, View } from "react-native";
 
 import MandarinText from "@/components/ui/MandarinText";
 
@@ -17,7 +17,7 @@ const LOADING_TEXTS = [
 const INTERVAL_MS = 1500; // 1.5초
 
 export default function ChatLoad() {
-  const { id } = useLocalSearchParams<{ id: string }>();
+  const { characterId } = useLocalSearchParams<{ characterId: string }>();
   const [textIndex, setTextIndex] = useState(0);
 
   useEffect(() => {
@@ -28,14 +28,14 @@ export default function ChatLoad() {
       } else {
         // 마지막 문구 후 chatbot으로 이동
         router.replace({
-          pathname: "/chatbot",
-          params: { id },
+          pathname: "/chatlist",
+          params: { characterId },
         });
       }
     }, INTERVAL_MS);
 
     return () => clearTimeout(timer);
-  }, [textIndex, id]);
+  }, [textIndex, characterId]);
 
   return (
     <View className="flex-1">
@@ -54,4 +54,3 @@ export default function ChatLoad() {
     </View>
   );
 }
-
