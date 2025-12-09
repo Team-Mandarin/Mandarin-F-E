@@ -6,7 +6,6 @@ import React, { useEffect, useState } from "react";
 import { Image, Pressable, ScrollView, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-import Button from "@/components/ui/Button";
 import MandarinText from "@/components/ui/MandarinText";
 import { useCharacterCreate } from "@/contexts/CharacterCreateContext";
 
@@ -40,8 +39,8 @@ interface AICharacterSummary {
 
 // 캐릭터 프로필 임시 데이터
 const MOCK_CHARACTER_PROFILES: Record<number, CharacterProfile> = {
-  1: {
-    id: 1,
+  0: {
+    id: 0,
     name: "안도현",
     age: 25,
     imageUrl: undefined,
@@ -49,8 +48,8 @@ const MOCK_CHARACTER_PROFILES: Record<number, CharacterProfile> = {
     relationshipType: "썸",
     loveType: "블러드 오렌지",
   },
-  2: {
-    id: 2,
+  1: {
+    id: 1,
     name: "성윤수",
     age: 27,
     imageUrl: undefined,
@@ -58,8 +57,8 @@ const MOCK_CHARACTER_PROFILES: Record<number, CharacterProfile> = {
     relationshipType: "연애",
     loveType: "레몬",
   },
-  3: {
-    id: 3,
+  2: {
+    id: 2,
     name: "이동근",
     age: 24,
     imageUrl: undefined,
@@ -67,8 +66,8 @@ const MOCK_CHARACTER_PROFILES: Record<number, CharacterProfile> = {
     relationshipType: "결별",
     loveType: "자몽",
   },
-  4: {
-    id: 4,
+  3: {
+    id: 3,
     name: "정민서",
     age: 26,
     imageUrl: undefined,
@@ -76,8 +75,8 @@ const MOCK_CHARACTER_PROFILES: Record<number, CharacterProfile> = {
     relationshipType: "연애",
     loveType: "만다린",
   },
-  5: {
-    id: 5,
+  4: {
+    id: 4,
     name: "제연우",
     age: 23,
     imageUrl: undefined,
@@ -89,25 +88,25 @@ const MOCK_CHARACTER_PROFILES: Record<number, CharacterProfile> = {
 
 // AI 요약 임시 데이터 (추후 LLM API로 대체)
 const MOCK_AI_SUMMARY: Record<number, AICharacterSummary> = {
-  1: {
+  0: {
     history:
       "Lorem ipsum dolor sit amet consectetur. Maecenas id amet sed suscipit accumsan egestas. Pulvinar a tortor eu purus. Odio sed tempor tristique fusce nullam eu. Sed sit fames dolor leo vitae felis habitant. Diam interdum quis augue fusce viverra mollis parturient consectetur. Consectetur imperdiet nunc at leo eget dictumst enim ullamcorper. O···",
     personality:
       "Lorem ipsum dolor sit amet consectetur. Maecenas id amet sed suscipit accumsan egestas. Pulvinar a tortor eu purus. Odio sed tempor tristique fusce nullam eu. Sed sit fames dolor leo vitae felis habitant. Diam interdum quis augue fusce viverra mollis parturient consectetur. Consectetur imperdiet nunc at leo eget dictumst enim ullamcorper. O···",
   },
-  2: {
+  1: {
     history: "성윤수님과의 관계는 2024년 8월에 시작되었습니다...",
     personality: "차분하고 배려심이 깊은 성격으로...",
   },
-  3: {
+  2: {
     history: "이동근님과의 추억은 2024년 여름부터...",
     personality: "활발하고 유머러스한 성격...",
   },
-  4: {
+  3: {
     history: "정민서님과는 2024년 가을에 만나...",
     personality: "따뜻하고 다정한 성격...",
   },
-  5: {
+  4: {
     history: "제연우님과의 만남은 특별했습니다...",
     personality: "조용하지만 깊이 있는 성격...",
   },
@@ -121,11 +120,13 @@ const MOCK_AI_SUMMARY: Record<number, AICharacterSummary> = {
  * 캐릭터 프로필 조회 API
  * @param characterId 캐릭터 ID
  * @returns CharacterProfile
- * 
+ *
  * TODO: 추후 Spring Boot API 연동
  * GET /api/characters/{characterId}
  */
-async function fetchCharacterProfile(characterId: number): Promise<CharacterProfile | null> {
+async function fetchCharacterProfile(
+  characterId: number
+): Promise<CharacterProfile | null> {
   // 임시: Mock 데이터 반환
   // 추후: axios.get(`${API_BASE_URL}/api/characters/${characterId}`)
   return MOCK_CHARACTER_PROFILES[characterId] || null;
@@ -135,11 +136,13 @@ async function fetchCharacterProfile(characterId: number): Promise<CharacterProf
  * AI 캐릭터 요약 조회 API
  * @param characterId 캐릭터 ID
  * @returns AICharacterSummary
- * 
+ *
  * TODO: 추후 LLM API 연동
  * GET /api/characters/{characterId}/ai-summary
  */
-async function fetchAISummary(characterId: number): Promise<AICharacterSummary | null> {
+async function fetchAISummary(
+  characterId: number
+): Promise<AICharacterSummary | null> {
   // 임시: Mock 데이터 반환
   // 추후: LLM API 호출로 대체
   return MOCK_AI_SUMMARY[characterId] || null;
@@ -152,8 +155,7 @@ async function fetchAISummary(characterId: number): Promise<AICharacterSummary |
 type TabType = "profile" | "relation";
 
 export default function CharacterProfileScreen() {
-  const { id } = useLocalSearchParams<{ id: string }>();
-  const characterId = parseInt(id || "1", 10);
+  const { characterId } = useLocalSearchParams<{ characterId: string }>();
   const { setEditMode, initializeEditData } = useCharacterCreate();
 
   // 상태 관리
@@ -168,8 +170,8 @@ export default function CharacterProfileScreen() {
       setIsLoading(true);
       try {
         const [profileData, summaryData] = await Promise.all([
-          fetchCharacterProfile(characterId),
-          fetchAISummary(characterId),
+          fetchCharacterProfile(parseInt(characterId)),
+          fetchAISummary(parseInt(characterId)),
         ]);
         setProfile(profileData);
         setAISummary(summaryData);
@@ -189,18 +191,18 @@ export default function CharacterProfileScreen() {
 
   const handleEdit = () => {
     if (!profile) return;
-    
+
     // 편집 모드 설정
-    setEditMode(true, characterId);
-    
+    setEditMode(true, parseInt(characterId));
+
     // 기존 캐릭터 데이터를 Context에 저장
     // relationshipType 변환 (한글 -> 영문)
     const relationshipTypeMap: Record<string, "SUM" | "LOVE" | "BREAKUP"> = {
-      "썸": "SUM",
-      "연애": "LOVE",
-      "결별": "BREAKUP",
+      썸: "SUM",
+      연애: "LOVE",
+      결별: "BREAKUP",
     };
-    
+
     initializeEditData({
       name: profile.name,
       age: String(profile.age),
@@ -208,7 +210,7 @@ export default function CharacterProfileScreen() {
       dateMet: profile.dateMet ? new Date(profile.dateMet) : null,
       characterImage: profile.imageUrl || null,
     });
-    
+
     console.log("편집 화면으로 이동");
     router.push("/char_add1");
   };
@@ -243,7 +245,10 @@ export default function CharacterProfileScreen() {
         </Pressable>
       </View>
 
-      <ScrollView className="flex-1" contentContainerStyle={{ paddingBottom: 120 }}>
+      <ScrollView
+        className="flex-1"
+        contentContainerStyle={{ paddingBottom: 120 }}
+      >
         {/* 프로필 이미지 */}
         <View className="items-center mt-4 mb-4">
           <View className="w-[140px] h-[140px] rounded-full overflow-hidden bg-gray-200 items-center justify-center">
@@ -276,7 +281,9 @@ export default function CharacterProfileScreen() {
           >
             <MandarinText
               className={`text-[16px] ${
-                activeTab === "profile" ? "text-[#FF9D00] font-bold" : "text-gray-400"
+                activeTab === "profile"
+                  ? "text-[#FF9D00] font-bold"
+                  : "text-gray-400"
               }`}
             >
               프로필
@@ -290,7 +297,9 @@ export default function CharacterProfileScreen() {
           >
             <MandarinText
               className={`text-[16px] ${
-                activeTab === "relation" ? "text-[#FF9D00] font-bold" : "text-gray-400"
+                activeTab === "relation"
+                  ? "text-[#FF9D00] font-bold"
+                  : "text-gray-400"
               }`}
             >
               관계
@@ -305,15 +314,6 @@ export default function CharacterProfileScreen() {
           <RelationTabContent aiSummary={aiSummary} />
         )}
       </ScrollView>
-
-      {/* 하단 고정 버튼 */}
-      <View className="absolute bottom-0 left-0 right-0 px-6 pb-8 pt-4 bg-[#FCFCFC]">
-        <Button
-          label="시뮬레이션 시작"
-          onPress={handleStartSimulation}
-          textClassName="text-white"
-        />
-      </View>
     </SafeAreaView>
   );
 }
@@ -355,13 +355,17 @@ function ProfileTabContent({ profile }: { profile: CharacterProfile }) {
 // 관계 탭 콘텐츠
 // ============================================
 
-function RelationTabContent({ aiSummary }: { aiSummary: AICharacterSummary | null }) {
+function RelationTabContent({
+  aiSummary,
+}: {
+  aiSummary: AICharacterSummary | null;
+}) {
   return (
     <View className="px-6 pt-6">
       {/* AI 캐릭터 요약 헤더 */}
       <View className="flex-row items-center mb-4">
-        <Image 
-          source={require("@/assets/images/ai_char_summary_icon.png")} 
+        <Image
+          source={require("@/assets/images/ai_char_summary_icon.png")}
           className="w-6 h-6"
           resizeMode="contain"
         />
@@ -392,4 +396,3 @@ function RelationTabContent({ aiSummary }: { aiSummary: AICharacterSummary | nul
     </View>
   );
 }
-

@@ -46,8 +46,12 @@ export default function LoginPage() {
         // loveType에 따라 분기 처리
         // 0-15: 이미 테스트 완료 → 채팅 화면으로 이동
         // 16: 테스트 필요 → 연애타입 검사 화면으로 이동
-        if (response.loveType !== undefined && response.loveType >= 0 && response.loveType <= 15) {
-          router.replace("/chat");
+        if (
+          response.loveType !== undefined &&
+          response.loveType >= 0 &&
+          response.loveType <= 15
+        ) {
+          router.replace("/(tabs)/chat");
         } else {
           router.replace("/lovetype");
         }
@@ -58,7 +62,8 @@ export default function LoginPage() {
     } catch (error: any) {
       console.error("로그인 실패:", error);
       setErrorMessage(
-        error.response?.data?.message || "로그인에 실패했습니다. 아이디와 비밀번호를 확인해주세요."
+        error.response?.data?.message ||
+          "로그인에 실패했습니다. 아이디와 비밀번호를 확인해주세요."
       );
     } finally {
       setIsLoading(false);

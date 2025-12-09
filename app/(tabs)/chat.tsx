@@ -9,16 +9,16 @@ import Toast from "react-native-toast-message";
 
 // 백엔드 연동 전 임시 데이터 타입 정의
 interface Character {
-  id: number;
+  characterId: number;
   name: string;
   imageUrl?: string;
 }
 
 // 백엔드 연동 전 임시 데이터 (3개)
 const sampleCharacters: Character[] = [
-  { id: 1, name: "안도현", imageUrl: undefined },
-  { id: 2, name: "성윤수", imageUrl: undefined },
-  { id: 3, name: "이동근", imageUrl: undefined },
+  { characterId: 0, name: "안도현", imageUrl: undefined },
+  { characterId: 1, name: "성윤수", imageUrl: undefined },
+  { characterId: 2, name: "이동근", imageUrl: undefined },
 ];
 
 export default function ChatTab() {
@@ -50,8 +50,8 @@ export default function ChatTab() {
   const handleCharacterDetail = (characterId: number) => {
     console.log(`캐릭터 ${characterId} 상세 화면으로 이동`);
     router.push({
-      pathname: "/char_profile" as const,
-      params: { id: String(characterId) },
+      pathname: "/chatlist" as const,
+      params: { character: JSON.stringify(characters[characterId]) },
     } as any);
   };
 
@@ -75,10 +75,10 @@ export default function ChatTab() {
       {/* 3. 캐릭터 목록 */}
       <FlatList
         data={characters}
-        keyExtractor={(item) => String(item.id)}
+        keyExtractor={(item) => String(item.characterId)}
         renderItem={({ item }) => (
           <ChatListItem
-            characterId={item.id}
+            characterId={item.characterId}
             name={item.name}
             imageUrl={item.imageUrl || ""}
             onPress={handleCharacterDetail}
