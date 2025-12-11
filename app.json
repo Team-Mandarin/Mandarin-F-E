@@ -14,7 +14,8 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.taba10-team1.mandarin"
     },
     "android": {
       "adaptiveIcon": {
@@ -25,13 +26,29 @@
       },
       "edgeToEdgeEnabled": false,
       "predictiveBackGestureEnabled": false,
-      "package": "com.taba10_team1.mandarin"
+      "package": "com.taba10_team1.mandarin",
+      "softwareKeyboardLayoutMode": "resize"
     },
     "web": {
       "output": "static",
       "favicon": "./assets/images/favicon.png"
     },
-    "plugins": ["expo-router", "expo-splash-screen", "expo-asset", "expo-font", "expo-navigation-bar"],
+    "plugins": [
+      "expo-router",
+      "expo-splash-screen",
+      "expo-asset",
+      "expo-font",
+      "expo-navigation-bar",
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "usesCleartextTraffic": true
+          }
+        }
+      ],
+      "expo-web-browser"
+    ],
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true

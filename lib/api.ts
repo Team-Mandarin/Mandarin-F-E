@@ -1,23 +1,17 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import axios from 'axios';
-import { Platform } from 'react-native';
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import axios from "axios";
+import { Alert } from "react-native";
 
 // ⚠️ 실제 디바이스(Expo Go)에서 테스트할 때는 PC의 IP 주소를 사용하세요
-// 에뮬레이터에서 테스트할 때는 아래 주석을 참고하세요
-const DEV_API_URL = 'http://15.164.177.244:8080'; // 현재 PC IP 주소
+const DEV_API_URL = "http://15.164.177.244:8080";
 
 // 환경에 따른 Base URL 설정
 const getBaseUrl = () => {
   if (__DEV__) {
-    // 개발 환경 - 실제 디바이스(Expo Go) 또는 에뮬레이터
-    // 실제 디바이스: PC의 IP 주소 사용 (현재 설정)
     return DEV_API_URL;
-    
-    // Android 에뮬레이터 사용 시: return 'http://10.0.2.2:8080';
-    // iOS 시뮬레이터 사용 시: return 'http://localhost:8080';
   }
-  // 프로덕션 URL (배포 시 변경)
-  return 'https://your-production-api.com';
+  // 프로덕션 URL
+  return "http://15.164.177.244:8080";
 };
 
 // axios 인스턴스 생성
@@ -25,20 +19,20 @@ const api = axios.create({
   baseURL: getBaseUrl(),
   timeout: 10000,
   headers: {
-    'Content-Type': 'application/json',
+    "Content-Type": "application/json",
   },
 });
 
-// 요청 인터셉터 (토큰 자동 추가)
+// 요청 인터셉터
 api.interceptors.request.use(
   async (config) => {
     try {
-      const token = await AsyncStorage.getItem('accessToken');
+      const token = await AsyncStorage.getItem("accessToken");
       if (token) {
         config.headers.Authorization = `Bearer ${token}`;
       }
     } catch (error) {
-      console.error('토큰 조회 실패:', error);
+      console.error("토큰 조회 실패:", error);
     }
     return config;
   },
@@ -47,35 +41,57 @@ api.interceptors.request.use(
   }
 );
 
-// 응답 인터셉터 (에러 처리, 토큰 갱신)
+// 👇 [핵심] 응답 인터셉터: 에러 로그 상세 출력 기능 추가
 api.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
 
-    // 401 에러 (인증 실패) 처리
+    // -----------------------------------------------------------
+    // 🔍 상세 디버깅 로그 생성 (JSON 형태로 변환하여 출력)
+    // -----------------------------------------------------------
+    const debugInfo = {
+      message: error.message, // 에러 메시지 (예: Network Error)
+      code: error.code, // 에러 코드 (예: ERR_NETWORK, ECONNABORTED)
+      status: error.response?.status, // HTTP 상태 코드 (예: 404, 500)
+      url: originalRequest?.url, // 요청한 주소
+      baseURL: originalRequest?.baseURL, // 기본 URL
+      data: error.response?.data, // 서버가 보낸 에러 응답 내용
+    };
+
+    // 401(토큰만료)이 아닐 때만 로그를 띄웁니다 (401은 자동 갱신 시도하니까)
+    if (error.response?.status !== 401) {
+      Alert.alert(
+        "🔥 에러 상세 로그 🔥",
+        JSON.stringify(debugInfo, null, 2) // 보기 좋게 들여쓰기하여 출력
+      );
+    }
+    // -----------------------------------------------------------
+
+    // 401 에러 (인증 실패) 처리 로직 (기존 유지)
     if (error.response?.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
 
       try {
-        // refreshToken으로 새 accessToken 요청
-        const refreshToken = await AsyncStorage.getItem('refreshToken');
+        const refreshToken = await AsyncStorage.getItem("refreshToken");
         if (refreshToken) {
           const response = await axios.get(`${getBaseUrl()}/auth/auto-login`, {
             headers: { Authorization: `Bearer ${refreshToken}` },
           });
 
           const { accessToken } = response.data;
-          await AsyncStorage.setItem('accessToken', accessToken);
+          await AsyncStorage.setItem("accessToken", accessToken);
 
-          // 원래 요청 재시도
           originalRequest.headers.Authorization = `Bearer ${accessToken}`;
           return api(originalRequest);
         }
       } catch (refreshError) {
-        // 토큰 갱신 실패 시 로그아웃 처리
-        await AsyncStorage.multiRemove(['accessToken', 'refreshToken', 'userId']);
-        // 로그인 화면으로 이동은 AuthContext에서 처리
+        await AsyncStorage.multiRemove([
+          "accessToken",
+          "refreshToken",
+          "userId",
+        ]);
+        // 로그아웃 처리
       }
     }
 
@@ -84,7 +100,4 @@ api.interceptors.response.use(
 );
 
 export default api;
-
-// API 기본 URL 내보내기 (필요 시 사용)
 export const API_BASE_URL = getBaseUrl();
-

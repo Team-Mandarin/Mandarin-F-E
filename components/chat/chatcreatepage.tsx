@@ -242,7 +242,7 @@ export default function ChatCreatePage() {
                     label="만나러 가기"
                     onPress={() => {
                       router.push({
-                        pathname: "/charchat",
+                        pathname: "/chatcreateload",
                         params: {
                           simulationId: String(simulationId),
                         },
