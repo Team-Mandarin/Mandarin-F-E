@@ -1,12 +1,13 @@
 import api from '@/lib/api';
 import type {
-  UpdateLoveTypeRequest,
+  CheckIdResponse,
   LoveTypeResponse,
+  UpdateLoveTypeRequest,
   User,
   VerifyPasswordRequest,
   VerifyPasswordResponse,
-  CheckIdResponse,
 } from '@/types/api';
+
 
 export const userService = {
   /**
@@ -30,10 +31,10 @@ export const userService = {
 
   /**
    * 유저 정보 조회
-   * GET /users/{user_id}
+   * GET /user/{user_id}
    */
   getUser: async (userId: number): Promise<User> => {
-    const response = await api.get<User>(`/users/${userId}`);
+    const response = await api.get<User>(`/user/${userId}`);
     return response.data;
   },
 
@@ -42,7 +43,7 @@ export const userService = {
    * PATCH /users/{user_id}
    */
   updateUser: async (userId: number, data: Partial<User>): Promise<User> => {
-    const response = await api.patch<User>(`/users/${userId}`, data);
+    const response = await api.post<User>(`/user/${userId}`, data);
     return response.data;
   },
 

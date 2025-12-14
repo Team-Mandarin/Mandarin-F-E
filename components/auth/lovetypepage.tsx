@@ -70,6 +70,7 @@ export default function LoveTypePage() {
         const userId = await authService.getUserId();
         if (userId) {
           await userService.updateLoveType(userId, loveType);
+          await authService.setLoveType(loveType);
         }
         router.replace("/mylovetype");
       } catch (error) {

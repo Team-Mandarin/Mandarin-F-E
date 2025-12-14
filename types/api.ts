@@ -75,7 +75,7 @@ export interface LoveTypeResponse {
 // 유저 정보
 export interface User {
   id: number;
-  nickname: string;
+  username: string;
   age?: number;
   gender?: string;
   loveType?: number; // 0-15
