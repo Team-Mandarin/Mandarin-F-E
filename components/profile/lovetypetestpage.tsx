@@ -1,3 +1,4 @@
+import { authService } from "@/services/authService";
 import { router } from "expo-router";
 import { useState } from "react";
 import { View } from "react-native";
@@ -37,7 +38,7 @@ export default function LoveTypeTestPage() {
     }));
   };
 
-  const goToNextQuestion = () => {
+  const goToNextQuestion = async () => {
     if (currentQuestionIndex < questions.length - 1) {
       setCurrentQuestionIndex((prevIndex) => prevIndex + 1);
     } else {
@@ -58,11 +59,22 @@ export default function LoveTypeTestPage() {
       const type3 = answers[2]! + answers[9]! - answers[7]! >= 2 ? 1 : 0; // 1: Realistic, 0: Passionate
       const type4 = answers[3]! + answers[10]! - answers[4]! >= 2 ? 1 : 0; // 1: Optimistic, 0: Earnest
 
-      const loveType = `${type1}${type2}${type3}${type4}`;
+      const loveTypeBinary = `${type1}${type2}${type3}${type4}`;
+      const loveType = parseInt(loveTypeBinary, 2);
 
       // 백엔드에 러브타입 저장
-
-      router.replace("/newlovetype");
+      const id = Number(await authService.getId());
+      if (id) {
+        const response = await authService.changeInfo(
+          id,
+          undefined,
+          undefined,
+          loveType
+        );
+        if (response.success) {
+          router.replace("/newlovetype");
+        }
+      }
     }
   };
 

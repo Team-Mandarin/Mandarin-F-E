@@ -6,15 +6,13 @@
 export interface LoginRequest {
   userId: string;
   password: string;
-  loveType?: number; // optional (0-15)
 }
 
 // 로그인 응답
 export interface LoginResponse {
   success: boolean;
   message: string;
-  loveType?: number; // 0-15: 이미 테스트 완료, 16: 테스트 필요
-  username?: string; // 사용자 이름
+  id: number;
 }
 
 // 회원가입 요청
@@ -56,6 +54,11 @@ export interface CheckIdResponse {
   data: boolean; // true: 중복, false: 사용 가능
 }
 
+export interface ChangeInfoResponse {
+  success: boolean;
+  message?: string;
+}
+
 // ============================================
 // 유저 관련 타입
 // ============================================
@@ -74,11 +77,20 @@ export interface LoveTypeResponse {
 
 // 유저 정보
 export interface User {
-  id: number;
-  username: string;
-  age?: number;
-  gender?: string;
-  loveType?: number; // 0-15
+  success: boolean;
+  message: string;
+  data: {
+    id: number;
+    userId: string;
+    username: string;
+    loveType: number;
+    createdAt: string;
+  };
+}
+
+export interface CheckPWResponse {
+  success: boolean;
+  message?: string;
 }
 
 // ============================================
@@ -153,4 +165,3 @@ export interface PaginationParams {
   page?: number;
   size?: number;
 }
-
