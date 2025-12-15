@@ -17,11 +17,6 @@ export default function ProfileEditPage({
       </MandarinText>
       <View className="flex-1 gap-4 items-center">
         <ProfileButton
-          label="아이디 변경"
-          onPress={() => router.push("/idedit")}
-          className="bg-[#f2f2f2]"
-        />
-        <ProfileButton
           label="패스워드 변경"
           onPress={() => router.push("/pwedit")}
           className="bg-[#f2f2f2]"

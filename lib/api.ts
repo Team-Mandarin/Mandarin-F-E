@@ -1,6 +1,5 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
-import { Alert } from "react-native";
 
 // ⚠️ 실제 디바이스(Expo Go)에서 테스트할 때는 PC의 IP 주소를 사용하세요
 const DEV_API_URL = "http://15.164.177.244:8080";
@@ -59,12 +58,9 @@ api.interceptors.response.use(
       data: error.response?.data, // 서버가 보낸 에러 응답 내용
     };
 
-    // 401(토큰만료)이 아닐 때만 로그를 띄웁니다 (401은 자동 갱신 시도하니까)
-    if (error.response?.status !== 401) {
-      Alert.alert(
-        "🔥 에러 상세 로그 🔥",
-        JSON.stringify(debugInfo, null, 2) // 보기 좋게 들여쓰기하여 출력
-      );
+    // 401(토큰만료)이 아닐 때만 개발 환경에서만 콘솔 로그 출력
+    if (error.response?.status !== 401 && __DEV__) {
+      console.error("API 에러 상세 로그:", JSON.stringify(debugInfo, null, 2));
     }
     // -----------------------------------------------------------
 

@@ -1,31 +1,51 @@
+import { authService } from "@/services/authService";
+import { userService } from "@/services/userService";
 import { router } from "expo-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Keyboard, View } from "react-native";
 import Button from "../ui/Button";
 import Input from "../ui/Input";
 import MandarinText from "../ui/MandarinText";
 
 export default function PwEditPage() {
-  const userName = "만다린";
-  const password = "test";
+  const [userName, setUserName] = useState("");
+  const [id, setId] = useState<number | null>(null);
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [lastPassword, setLastPassword] = useState(false);
   const [samePassword, setSamePassword] = useState(false);
 
+  useEffect(() => {
+    const getUserInfo = async () => {
+      const id = Number(await authService.getId());
+      if (!id) {
+        return;
+      }
+      setId(id);
+      const response = await userService.getUser(id);
+      if (response.success) {
+        setUserName(response.data.username);
+      }
+    };
+
+    getUserInfo();
+  }, []);
   // 비밀번호 확인 로직 및 새로운 비밀번호 확인 로직 추가
-  const savePW = () => {
-    setLastPassword(false);
-    setSamePassword(false);
+  const savePW = async () => {
     Keyboard.dismiss();
-    if (password === newPassword) {
-      setLastPassword(true);
+    setSamePassword(false);
+
+    if (!id) {
       return;
-    } else if (newPassword !== confirmPassword) {
+    }
+
+    if (newPassword !== confirmPassword) {
       setSamePassword(true);
       return;
-    } else {
-      router.back();
+    }
+
+    const response = await authService.changeInfo(id, newPassword);
+    if (response.success) {
+      router.replace("/profile");
     }
   };
 
@@ -53,11 +73,6 @@ export default function PwEditPage() {
           placeholder="새로운 패스워드 확인"
           secureTextEntry={true}
         />
-        {lastPassword && (
-          <MandarinText className="text-red-500 text-sm mt-4">
-            이전 비밀번호와 동일합니다.
-          </MandarinText>
-        )}
         {samePassword && (
           <MandarinText className="text-red-500 text-sm mt-4">
             비밀번호가 일치하지 않습니다.

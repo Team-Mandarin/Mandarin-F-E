@@ -1,5 +1,6 @@
 import { loveTypeInfo } from "@/constants/loveTypeInfo";
 import { authService } from "@/services/authService";
+import { userService } from "@/services/userService";
 import { router } from "expo-router";
 import { useEffect, useState } from "react";
 import { Image, ScrollView, View } from "react-native";
@@ -14,21 +15,16 @@ export default function ProfileLoveTypePage() {
   // 사용자 정보 가져오기
   useEffect(() => {
     const fetchUserInfo = async () => {
-      try {
-        // username 가져오기
-        const username = await authService.getUsername();
-        if (username) {
-          setUserName(username);
-        }
+      setIsLoading(true);
 
-        // loveType 가져오기
-        const storedLoveType = await authService.getLoveType();
-        if (storedLoveType !== null && storedLoveType >= 0 && storedLoveType <= 15) {
-          setLoveType(storedLoveType);
-        }
-      } finally {
-        setIsLoading(false);
+      const id = Number(await authService.getId());
+
+      const response = await userService.getUser(id);
+      if (response.success) {
+        setUserName(response.data.username);
+        setLoveType(response.data.loveType);
       }
+      setIsLoading(false);
     };
     fetchUserInfo();
   }, []);

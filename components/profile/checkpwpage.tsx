@@ -26,10 +26,9 @@ export default function CheckPWPage() {
     setIsLoading(true);
 
     try {
-      // 저장된 userId 가져오기
-      const userId = await authService.getUserId();
+      const id = await authService.getId();
 
-      if (!userId) {
+      if (!id) {
         Toast.show({
           type: "login",
           visibilityTime: 4000,
@@ -39,14 +38,10 @@ export default function CheckPWPage() {
         return;
       }
 
-      // 로그인 API를 활용하여 비밀번호 확인
-      const response = await authService.login({
-        userId: userId,
-        password: inputPW,
-      });
+      // 비밀번호 확인
+      const response = await authService.checkPW(id, inputPW);
 
       if (response.success) {
-        // 비밀번호 일치 → 회원정보 관리 페이지로 이동
         router.push("/profileedit");
       } else {
         Toast.show({
@@ -57,7 +52,6 @@ export default function CheckPWPage() {
         });
       }
     } catch (error: any) {
-      console.error("비밀번호 확인 실패:", error);
       Toast.show({
         type: "login",
         visibilityTime: 4000,

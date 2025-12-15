@@ -1,15 +1,34 @@
+import { authService } from "@/services/authService";
+import { userService } from "@/services/userService";
 import { router } from "expo-router";
+import { useEffect, useState } from "react";
 import { Image, ScrollView, View } from "react-native";
 import { loveTypeInfo } from "../../constants/loveTypeInfo";
 import Button from "../ui/Button";
 import MandarinText from "../ui/MandarinText";
 
-export default function NewLoveTypePage() {
-  // 저장된 사용자 정보 가져온 뒤 출력 진행
-  const loveType = 9; // TODO: 백엔드에서 가져온 러브타입으로 교체 (0-15)
-  const userName = "만다린"; // TODO: 백엔드에서 가져온 사용자 이름으로 교체
+type LoveTypeInfo = (typeof loveTypeInfo)[number];
 
-  const typeInfo = loveTypeInfo[loveType];
+export default function NewLoveTypePage() {
+  const [userName, setUserName] = useState("");
+  const [typeInfo, setTypeInfo] = useState<LoveTypeInfo | null>(null);
+
+  useEffect(() => {
+    const getUserInfo = async () => {
+      const id = Number(await authService.getId());
+      if (!id) {
+        return;
+      }
+      const userInfo = await userService.getUser(id);
+
+      if (userInfo) {
+        setUserName(userInfo.data.username);
+        setTypeInfo(loveTypeInfo[userInfo.data.loveType]);
+      }
+    };
+
+    getUserInfo();
+  }, []);
 
   if (!typeInfo) {
     return (
