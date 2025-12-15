@@ -1,5 +1,4 @@
 import { authService } from "@/services/authService";
-import { userService } from "@/services/userService";
 import { router } from "expo-router";
 import { useState } from "react";
 import { View } from "react-native";
@@ -62,24 +61,17 @@ export default function LoveTypePage() {
       const type4 = answers[3]! + answers[10]! - answers[4]! >= 2 ? 1 : 0; // 1: Optimistic, 0: Earnest
 
       // 이진수를 0-15 정수로 변환
-      const loveType = type1 * 8 + type2 * 4 + type3 * 2 + type4;
+      const loveTypeBinary = `${type1}${type2}${type3}${type4}`;
+      const loveType = parseInt(loveTypeBinary, 2);
 
       // 백엔드에 러브타입 저장
       setIsSubmitting(true);
-      try {
-        const userId = await authService.getUserId();
-        if (userId) {
-          await userService.updateLoveType(userId, loveType);
-          await authService.setLoveType(loveType);
-        }
-        router.replace("/mylovetype");
-      } catch (error) {
-        console.error("러브타입 저장 실패:", error);
-        // 실패해도 결과 화면으로 이동 (오프라인 지원)
-        router.replace("/mylovetype");
-      } finally {
-        setIsSubmitting(false);
+      const id = Number(await authService.getId());
+      if (id) {
+        await authService.changeInfo(id, undefined, undefined, loveType);
+        console.log("러브타입 저장 성공", loveType);
       }
+      router.replace("/mylovetype");
     }
   };
 
