@@ -10,13 +10,14 @@ interface CharacterCreateData {
   age: string | null;
   relationshipType: "SUM" | "LOVE" | "BREAKUP" | null;
   dateMet: Date | null;
-  
+
   // char_add2 데이터 (상대방 연애 타입 질문 답변)
   loveTypeAnswers: { [key: number]: number | null };
-  
+  loveType: number | null;
+
   // char_add3 데이터
   history: string;
-  
+
   // char_add4 데이터
   uploadedFile: string | null;
 }
@@ -44,11 +45,14 @@ const initialData: CharacterCreateData = {
     2: null,
     10: null,
   },
+  loveType: null,
   history: "",
   uploadedFile: null,
 };
 
-const CharacterCreateContext = createContext<CharacterCreateContextType | undefined>(undefined);
+const CharacterCreateContext = createContext<
+  CharacterCreateContextType | undefined
+>(undefined);
 
 export function CharacterCreateProvider({ children }: { children: ReactNode }) {
   const [data, setData] = useState<CharacterCreateData>(initialData);
@@ -75,15 +79,17 @@ export function CharacterCreateProvider({ children }: { children: ReactNode }) {
   };
 
   return (
-    <CharacterCreateContext.Provider value={{ 
-      data, 
-      updateData, 
-      resetData,
-      isEditMode,
-      editCharacterId,
-      setEditMode,
-      initializeEditData,
-    }}>
+    <CharacterCreateContext.Provider
+      value={{
+        data,
+        updateData,
+        resetData,
+        isEditMode,
+        editCharacterId,
+        setEditMode,
+        initializeEditData,
+      }}
+    >
       {children}
     </CharacterCreateContext.Provider>
   );
@@ -92,8 +98,9 @@ export function CharacterCreateProvider({ children }: { children: ReactNode }) {
 export function useCharacterCreate() {
   const context = useContext(CharacterCreateContext);
   if (!context) {
-    throw new Error("useCharacterCreate must be used within CharacterCreateProvider");
+    throw new Error(
+      "useCharacterCreate must be used within CharacterCreateProvider"
+    );
   }
   return context;
 }
-

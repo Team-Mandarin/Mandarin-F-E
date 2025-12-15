@@ -1,4 +1,19 @@
 // ============================================
+// 공통 타입
+// ============================================
+export interface ApiResponse<T> {
+  code: number;
+  message: string;
+  data: T;
+}
+
+export interface ApiError {
+  message: string;
+  code?: string;
+  status?: number;
+}
+
+// ============================================
 // 인증 관련 타입
 // ============================================
 
@@ -100,17 +115,28 @@ export interface CheckPWResponse {
 // 캐릭터 생성 요청
 export interface CreateCharacterRequest {
   name: string;
-  personality: string;
-  description: string;
+  age: string | null;
+  relationshipType: string | null;
+  dateMet: Date | null;
+  loveTypeAnswers: { [key: number]: number | null };
+  history: string;
+}
+
+export interface Characters {
+  code: number;
+  message?: string;
+  data: Character[];
 }
 
 // 캐릭터 응답
 export interface Character {
   id: number;
-  name: string;
+  characterId: number;
+  characterName: string;
   personality: string;
   description: string;
   createdAt?: string;
+  imageUrl?: string;
 }
 
 // 채팅 메시지 저장 요청

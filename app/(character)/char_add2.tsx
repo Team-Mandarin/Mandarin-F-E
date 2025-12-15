@@ -53,7 +53,17 @@ export default function CharacterAdd2() {
       return;
     }
 
-    console.log("상대방 연애 타입 답변:", answers);
+    // 1. F0 or L1 5.A1 or C0 2. R1 or P0  10. O1 or E0
+    const type1 = answers[1]! >= 2 ? 0 : 1;
+    const type2 = answers[5]! >= 2 ? 1 : 0;
+    const type3 = answers[2]! >= 2 ? 1 : 0;
+    const type4 = answers[10]! >= 2 ? 1 : 0;
+
+    const loveTypeBinary = `${type1}${type2}${type3}${type4}`;
+    const loveType = parseInt(loveTypeBinary, 2);
+    updateData({ loveType: loveType });
+
+    console.log("러브타입:", loveType);
 
     // char_add3로 이동
     router.push("/char_add3");
