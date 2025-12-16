@@ -1,21 +1,10 @@
+import { Simulation } from "@/types/api";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { router } from "expo-router";
 import { Pressable, View } from "react-native";
 import MandarinText from "../ui/MandarinText";
 
-interface Chat {
-  simulation_id: number;
-  id: number;
-  character_id: number;
-  simulation_name: string;
-  purpose: string;
-  category: string;
-  time: string;
-  last_update_time: string;
-  is_finished: boolean;
-}
-
-export default function ChatListCard({ chat }: { chat: Chat }) {
+export default function ChatListCard({ chat }: { chat: Simulation }) {
   return (
     <View className="flex-row items-center justify-between px-8 my-4">
       <Pressable

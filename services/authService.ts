@@ -2,6 +2,7 @@ import api from "@/lib/api";
 import type {
   AutoLoginResponse,
   ChangeInfoResponse,
+  CheckIdResponse,
   CheckPWResponse,
   LoginRequest,
   LoginResponse,
@@ -128,6 +129,17 @@ export const authService = {
       loveType: loveType ? loveType : undefined,
     });
 
+    return response.data;
+  },
+
+  /**
+   * 아이디 중복 체크
+   * GET /user/checkid
+   */
+  checkId: async (userId: string): Promise<CheckIdResponse> => {
+    const response = await api.get<CheckIdResponse>(
+      `/user/check-id?userId=${userId}`
+    );
     return response.data;
   },
 };

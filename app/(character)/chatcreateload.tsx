@@ -14,28 +14,35 @@ const LOADING_TEXTS = [
   "고민을 해결해 줄 만다린을 찾는 중...",
 ];
 
-const INTERVAL_MS = 1500; // 1.5초
-
-export default function ChatCreateLoad() {
+export default function ChatCreateLoad({
+  setIsLoading,
+  isLoading, // ✅ 추가
+}: {
+  setIsLoading: (isLoading: boolean) => void;
+  isLoading: boolean; // ✅ 추가
+}) {
   const { simulationId } = useLocalSearchParams<{ simulationId: string }>();
   const [textIndex, setTextIndex] = useState(0);
 
   useEffect(() => {
+    // ✅ isLoading이 false가 되면 자동으로 이동
+    if (!isLoading) {
+      router.replace({
+        pathname: "/charchat",
+        params: { simulationId },
+      });
+      return;
+    }
+
+    // ✅ 텍스트 애니메이션은 계속 진행
     const timer = setTimeout(() => {
       if (textIndex < LOADING_TEXTS.length - 1) {
-        // 다음 문구로 변경
         setTextIndex(textIndex + 1);
-      } else {
-        // 마지막 문구 후 chatbot으로 이동
-        router.replace({
-          pathname: "/charchat",
-          params: { simulationId },
-        });
       }
-    }, INTERVAL_MS);
+    }, 1500);
 
     return () => clearTimeout(timer);
-  }, [textIndex, simulationId]);
+  }, [textIndex, simulationId, isLoading]);
 
   return (
     <View className="flex-1">

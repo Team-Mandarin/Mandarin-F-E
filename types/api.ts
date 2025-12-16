@@ -28,6 +28,7 @@ export interface LoginResponse {
   success: boolean;
   message: string;
   id: number;
+  loveType: number;
 }
 
 // 회원가입 요청
@@ -128,7 +129,6 @@ export interface Characters {
   data: Character[];
 }
 
-// 캐릭터 응답
 export interface Character {
   id: number;
   characterId: number;
@@ -136,7 +136,19 @@ export interface Character {
   personality: string;
   description: string;
   createdAt?: string;
-  imageUrl?: string;
+  characterImg?: string;
+}
+
+// 캐릭터 응답
+export interface CharacterResponse {
+  code: number;
+  message?: string;
+  data: Character;
+}
+
+export interface UploadAndMaskResponse {
+  success: boolean;
+  dialogueJson: string;
 }
 
 // 채팅 메시지 저장 요청
@@ -147,21 +159,55 @@ export interface SaveMessageRequest {
 }
 
 // 채팅 메시지
-export interface ChatMessage {
+export interface Chat {
+  character_id: number;
   id: number;
-  characterId: number;
-  userMessage: string;
-  aiMessage: string;
-  createdAt: string;
+  character_img: string;
+  character_name: string;
+  character_age: number;
+  relation_type: number;
+  meet_date: string;
+  c_lovetype: number;
+  kakao_name: string;
+  full_dialogue: string;
+}
+
+export interface Chats {
+  code: number;
+  message?: string;
+  data?: Chat[];
 }
 
 // 채팅 내역 응답 (페이지네이션)
 export interface ChatMessagesResponse {
-  content: ChatMessage[];
+  content: Chat[];
   page: number;
   size: number;
   totalElements: number;
   totalPages: number;
+}
+
+export interface CreateSimulation {
+  id: number;
+  characterId: number;
+  simulationName: string;
+  purpose: string;
+  category: string;
+  time: string;
+}
+
+export interface Simulation {
+  simulation_id: number;
+  id: number;
+  character_id: number;
+  simulation_name: string;
+  purpose: string;
+  category: string;
+  time: string;
+  last_update_time: string;
+  is_finished: boolean;
+  few_shot_context: string;
+  character_persona: string;
 }
 
 // 채팅 시뮬레이션 요청
@@ -190,4 +236,15 @@ export interface ApiError {
 export interface PaginationParams {
   page?: number;
   size?: number;
+}
+
+// 히스토리 요약 요청
+export interface HistorySummaryRequest {
+  characterName: string;
+  history: string;
+}
+
+// 히스토리 요약 응답
+export interface HistorySummaryResponse {
+  historySum: string;
 }

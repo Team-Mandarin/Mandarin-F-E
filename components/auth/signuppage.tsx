@@ -4,7 +4,7 @@ import { useState } from "react";
 import { View } from "react-native";
 import Button from "../ui/Button";
 import MandarinText from "../ui/MandarinText";
-import NumInput from "./idinput";
+import IdInput from "./idinput";
 import NameInput from "./nameinput";
 import PWInput from "./pwinput";
 
@@ -55,7 +55,7 @@ export default function SignUpPage({ step, setStep }: SignUpPageProps) {
         <NameInput name={name} setName={setName} setStep={setStep} />
       )}
 
-      {step === 2 && <NumInput iD={iD} setID={setID} setStep={setStep} />}
+      {step === 2 && <IdInput iD={iD} setID={setID} setStep={setStep} />}
 
       {step === 3 && (
         <PWInput

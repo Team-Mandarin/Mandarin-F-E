@@ -16,7 +16,7 @@ interface CharacterCreateData {
   loveType: number | null;
 
   // char_add3 데이터
-  history: string;
+  historySum: string;
 
   // char_add4 데이터
   uploadedFile: string | null;
@@ -46,7 +46,7 @@ const initialData: CharacterCreateData = {
     10: null,
   },
   loveType: null,
-  history: "",
+  historySum: "",
   uploadedFile: null,
 };
 

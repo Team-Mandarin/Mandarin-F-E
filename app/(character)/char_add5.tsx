@@ -83,7 +83,7 @@ export default function CharacterAdd4() {
           ? data.dateMet.toISOString().split(".")[0]
           : new Date().toISOString().split(".")[0],
         loveType: data.loveType,
-        historySum: data.history,
+        historySum: data.historySum,
         kakaoName: kakaoName,
       };
 
@@ -112,11 +112,10 @@ export default function CharacterAdd4() {
       // ---------------------------------------------------------
       if (data.uploadedFile) {
         const localUri = data.uploadedFile;
-        const filename = localUri.split("/").pop() || "dialogue.txt";
 
         formData.append("full_dialogue", {
           uri: localUri,
-          name: filename,
+          name: "dialogue.txt",
           type: "text/plain", // txt 파일이므로 text/plain 고정
         } as any);
       }

@@ -1,36 +1,24 @@
+import { chatService } from "@/services/chatService";
+import { Simulation } from "@/types/api";
+import { useEffect, useState } from "react";
 import { View } from "react-native";
 import ChatListCard from "./chatlistcard";
 
-export default function ChatListPage() {
-  const chatList = [
-    {
-      simulation_id: 1,
-      id: 1,
-      character_id: 0,
-      simulation_name: "simulation_name_1",
-      purpose: "FUTURE",
-      category: "EMOTIONAL_MISTAKE",
-      time: "2022-01-01",
-      last_update_time: "2025-01-01",
-      is_finished: false,
-    },
-    {
-      simulation_id: 2,
-      id: 2,
-      character_id: 0,
-      simulation_name: "simulation_name_2",
-      purpose: "FUTURE",
-      category: "EMOTIONAL_MISTAKE",
-      time: "2022-01-01",
-      last_update_time: "2025-01-01",
-      is_finished: true,
-    },
-  ];
+export default function ChatListPage({ characterId }: { characterId: number }) {
+  const [chatList, setChatList] = useState<Simulation[]>([]);
+
+  useEffect(() => {
+    const fetchChatList = async () => {
+      const response = await chatService.getChatList(characterId);
+      // setChatList(response.data || []);
+    };
+    fetchChatList();
+  }, [characterId]);
 
   return (
     <View className="mt-4">
       {chatList.map((chat) => (
-        <ChatListCard key={chat.simulation_id} chat={chat} />
+        <ChatListCard key={chat.character_id} chat={chat} />
       ))}
     </View>
   );
