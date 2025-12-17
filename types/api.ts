@@ -3,8 +3,8 @@
 // ============================================
 export interface ApiResponse<T> {
   code: number;
-  message: string;
-  data: T;
+  message?: string;
+  data?: T;
 }
 
 export interface ApiError {
@@ -133,10 +133,15 @@ export interface Character {
   id: number;
   characterId: number;
   characterName: string;
-  personality: string;
-  description: string;
   createdAt?: string;
   characterImg?: string;
+  characterAge: number;
+  relationType: string;
+  meetDate: string;
+  loveType: number;
+  kakaoName: string;
+  historySum: string;
+  fullDialogue: string;
 }
 
 // 캐릭터 응답
@@ -197,17 +202,27 @@ export interface CreateSimulation {
 }
 
 export interface Simulation {
-  simulation_id: number;
+  simulationId: number;
   id: number;
-  character_id: number;
-  simulation_name: string;
+  characterId: number;
+  simulationName: string;
   purpose: string;
   category: string;
   time: string;
-  last_update_time: string;
-  is_finished: boolean;
-  few_shot_context: string;
-  character_persona: string;
+  lastUpdateTime: string;
+  isFinished: boolean;
+  fewShotContext: string;
+  characterPersona: string;
+}
+
+export interface SimulationResponse {
+  data: Simulation;
+}
+
+export interface Simulations {
+  code: number;
+  message?: string;
+  data?: Simulation[];
 }
 
 // 채팅 시뮬레이션 요청
@@ -247,4 +262,59 @@ export interface HistorySummaryRequest {
 // 히스토리 요약 응답
 export interface HistorySummaryResponse {
   historySum: string;
+}
+
+export interface SendMessageResponse {
+  reply: string;
+}
+
+export interface SendMessageRequest {
+  simulationId: number;
+  userMessage: string;
+}
+
+export interface SimulationHistoryResponse {
+  data: SimulationHistory[];
+}
+
+export interface SimulationHistory {
+  sender: string;
+  content: string;
+  timestamp: string;
+}
+
+export interface CreateReportRequest {
+  simulationId: number;
+  id: number;
+}
+
+export interface CreateReportResponse {
+  success: boolean;
+  data: Report;
+}
+
+export interface Report {
+  chatReportId: number;
+  simulationId: number;
+  characterId: number;
+  scoreAvg: number;
+  labelKey: number;
+  labelScore: number;
+  reportContent: string;
+  createdAt: string;
+}
+
+export interface CharacterReport {
+  reportCharacterId: number;
+  characterId: number;
+  conflictName: string;
+  dangerLevel: number;
+  description: string;
+  solution: string;
+}
+
+export interface CharacterReports {
+  code: number;
+  message?: string;
+  data?: CharacterReport[];
 }

@@ -1,14 +1,22 @@
 import api, { SERVER_URL } from "@/lib/api";
 import type {
   ApiResponse,
+  CharacterReports,
   CharacterResponse,
   Characters,
-  Chats,
+  CreateReportRequest,
+  CreateReportResponse,
   CreateSimulation,
   HistorySummaryRequest,
   HistorySummaryResponse,
+  SendMessageRequest,
+  SendMessageResponse,
   Simulation,
+  SimulationHistoryResponse,
+  SimulationResponse,
+  Simulations,
 } from "@/types/api";
+import { router } from "expo-router";
 
 export const chatService = {
   /**
@@ -76,8 +84,8 @@ export const chatService = {
    * 채팅 목록 조회
    * GET /chat/list
    */
-  getChatList: async (characterId: number): Promise<Chats> => {
-    const response = await api.get<Chats>(
+  getChatList: async (characterId: number): Promise<Simulations> => {
+    const response = await api.get<Simulations>(
       `/simulation/character/${characterId}`
     );
 
@@ -125,5 +133,87 @@ export const chatService = {
     });
 
     return response.json(); // 마스킹된 JSON 데이터 반환
+  },
+
+  /**
+   * 캐릭터 삭제
+   * DELETE /character/delete/{character_id}
+   */
+  deleteCharacter: async (characterId: number): Promise<ApiResponse<null>> => {
+    const response = await api.delete<ApiResponse<null>>(
+      `/character/delete/${characterId}`
+    );
+
+    router.replace("/chat");
+    return response.data;
+  },
+
+  /**
+   * 채팅 전송
+   * POST /api/chat/send
+   */
+  sendMessage: async (
+    data: SendMessageRequest
+  ): Promise<SendMessageResponse> => {
+    const response = await api.post<SendMessageResponse>(`/api/chat/send`, {
+      simulationId: data.simulationId,
+      userMessage: data.userMessage,
+    });
+
+    return response.data;
+  },
+
+  /**
+   * 시뮬레이션 단건 조회
+   * GET /simulation/{simulation_id}
+   */
+  getSimulation: async (simulationId: number): Promise<SimulationResponse> => {
+    const response = await api.get<SimulationResponse>(
+      `/simulation/${simulationId}`
+    );
+    return response.data;
+  },
+
+  /**
+   * 채팅 내역 조회
+   * GET /api/chat/list
+   */
+  getSimulationHistory: async (
+    simulationId: number
+  ): Promise<SimulationHistoryResponse> => {
+    const response = await api.get<SimulationHistoryResponse>(
+      `/simulation/message/${simulationId}`
+    );
+    return response.data;
+  },
+
+  /**
+   * 보고서 생성
+   * POST /chat/report/create
+   */
+  createReport: async (
+    data: CreateReportRequest
+  ): Promise<CreateReportResponse> => {
+    const response = await api.post<CreateReportResponse>(
+      `/chat/report/create`,
+      {
+        simulation_id: data.simulationId,
+        id: data.id,
+      }
+    );
+    return response.data;
+  },
+
+  /**
+   * 캐릭터 보고서 조회
+   * GET /chat/report/character/{character_id}
+   */
+  getCharacterReport: async (
+    characterId: number
+  ): Promise<CharacterReports> => {
+    const response = await api.get<CharacterReports>(
+      `/character/report/${characterId}`
+    );
+    return response.data;
   },
 };

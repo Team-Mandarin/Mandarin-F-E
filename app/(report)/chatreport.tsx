@@ -7,6 +7,10 @@ import { Image, ScrollView, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function ChatReport() {
+  const reportResponse = useLocalSearchParams<{ report: string }>();
+
+  console.log(reportResponse);
+
   const { score, label_key, label_score, report_content } =
     useLocalSearchParams<{
       score: string;

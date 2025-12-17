@@ -1,23 +1,41 @@
+import {
+  CATEGORY_OPTIONS,
+  CategoryType,
+  PURPOSE_LABELS,
+  PurposeType,
+} from "@/constants/simulationType";
 import { Simulation } from "@/types/api";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { router } from "expo-router";
 import { Pressable, View } from "react-native";
 import MandarinText from "../ui/MandarinText";
 
-export default function ChatListCard({ chat }: { chat: Simulation }) {
+export default function ChatListCard({
+  simulation,
+}: {
+  simulation: Simulation;
+}) {
+  const purpose = simulation.purpose as PurposeType;
+  const category = simulation.category as CategoryType;
+
+  const purposeLabel = PURPOSE_LABELS[purpose];
+
+  const categoryLabel =
+    CATEGORY_OPTIONS[purpose].find((opt) => opt.value === category)?.label ??
+    "";
   return (
     <View className="flex-row items-center justify-between px-8 my-4">
       <Pressable
         onPress={() =>
           router.push({
             pathname: "/charchat",
-            params: { simulationId: chat.simulation_id },
+            params: { simulationId: String(simulation.simulationId) },
           })
         }
       >
         <View>
           <View className="flex-row items-center">
-            {chat.is_finished ? (
+            {simulation.isFinished ? (
               <Ionicons
                 name="document-text-outline"
                 size={24}
@@ -46,13 +64,17 @@ export default function ChatListCard({ chat }: { chat: Simulation }) {
                 />
               </View>
             )}
-            <MandarinText className="text-xl font-semibold ml-2">
-              {chat.simulation_name}
+            <MandarinText
+              className="text-xl font-semibold ml-2 w-60"
+              numberOfLines={1}
+              ellipsizeMode="tail"
+            >
+              {simulation.simulationName}
             </MandarinText>
           </View>
           <View>
             <MandarinText className="text-xs text-[#737373]">
-              {chat.purpose} | {chat.category} | {chat.time}{" "}
+              {purposeLabel} | {categoryLabel} | {simulation.time.slice(0, 10)}{" "}
             </MandarinText>
           </View>
         </View>

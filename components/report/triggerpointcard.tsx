@@ -8,7 +8,7 @@ export default function TriggerPointCard({
   onPress,
 }: {
   keyword: string;
-  percentage: string;
+  percentage: number;
   className?: string;
   onPress?: () => void;
 }) {
@@ -23,7 +23,7 @@ export default function TriggerPointCard({
           <View className="flex-1 h-3 bg-[#FFD0D0] rounded-full overflow-hidden">
             <View
               className="h-full bg-[#FF7C7C] rounded-full"
-              style={{ width: `${Number(percentage)}%` }}
+              style={{ width: `${percentage}%` }}
             />
           </View>
           <MandarinText className="ml-3 text-sm font-semibold text-[#8E8E8E]">

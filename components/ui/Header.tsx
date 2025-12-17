@@ -42,6 +42,8 @@ export default function Header({
           {title ? (
             <MandarinText
               className={`text-2xl font-bold text-black ${className}`}
+              numberOfLines={1}
+              ellipsizeMode="tail"
             >
               {title}
             </MandarinText>

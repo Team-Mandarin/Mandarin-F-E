@@ -8,6 +8,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function ChatList() {
   const { character } = useLocalSearchParams<{ character: string }>();
+  console.log(character);
 
   const parsedCharacter: Character = JSON.parse(character as string);
   console.log(parsedCharacter);

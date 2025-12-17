@@ -36,9 +36,10 @@ export default function ChatCreateLoad({
 
     // ✅ 텍스트 애니메이션은 계속 진행
     const timer = setTimeout(() => {
-      if (textIndex < LOADING_TEXTS.length - 1) {
-        setTextIndex(textIndex + 1);
-      }
+      // 마지막 인덱스에 도달하면 0으로 리셋, 아니면 다음 인덱스로
+      setTextIndex((prevIndex) =>
+        prevIndex < LOADING_TEXTS.length - 1 ? prevIndex + 1 : 0
+      );
     }, 1500);
 
     return () => clearTimeout(timer);

@@ -1,21 +1,10 @@
-import Character from "@/components/report/character";
+import CharacterPage from "@/components/report/characterpage";
 import Me from "@/components/report/me";
 import MandarinText from "@/components/ui/MandarinText";
-import * as NavigationBar from "expo-navigation-bar";
-import { useEffect, useState } from "react";
-import { Platform, Pressable, ScrollView, StatusBar, View } from "react-native";
+import { useState } from "react";
+import { Pressable, ScrollView, View } from "react-native";
 
 export default function ReportTab() {
-  useEffect(() => {
-    if (Platform.OS === "android") {
-      StatusBar.setBackgroundColor("#FFFFFF");
-      StatusBar.setBarStyle("dark-content");
-
-      NavigationBar.setBackgroundColorAsync("#FFFFFF");
-      NavigationBar.setButtonStyleAsync("dark");
-    }
-  }, []);
-
   const [tap, setTap] = useState(0);
 
   return (
@@ -58,7 +47,7 @@ export default function ReportTab() {
         </Pressable>
       </View>
       <ScrollView className="flex-1 bg-[#f6f5f3]">
-        {tap === 0 && <Character />}
+        {tap === 0 && <CharacterPage />}
         {tap === 1 && <Me />}
       </ScrollView>
     </View>

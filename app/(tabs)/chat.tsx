@@ -11,7 +11,6 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import Toast from "react-native-toast-message";
 
 export default function ChatTab() {
-  // 백엔드 API를 통해 캐릭터 데이터를 불러와 저장 (아직은 구현 x)
   const [characters, setCharacters] = useState<Character[] | null>(null);
 
   useEffect(() => {

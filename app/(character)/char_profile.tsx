@@ -8,149 +8,9 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 import MandarinText from "@/components/ui/MandarinText";
 import { useCharacterCreate } from "@/contexts/CharacterCreateContext";
-
-// ============================================
-// 타입 정의 (추후 백엔드 연동 시 별도 파일로 분리 가능)
-// ============================================
-
-interface CharacterProfile {
-  id: number;
-  name: string;
-  age: number;
-  imageUrl?: string;
-  dateMet: string; // YYYY-MM-DD 형식
-  relationshipType: "썸" | "연애" | "결별";
-  loveType: string; // 연애 타입 (예: 블러드 오렌지)
-}
-
-interface CharacterRelation {
-  history: string; // 히스토리 텍스트
-  personality: string; // 말투, 성격 텍스트
-}
-
-interface AICharacterSummary {
-  history: string;
-  personality: string;
-}
-
-// ============================================
-// 임시 데이터 (추후 백엔드 API로 대체)
-// ============================================
-
-// 캐릭터 프로필 임시 데이터
-const MOCK_CHARACTER_PROFILES: Record<number, CharacterProfile> = {
-  0: {
-    id: 0,
-    name: "안도현",
-    age: 25,
-    imageUrl: undefined,
-    dateMet: "2024-11-23",
-    relationshipType: "썸",
-    loveType: "블러드 오렌지",
-  },
-  1: {
-    id: 1,
-    name: "성윤수",
-    age: 27,
-    imageUrl: undefined,
-    dateMet: "2024-08-15",
-    relationshipType: "연애",
-    loveType: "레몬",
-  },
-  2: {
-    id: 2,
-    name: "이동근",
-    age: 24,
-    imageUrl: undefined,
-    dateMet: "2024-06-01",
-    relationshipType: "결별",
-    loveType: "자몽",
-  },
-  3: {
-    id: 3,
-    name: "정민서",
-    age: 26,
-    imageUrl: undefined,
-    dateMet: "2024-09-10",
-    relationshipType: "연애",
-    loveType: "만다린",
-  },
-  4: {
-    id: 4,
-    name: "제연우",
-    age: 23,
-    imageUrl: undefined,
-    dateMet: "2024-10-05",
-    relationshipType: "썸",
-    loveType: "유자",
-  },
-};
-
-// AI 요약 임시 데이터 (추후 LLM API로 대체)
-const MOCK_AI_SUMMARY: Record<number, AICharacterSummary> = {
-  0: {
-    history:
-      "Lorem ipsum dolor sit amet consectetur. Maecenas id amet sed suscipit accumsan egestas. Pulvinar a tortor eu purus. Odio sed tempor tristique fusce nullam eu. Sed sit fames dolor leo vitae felis habitant. Diam interdum quis augue fusce viverra mollis parturient consectetur. Consectetur imperdiet nunc at leo eget dictumst enim ullamcorper. O···",
-    personality:
-      "Lorem ipsum dolor sit amet consectetur. Maecenas id amet sed suscipit accumsan egestas. Pulvinar a tortor eu purus. Odio sed tempor tristique fusce nullam eu. Sed sit fames dolor leo vitae felis habitant. Diam interdum quis augue fusce viverra mollis parturient consectetur. Consectetur imperdiet nunc at leo eget dictumst enim ullamcorper. O···",
-  },
-  1: {
-    history: "성윤수님과의 관계는 2024년 8월에 시작되었습니다...",
-    personality: "차분하고 배려심이 깊은 성격으로...",
-  },
-  2: {
-    history: "이동근님과의 추억은 2024년 여름부터...",
-    personality: "활발하고 유머러스한 성격...",
-  },
-  3: {
-    history: "정민서님과는 2024년 가을에 만나...",
-    personality: "따뜻하고 다정한 성격...",
-  },
-  4: {
-    history: "제연우님과의 만남은 특별했습니다...",
-    personality: "조용하지만 깊이 있는 성격...",
-  },
-};
-
-// ============================================
-// API 함수 (추후 실제 백엔드 연동 시 구현)
-// ============================================
-
-/**
- * 캐릭터 프로필 조회 API
- * @param characterId 캐릭터 ID
- * @returns CharacterProfile
- *
- * TODO: 추후 Spring Boot API 연동
- * GET /api/characters/{characterId}
- */
-async function fetchCharacterProfile(
-  characterId: number
-): Promise<CharacterProfile | null> {
-  // 임시: Mock 데이터 반환
-  // 추후: axios.get(`${API_BASE_URL}/api/characters/${characterId}`)
-  return MOCK_CHARACTER_PROFILES[characterId] || null;
-}
-
-/**
- * AI 캐릭터 요약 조회 API
- * @param characterId 캐릭터 ID
- * @returns AICharacterSummary
- *
- * TODO: 추후 LLM API 연동
- * GET /api/characters/{characterId}/ai-summary
- */
-async function fetchAISummary(
-  characterId: number
-): Promise<AICharacterSummary | null> {
-  // 임시: Mock 데이터 반환
-  // 추후: LLM API 호출로 대체
-  return MOCK_AI_SUMMARY[characterId] || null;
-}
-
-// ============================================
-// 컴포넌트
-// ============================================
+import { SERVER_URL } from "@/lib/api";
+import { chatService } from "@/services/chatService";
+import { Character } from "@/types/api";
 
 type TabType = "profile" | "relation";
 
@@ -160,8 +20,7 @@ export default function CharacterProfileScreen() {
 
   // 상태 관리
   const [activeTab, setActiveTab] = useState<TabType>("profile");
-  const [profile, setProfile] = useState<CharacterProfile | null>(null);
-  const [aiSummary, setAISummary] = useState<AICharacterSummary | null>(null);
+  const [character, setCharacter] = useState<Character | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   // 데이터 로딩
@@ -169,12 +28,8 @@ export default function CharacterProfileScreen() {
     const loadData = async () => {
       setIsLoading(true);
       try {
-        const [profileData, summaryData] = await Promise.all([
-          fetchCharacterProfile(parseInt(characterId)),
-          fetchAISummary(parseInt(characterId)),
-        ]);
-        setProfile(profileData);
-        setAISummary(summaryData);
+        const response = await chatService.getCharacter(parseInt(characterId));
+        setCharacter(response.data);
       } catch (error) {
         console.error("데이터 로딩 오류:", error);
       } finally {
@@ -190,7 +45,7 @@ export default function CharacterProfileScreen() {
   };
 
   const handleEdit = () => {
-    if (!profile) return;
+    if (!character) return;
 
     // 편집 모드 설정
     setEditMode(true, parseInt(characterId));
@@ -204,15 +59,20 @@ export default function CharacterProfileScreen() {
     };
 
     initializeEditData({
-      name: profile.name,
-      age: String(profile.age),
-      relationshipType: relationshipTypeMap[profile.relationshipType] || null,
-      dateMet: profile.dateMet ? new Date(profile.dateMet) : null,
-      characterImage: profile.imageUrl || null,
+      name: character.characterName,
+      age: String(character.characterAge),
+      relationshipType: relationshipTypeMap[character.relationType] || null,
+      dateMet: character.meetDate ? new Date(character.meetDate) : null,
+      characterImage: `${SERVER_URL}/uploads/${character.characterImg}` || null,
     });
 
     console.log("편집 화면으로 이동");
     router.push("/char_add1");
+  };
+
+  const handleDelete = async () => {
+    console.log("캐릭터 삭제:", characterId);
+    await chatService.deleteCharacter(parseInt(characterId));
   };
 
   const handleStartSimulation = () => {
@@ -223,9 +83,9 @@ export default function CharacterProfileScreen() {
     });
   };
 
-  const hasImage = profile?.imageUrl;
+  const hasImage = character?.characterImg;
 
-  if (isLoading || !profile) {
+  if (isLoading || !character) {
     return (
       <SafeAreaView className="flex-1 bg-[#FCFCFC] items-center justify-center">
         <MandarinText className="text-gray-500">로딩 중...</MandarinText>
@@ -243,6 +103,9 @@ export default function CharacterProfileScreen() {
         <Pressable onPress={handleEdit}>
           <MandarinText className="text-[18px] text-black">편집</MandarinText>
         </Pressable>
+        <Pressable onPress={handleDelete}>
+          <MandarinText className="text-[18px] text-red">삭제</MandarinText>
+        </Pressable>
       </View>
 
       <ScrollView
@@ -254,7 +117,9 @@ export default function CharacterProfileScreen() {
           <View className="w-[140px] h-[140px] rounded-full overflow-hidden bg-gray-200 items-center justify-center">
             {hasImage ? (
               <Image
-                source={{ uri: profile.imageUrl }}
+                source={{
+                  uri: `${SERVER_URL}/uploads/${character.characterImg}`,
+                }}
                 className="w-full h-full"
                 resizeMode="cover"
               />
@@ -267,7 +132,7 @@ export default function CharacterProfileScreen() {
         {/* 이름 */}
         <View className="items-center mb-6">
           <MandarinText className="text-[24px] font-bold text-black">
-            {profile.name}
+            {character.characterName}
           </MandarinText>
         </View>
 
@@ -309,9 +174,9 @@ export default function CharacterProfileScreen() {
 
         {/* 탭 콘텐츠 */}
         {activeTab === "profile" ? (
-          <ProfileTabContent profile={profile} />
+          <ProfileTabContent character={character} />
         ) : (
-          <RelationTabContent aiSummary={aiSummary} />
+          <RelationTabContent character={character} />
         )}
       </ScrollView>
     </SafeAreaView>
@@ -322,12 +187,23 @@ export default function CharacterProfileScreen() {
 // 프로필 탭 콘텐츠
 // ============================================
 
-function ProfileTabContent({ profile }: { profile: CharacterProfile }) {
+function ProfileTabContent({ character }: { character: Character }) {
+  const relationshipTypeLabelMap: Record<string, string> = {
+    0: "썸",
+    1: "연애",
+    2: "결별",
+  };
+
   const infoItems = [
-    { label: "나이", value: `${profile.age}세` },
-    { label: "만난 날짜", value: profile.dateMet },
-    { label: "관계 유형", value: profile.relationshipType },
-    { label: "연애 타입", value: profile.loveType },
+    { label: "나이", value: `${character.characterAge}세` },
+    { label: "만난 날짜", value: character.meetDate },
+    {
+      label: "관계 유형",
+      value:
+        relationshipTypeLabelMap[character.relationType] ||
+        character.relationType,
+    },
+    { label: "연애 타입", value: character.loveType },
   ];
 
   return (
@@ -355,11 +231,7 @@ function ProfileTabContent({ profile }: { profile: CharacterProfile }) {
 // 관계 탭 콘텐츠
 // ============================================
 
-function RelationTabContent({
-  aiSummary,
-}: {
-  aiSummary: AICharacterSummary | null;
-}) {
+function RelationTabContent({ character }: { character: Character }) {
   return (
     <View className="px-6 pt-6">
       {/* AI 캐릭터 요약 헤더 */}
@@ -380,7 +252,7 @@ function RelationTabContent({
           히스토리
         </MandarinText>
         <MandarinText className="text-[14px] text-gray-600 leading-6">
-          {aiSummary?.history || "AI 요약을 생성 중입니다..."}
+          {character.historySum || "AI 요약을 생성 중입니다..."}
         </MandarinText>
       </View>
 
@@ -390,7 +262,7 @@ function RelationTabContent({
           말투, 성격
         </MandarinText>
         <MandarinText className="text-[14px] text-gray-600 leading-6">
-          {aiSummary?.personality || "AI 요약을 생성 중입니다..."}
+          {"AI 요약을 생성 중입니다..."}
         </MandarinText>
       </View>
     </View>

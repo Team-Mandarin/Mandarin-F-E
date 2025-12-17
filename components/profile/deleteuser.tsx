@@ -18,7 +18,8 @@ export default function DeleteUser({
       }
       await userService.deleteUser(id);
       await authService.logout();
-      router.replace("/login");
+      router.dismissAll();
+      router.push("/login");
     } catch (error) {
       console.error(error);
     }

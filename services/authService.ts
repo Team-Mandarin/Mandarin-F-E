@@ -68,7 +68,8 @@ export const authService = {
    */
   logout: async (): Promise<void> => {
     await AsyncStorage.multiRemove(["id"]);
-    router.replace("/home");
+    router.dismissAll();
+    router.push("/home");
   },
 
   /**
