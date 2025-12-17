@@ -18,7 +18,7 @@ const getBaseUrl = () => {
 // axios 인스턴스 생성
 const api = axios.create({
   baseURL: getBaseUrl(),
-  timeout: 360000,
+  timeout: 660000,
   headers: {
     "Content-Type": "application/json",
   },
