@@ -11,7 +11,6 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import Toast from "react-native-toast-message";
 
 export default function ChatTab() {
-  // 백엔드 API를 통해 캐릭터 데이터를 불러와 저장 (아직은 구현 x)
   const [characters, setCharacters] = useState<Character[] | null>(null);
 
   useEffect(() => {
@@ -43,17 +42,20 @@ export default function ChatTab() {
     }
 
     console.log("캐릭터 생성 화면으로 이동");
-    // 추후 캐릭터 생성 화면으로 이동하는 로직 구현
-    // router.push("/chat_create");
+
+    // 캐릭터 생성 화면으로 이동
     router.push("/char_add1");
   };
 
   // 캐릭터 상세 화면으로 이동하는 함수
   const handleCharacterDetail = (characterId: number) => {
     console.log(`캐릭터 ${characterId} 상세 화면으로 이동`);
+
+    const character = characters?.find((c) => c.characterId === characterId);
+
     router.push({
       pathname: "/chatlist" as const,
-      params: { character: JSON.stringify(characters?.[characterId]) },
+      params: { character: JSON.stringify(character) },
     } as any);
   };
 
@@ -82,7 +84,7 @@ export default function ChatTab() {
           <ChatListItem
             characterId={item.characterId}
             name={item.characterName}
-            imageUrl={item.imageUrl || ""}
+            characterImg={item.characterImg || ""}
             onPress={handleCharacterDetail}
           />
         )}

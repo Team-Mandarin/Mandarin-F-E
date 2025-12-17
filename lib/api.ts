@@ -4,6 +4,8 @@ import axios from "axios";
 // ⚠️ 실제 디바이스(Expo Go)에서 테스트할 때는 PC의 IP 주소를 사용하세요
 const DEV_API_URL = "http://15.164.177.244:8080";
 
+export const SERVER_URL = "http://15.164.177.244:8080";
+
 // 환경에 따른 Base URL 설정
 const getBaseUrl = () => {
   if (__DEV__) {
@@ -16,7 +18,7 @@ const getBaseUrl = () => {
 // axios 인스턴스 생성
 const api = axios.create({
   baseURL: getBaseUrl(),
-  timeout: 10000,
+  timeout: 360000,
   headers: {
     "Content-Type": "application/json",
   },

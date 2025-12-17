@@ -1,8 +1,12 @@
+import { authService } from "@/services/authService";
+import { chatService } from "@/services/chatService";
+import { userService } from "@/services/userService";
+import { Character, User } from "@/types/api";
 import DateTimePicker, {
   DateTimePickerEvent,
 } from "@react-native-community/datetimepicker";
 import { router } from "expo-router";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   KeyboardAvoidingView,
   Platform,
@@ -11,29 +15,19 @@ import {
   TextInput,
   View,
 } from "react-native";
+import ChatCreateLoad from "../../app/(character)/chatcreateload";
 import MandarinText from "../ui/MandarinText";
 import AiChat from "./aichat";
 import UserButton from "./userbutton";
 
-type PurposeType = "PAST" | "FUTURE";
-type CategoryType =
-  | "EMOTIONAL_MISTAKE"
-  | "MISCOMMUNICATION"
-  | "CONTACT_ISSUE"
-  | "BREAKUP_PROCESS"
-  | "REALITY_PROBLEM"
-  | "RELATION_TENSION"
-  | "PERSONAL_BOUNDARY"
-  | "FAMILY_FRIEND_ISSUE"
-  | "BREAKUP_FUTURE"
-  | "EVENT_PREPARATION";
+import {
+  CATEGORY_OPTIONS,
+  CategoryType,
+  PURPOSE_LABELS,
+  PurposeType,
+} from "@/constants/simulationType";
 
 const MANDARIN_IMG = require("@/assets/images/mandarin_large.png");
-
-const PURPOSE_LABELS: Record<PurposeType, string> = {
-  PAST: "후회",
-  FUTURE: "불확실성",
-};
 
 const GUIDE_MESSAGES: Record<PurposeType, string> = {
   PAST: "시뮬레이션을 통해 후회하는 행동에 대한 구체적인 상황이나 주제를 알려주세요.",
@@ -41,31 +35,33 @@ const GUIDE_MESSAGES: Record<PurposeType, string> = {
     "시뮬레이션을 통해 불확실성을 줄이고 연습을 하고 싶은 구체적인 상황이나 주제를 알려주세요.",
 };
 
-const CATEGORY_OPTIONS: Record<
-  PurposeType,
-  { label: string; value: CategoryType }[]
-> = {
-  PAST: [
-    { label: "감정적 다툼, 말실수", value: "EMOTIONAL_MISTAKE" },
-    { label: "서운함, 불만 표현 실패", value: "MISCOMMUNICATION" },
-    { label: "연락, 시간 배분 문제", value: "CONTACT_ISSUE" },
-    { label: "고백, 이별 후속 처리", value: "BREAKUP_PROCESS" },
-    { label: "현실적인 문제 대처", value: "REALITY_PROBLEM" },
-  ],
-  FUTURE: [
-    { label: "고백, 관계 진전", value: "RELATION_TENSION" },
-    { label: "민감한 요구나 부탁", value: "PERSONAL_BOUNDARY" },
-    { label: "가족, 친구 문제", value: "FAMILY_FRIEND_ISSUE" },
-    { label: "이별 통보, 대처", value: "BREAKUP_FUTURE" },
-    { label: "기념일, 이벤트 계획", value: "EVENT_PREPARATION" },
-  ],
-};
-
-export default function ChatCreatePage() {
+export default function ChatCreatePage({
+  characterId,
+}: {
+  characterId: number;
+}) {
   const scrollViewRef = useRef<ScrollView>(null);
-  const username = "만다린";
-  const charname = "캐릭터이름";
-  const simulationId = 0;
+  const [user, setUser] = useState<User | null>(null);
+  const [character, setCharacter] = useState<Character | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      const id = Number(await authService.getId());
+      const response = await userService.getUser(id);
+      setUser(response);
+    };
+
+    const fetchCharacter = async () => {
+      const response = await chatService.getCharacter(characterId);
+      setCharacter(response.data);
+      console.log(response);
+    };
+
+    fetchUser();
+    fetchCharacter();
+  }, []);
+
   const [selectedPurpose, setSelectedPurpose] = useState<PurposeType | null>(
     null
   );
@@ -102,7 +98,29 @@ export default function ChatCreatePage() {
     }
   };
 
-  return (
+  const createSimulation = async () => {
+    setIsLoading(true);
+    const simulation = await chatService.createSimulation({
+      id: Number(user?.data.id),
+      characterId: character?.characterId || -1,
+      simulationName: chatName,
+      purpose: selectedPurpose || "",
+      category: selectedCategory || "",
+      time: date?.toISOString() || "",
+    });
+    setIsLoading(false);
+    console.log(simulation);
+    router.replace({
+      pathname: "/chatcreateload",
+      params: {
+        simulationId: String(simulation.simulationId),
+      },
+    });
+  };
+
+  return isLoading ? (
+    <ChatCreateLoad setIsLoading={setIsLoading} isLoading={isLoading} />
+  ) : (
     <KeyboardAvoidingView behavior="padding" className="flex-1">
       <ScrollView
         ref={scrollViewRef}
@@ -113,14 +131,14 @@ export default function ChatCreatePage() {
       >
         <View className="px-4 py-2 mb-2">
           <AiChat
-            label={`안녕하세요! 저는 ${username}님의 연애 시뮬레이션을 도와드릴 만다린이에요!`}
+            label={`안녕하세요! 저는 ${user?.data.username}님의 연애 시뮬레이션을 도와드릴 만다린이에요!`}
             image={MANDARIN_IMG}
           />
           <AiChat
-            label={`${charname}(이)랑 대화 시뮬레이션을 진행하기 전에, ${username}님의 고민을 정확히 파악하기 위해 몇 가지 질문을 드릴게요`}
+            label={`${character?.characterName}(이)랑 대화 시뮬레이션을 진행하기 전에, ${user?.data.username}님의 고민을 정확히 파악하기 위해 몇 가지 질문을 드릴게요`}
           />
           <AiChat
-            label={`${username}님은 ${charname}(와)과의 관계에서 '후회'를 다루고 싶으신가요, 아니면 '불확실성'을 다루고 싶으신가요?`}
+            label={`${user?.data.username}님은 ${character?.characterName}(와)과의 관계에서 '후회'를 다루고 싶으신가요, 아니면 '불확실성'을 다루고 싶으신가요?`}
           />
 
           <View className="flex-row gap-2 justify-end mb-3">
@@ -191,9 +209,9 @@ export default function ChatCreatePage() {
           {date && (
             <>
               <AiChat
-                label={`완벽해요! ${username}님의 ${charname}과(와)의 대화가 있었던 ${formatDate(
-                  date
-                )}으로 돌아갈게요`}
+                label={`완벽해요! ${user?.data.username}님의 ${
+                  character?.characterName
+                }과(와)의 대화가 있었던 ${formatDate(date)}으로 돌아갈게요`}
                 image={MANDARIN_IMG}
               />
               <AiChat label={`마지막으로 사용할 채팅방 이름을 설정해주세요.`} />
@@ -234,19 +252,14 @@ export default function ChatCreatePage() {
               {chatNameConfirmed && (
                 <>
                   <AiChat
-                    label={`${charname}을 만나러 가시겠어요?`}
+                    label={`${character?.characterName}을 만나러 가시겠어요?`}
                     image={MANDARIN_IMG}
                   />
                   <UserButton
                     className="w-60 bg-[#A0C862]"
                     label="만나러 가기"
                     onPress={() => {
-                      router.push({
-                        pathname: "/chatcreateload",
-                        params: {
-                          simulationId: String(simulationId),
-                        },
-                      });
+                      createSimulation();
                     }}
                   />
                 </>

@@ -5,18 +5,16 @@ import { useLocalSearchParams } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function TriggerPoint() {
-  const { keyword, percentage } = useLocalSearchParams<{
-    keyword: string;
-    percentage: string;
-  }>();
+  const { characterReport } = useLocalSearchParams();
+  const characterReportData = JSON.parse(characterReport as string);
 
   return (
     <SafeAreaView className="flex-1 bg-white">
       <Header />
       <MandarinText className="text-2xl font-bold ml-8 mt-4">
-        갈등 유발 유형 TOP 3
+        갈등 유발 유형
       </MandarinText>
-      <TriggerPointPage keyword={keyword} percentage={percentage} />
+      <TriggerPointPage characterReport={characterReportData} />
     </SafeAreaView>
   );
 }

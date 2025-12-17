@@ -1,37 +1,35 @@
+import { chatService } from "@/services/chatService";
+import { Simulation } from "@/types/api";
+import { useFocusEffect } from "expo-router";
+import { useCallback, useState } from "react";
 import { View } from "react-native";
+import MandarinText from "../ui/MandarinText";
 import ChatListCard from "./chatlistcard";
 
-export default function ChatListPage() {
-  const chatList = [
-    {
-      simulation_id: 1,
-      id: 1,
-      character_id: 0,
-      simulation_name: "simulation_name_1",
-      purpose: "FUTURE",
-      category: "EMOTIONAL_MISTAKE",
-      time: "2022-01-01",
-      last_update_time: "2025-01-01",
-      is_finished: false,
-    },
-    {
-      simulation_id: 2,
-      id: 2,
-      character_id: 0,
-      simulation_name: "simulation_name_2",
-      purpose: "FUTURE",
-      category: "EMOTIONAL_MISTAKE",
-      time: "2022-01-01",
-      last_update_time: "2025-01-01",
-      is_finished: true,
-    },
-  ];
+export default function ChatListPage({ characterId }: { characterId: number }) {
+  const [chatList, setChatList] = useState<Simulation[]>([]);
+
+  const fetchChatList = async () => {
+    const response = await chatService.getChatList(characterId);
+    console.log(response.data);
+    setChatList(response.data || []);
+  };
+
+  useFocusEffect(
+    useCallback(() => {
+      fetchChatList();
+    }, [])
+  );
 
   return (
     <View className="mt-4">
-      {chatList.map((chat) => (
-        <ChatListCard key={chat.simulation_id} chat={chat} />
-      ))}
+      {chatList ? (
+        chatList.map((simulation) => (
+          <ChatListCard key={simulation.simulationId} simulation={simulation} />
+        ))
+      ) : (
+        <MandarinText>새로운 채팅을 시작하세요.</MandarinText>
+      )}
     </View>
   );
 }

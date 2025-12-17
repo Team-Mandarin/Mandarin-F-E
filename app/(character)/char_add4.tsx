@@ -4,8 +4,10 @@ import ConfirmDialog from "@/components/ui/ConfirmDialog";
 import Header from "@/components/ui/Header";
 import MandarinText from "@/components/ui/MandarinText";
 import { useCharacterCreate } from "@/contexts/CharacterCreateContext";
+import { chatService } from "@/services/chatService";
 import { Ionicons } from "@expo/vector-icons";
 import * as DocumentPicker from "expo-document-picker";
+import * as FileSystem from "expo-file-system/legacy";
 import { router } from "expo-router";
 import React, { useState } from "react";
 import { ActivityIndicator, Pressable, ScrollView, View } from "react-native";
@@ -19,6 +21,7 @@ export default function CharacterAdd4() {
 
   // [수정 1] uploadedFile을 Context인 data에서 직접 가져옵니다.
   const { data, updateData, isEditMode, resetData } = useCharacterCreate();
+  const [fileUri, setFileUri] = useState<string | null>(null);
 
   // [수정 1] 불필요한 로컬 state 삭제 (const [uploadedFile, setUploadedFile]...)
 
@@ -51,8 +54,7 @@ export default function CharacterAdd4() {
 
       if (!result.canceled && result.assets[0]) {
         // [수정 2] 파일의 이름이 아닌 'URI(경로)'를 Context에 저장
-        const fileUri = result.assets[0].uri;
-        updateData({ uploadedFile: fileUri });
+        setFileUri(result.assets[0].uri);
         console.log("업로드된 파일 URI:", fileUri);
       }
     } catch (error) {
@@ -60,13 +62,40 @@ export default function CharacterAdd4() {
     }
   };
 
-  const handleNext = () => {
-    router.push("/char_add5");
+  const handleNext = async () => {
+    try {
+      // 1. 서버 전송 및 결과 받기
+      const responseData = await chatService.uploadAndMask(fileUri || "");
+      console.log("서버 응답 완료");
+
+      // 2. JSON 데이터를 문자열로 변환
+      const jsonString = responseData.dialogueJson;
+
+      // 3. 임시 파일 경로 생성
+      // cacheDirectory가 null일 수 있으므로 안전하게 처리
+      const cacheDir = (FileSystem.cacheDirectory as string) || "";
+      const fileName = "masked_dialogue.json";
+      const newFileUri = cacheDir + fileName;
+
+      // 4. 파일 쓰기
+      // [수정 2] EncodingType.UTF8 대신 문자열 'utf8' 사용 (에러 방지)
+      await FileSystem.writeAsStringAsync(newFileUri, jsonString, {
+        encoding: "utf8",
+      });
+
+      console.log("임시 파일 생성 완료:", newFileUri);
+
+      // 5. Context 업데이트 및 이동
+      updateData({ uploadedFile: newFileUri });
+      router.push("/char_add5");
+    } catch (error) {
+      console.error("파일 처리 실패:", error);
+    }
   };
 
   // 파일명 표시를 위한 헬퍼 변수
-  const displayFileName = data.uploadedFile
-    ? data.uploadedFile.split("/").pop()
+  const displayFileName = fileUri
+    ? fileUri.split("/").pop()
     : "텍스트 파일 업로드";
 
   return (

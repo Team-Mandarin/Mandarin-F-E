@@ -1,4 +1,4 @@
-import { userService } from "@/services/userService";
+import { authService } from "@/services/authService";
 import { useState } from "react";
 import {
   Keyboard,
@@ -35,10 +35,9 @@ export default function IDInput({ iD, setID, setStep }: NumInputProps) {
 
     try {
       // 아이디 중복 체크 API 호출
-      const response = await userService.checkId(iD);
+      const response = await authService.checkId(iD);
 
       if (response.data === true) {
-        // 중복된 아이디
         setErr("중복된 아이디에요");
       } else {
         // 사용 가능한 아이디 → 다음 단계로 이동

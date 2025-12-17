@@ -1,8 +1,10 @@
 import { DefaultTheme, ThemeProvider } from "@react-navigation/native";
 import { useFonts } from "expo-font";
+import * as NavigationBar from "expo-navigation-bar";
 import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect, useState } from "react";
+import { Platform, StatusBar } from "react-native";
 import "react-native-reanimated";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import Toast from "react-native-toast-message";
@@ -15,6 +17,16 @@ SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
   const [time, setTime] = useState(false);
+
+  useEffect(() => {
+    if (Platform.OS === "android") {
+      StatusBar.setBackgroundColor("#FFFFFF");
+      StatusBar.setBarStyle("dark-content");
+
+      NavigationBar.setBackgroundColorAsync("#FFFFFF");
+      NavigationBar.setButtonStyleAsync("dark");
+    }
+  }, []);
 
   useEffect(() => {
     const timer = setTimeout(() => {
