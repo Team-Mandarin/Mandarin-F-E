@@ -1,4 +1,6 @@
+import { SERVER_URL } from "@/lib/api";
 import { chatService } from "@/services/chatService";
+import { Character } from "@/types/api";
 import { Ionicons } from "@expo/vector-icons";
 import { useEffect, useState } from "react";
 import {
@@ -13,6 +15,7 @@ import AiChat from "./aichat";
 import UserChat from "./userchat";
 
 export default function ChatPage({ simulationId }: { simulationId?: string }) {
+  const [character, setCharacter] = useState<Character | null>(null);
   const [message, setMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isFinished, setIsFinished] = useState(false);
@@ -21,9 +24,16 @@ export default function ChatPage({ simulationId }: { simulationId?: string }) {
   >([]);
 
   useEffect(() => {
+    const fetchCharacter = async () => {};
+
     const fetchSimulation = async () => {
       const response = await chatService.getSimulation(Number(simulationId));
       setIsFinished(response.data.isFinished);
+
+      const responseCharacter = await chatService.getCharacter(
+        response.data.characterId
+      );
+      setCharacter(responseCharacter.data);
     };
 
     const fetchSimulationHistory = async () => {
@@ -49,6 +59,8 @@ export default function ChatPage({ simulationId }: { simulationId?: string }) {
         setMessageList(formattedMessages);
       }
     };
+
+    fetchCharacter();
     fetchSimulation();
     fetchSimulationHistory();
   }, [simulationId]);
@@ -99,7 +111,7 @@ export default function ChatPage({ simulationId }: { simulationId?: string }) {
             <AiChat
               key={msg.id}
               label={msg.content}
-              image={require("@/assets/images/character/4.jpeg")}
+              image={`${SERVER_URL}/uploads/${character?.characterImg}`}
             />
           ) : (
             <UserChat key={msg.id} label={msg.content} />

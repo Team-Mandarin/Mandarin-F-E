@@ -8,6 +8,7 @@ import DateTimePicker, {
 import { router } from "expo-router";
 import { useEffect, useRef, useState } from "react";
 import {
+  Image,
   KeyboardAvoidingView,
   Platform,
   Pressable,
@@ -27,7 +28,8 @@ import {
   PurposeType,
 } from "@/constants/simulationType";
 
-const MANDARIN_IMG = require("@/assets/images/mandarin_large.png");
+const MANDARIN_IMG_SOURCE = require("@/assets/images/mandarin_large.png");
+const MANDARIN_IMG = Image.resolveAssetSource(MANDARIN_IMG_SOURCE).uri;
 
 const GUIDE_MESSAGES: Record<PurposeType, string> = {
   PAST: "시뮬레이션을 통해 후회하는 행동에 대한 구체적인 상황이나 주제를 알려주세요.",

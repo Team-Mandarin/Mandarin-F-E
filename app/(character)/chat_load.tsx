@@ -2,17 +2,13 @@
 
 import { router, useLocalSearchParams } from "expo-router";
 import React, { useEffect, useState } from "react";
-import { Dimensions, ImageBackground, View } from "react-native";
+import { Image, View } from "react-native";
 
+import Header from "@/components/ui/Header";
 import MandarinText from "@/components/ui/MandarinText";
+import { SafeAreaView } from "react-native-safe-area-context";
 
-const { width, height } = Dimensions.get("window");
-
-const LOADING_TEXTS = [
-  "고민을 해결해 줄 만다린을 찾는 중.",
-  "고민을 해결해 줄 만다린을 찾는 중..",
-  "고민을 해결해 줄 만다린을 찾는 중...",
-];
+const LOADING_TEXTS = [".", "..", "..."];
 
 const INTERVAL_MS = 1500; // 1.5초
 
@@ -38,19 +34,35 @@ export default function ChatLoad() {
   }, [textIndex, characterId]);
 
   return (
-    <View className="flex-1">
-      <ImageBackground
-        source={require("@/assets/images/chatbot_loading1.png")}
-        style={{ width, height }}
-        resizeMode="cover"
-      >
-        {/* 텍스트 오버레이 */}
-        <View className="flex-1 justify-start items-center pt-[50%]">
-          <MandarinText className="text-[30px] font-bold text-black">
-            {LOADING_TEXTS[textIndex]}
+    <SafeAreaView className="flex-1 bg-white">
+      <Header />
+      <View className="mt-10 ml-8 gap-2">
+        <MandarinText className="text-5xl font-bold text-black">
+          고민을
+        </MandarinText>
+        <MandarinText className="text-5xl font-bold text-black">
+          해결해줄
+        </MandarinText>
+        <MandarinText className="text-5xl font-bold text-black"></MandarinText>
+        <View className="flex-row">
+          <MandarinText className="text-5xl font-bold text-[#FF9D00]">
+            캐릭터
+          </MandarinText>
+          <MandarinText className="text-5xl font-bold text-black">
+            를
           </MandarinText>
         </View>
-      </ImageBackground>
-    </View>
+        <MandarinText className="text-5xl font-bold text-black">
+          불러오는 중{LOADING_TEXTS[textIndex]}
+        </MandarinText>
+      </View>
+      <View className="items-center mt-20">
+        <Image
+          source={require("@/assets/images/mandarin_large.png")}
+          resizeMode="contain"
+          className="w-60"
+        />
+      </View>
+    </SafeAreaView>
   );
 }
