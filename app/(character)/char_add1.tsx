@@ -1,13 +1,24 @@
-// app/(character)/char_add1.tsx
-
+import { authService } from "@/services/authService";
+import { userService } from "@/services/userService";
+import { User } from "@/types/api";
 import { Ionicons } from "@expo/vector-icons";
 import DateTimePicker from "@react-native-community/datetimepicker"; // 📅 날짜 선택 라이브러리
 import * as ImagePicker from "expo-image-picker"; // 📷 이미지 선택 라이브러리
 import { router } from "expo-router";
 import React, { useEffect, useState } from "react";
-import { Image, Platform, Pressable, ScrollView, TextInput, View } from "react-native";
+import {
+  Image,
+  Platform,
+  Pressable,
+  ScrollView,
+  TextInput,
+  View,
+} from "react-native";
 import RNPickerSelect from "react-native-picker-select"; // 🎡 나이 선택 라이브러리
-import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
+import {
+  SafeAreaView,
+  useSafeAreaInsets,
+} from "react-native-safe-area-context";
 import Toast from "react-native-toast-message";
 
 // 커스텀 컴포넌트 임포트
@@ -40,9 +51,7 @@ const RelationshipButton: React.FC<RelationshipButtonProps> = ({
   <Pressable
     onPress={onPress}
     className={`w-[97px] h-[106px] rounded-xl items-center justify-center border ${
-      isSelected
-        ? "bg-[#FF9D00] border-[#FF9D00]"
-        : "bg-white border-gray-300"
+      isSelected ? "bg-[#FF9D00] border-[#FF9D00]" : "bg-white border-gray-300"
     }`}
     style={{ marginHorizontal: 10 }}
   >
@@ -59,10 +68,11 @@ const RelationshipButton: React.FC<RelationshipButtonProps> = ({
 export default function CharacterAdd1() {
   const insets = useSafeAreaInsets();
   const { data, updateData, resetData, isEditMode } = useCharacterCreate();
-  
+  const [user, setUser] = useState<User | null>(null);
+
   // 폼 상태 관리
   const [name, setName] = useState("");
-  const [age, setAge] = useState<string | null>(null); // 나이
+  const [age, setAge] = useState<string | null>("20"); // 나이
   const [relationshipType, setRelationshipType] = useState<
     "SUM" | "LOVE" | "BREAKUP" | null
   >(null);
@@ -71,6 +81,16 @@ export default function CharacterAdd1() {
   const [characterImage, setCharacterImage] = useState<string | null>(null); // 캐릭터 이미지
   const [showExitDialog, setShowExitDialog] = useState(false); // 나가기 다이얼로그 표시 여부
 
+  useEffect(() => {
+    const fetchUser = async () => {
+      const userId = await authService.getId();
+      if (userId) {
+        const user = await userService.getUser(Number(userId));
+        setUser(user);
+      }
+    };
+    fetchUser();
+  });
   // 편집 모드일 때 기존 데이터 로드
   useEffect(() => {
     if (isEditMode && data) {
@@ -85,8 +105,9 @@ export default function CharacterAdd1() {
   // 갤러리에서 이미지 선택
   const pickImage = async () => {
     // 갤러리 접근 권한 요청
-    const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
-    
+    const permissionResult =
+      await ImagePicker.requestMediaLibraryPermissionsAsync();
+
     if (!permissionResult.granted) {
       alert("갤러리 접근 권한이 필요합니다.");
       return;
@@ -94,7 +115,7 @@ export default function CharacterAdd1() {
 
     // 이미지 선택
     const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ['images'],
+      mediaTypes: ["images"],
       allowsEditing: true,
       aspect: [1, 1],
       quality: 0.8,
@@ -110,7 +131,7 @@ export default function CharacterAdd1() {
 
   // 캘린더에서 날짜 선택 시
   const onDateChange = (event: any, selectedDate?: Date) => {
-    setShowDatePicker(Platform.OS === 'ios'); // iOS는 DatePicker를 유지, Android는 닫기
+    setShowDatePicker(Platform.OS === "ios"); // iOS는 DatePicker를 유지, Android는 닫기
     if (selectedDate) {
       setDateMet(selectedDate);
     }
@@ -136,9 +157,15 @@ export default function CharacterAdd1() {
       dateMet,
       characterImage,
     });
-    
-    console.log("폼 데이터:", { name, age, relationshipType, dateMet, characterImage }); 
-    
+
+    console.log("폼 데이터:", {
+      name,
+      age,
+      relationshipType,
+      dateMet,
+      characterImage,
+    });
+
     // char_add2로 이동
     router.push("/char_add2");
   };
@@ -157,24 +184,23 @@ export default function CharacterAdd1() {
 
   return (
     <SafeAreaView className="flex-1 bg-[#FCFCFC]" edges={["top"]}>
-      <Header 
-        showBackButton={true} 
-        onBack={handleBack} 
-        className="bg-[#FCFCFC]" 
+      <Header
+        showBackButton={true}
+        onBack={handleBack}
+        className="bg-[#FCFCFC]"
       />
-      
-      <ScrollView 
-        className="flex-1 px-5" 
+
+      <ScrollView
+        className="flex-1 px-5"
         contentContainerStyle={{ paddingBottom: insets.bottom + 10 }}
       >
-        
         {/* 1. 제목 및 설명 */}
         <View className="mt-5 mb-8 pl-5">
           <MandarinText className="text-[32px] font-bold mb-1">
             {isEditMode ? "캐릭터 수정" : "캐릭터 생성"}
           </MandarinText>
           <MandarinText className="text-[12px] text-[#737373] leading-4">
-            [user_name]님의 연인에 대해 말해주세요.{"\n"}
+            {user?.data.username}님의 연인에 대해 말해주세요.{"\n"}
             자세하게 말할수록 실제 연인과 비슷해지는 대화를 할 수 있어요.
           </MandarinText>
         </View>
@@ -189,8 +215,8 @@ export default function CharacterAdd1() {
             onPress={pickImage}
           >
             {characterImage ? (
-              <Image 
-                source={{ uri: characterImage }} 
+              <Image
+                source={{ uri: characterImage }}
                 className="w-full h-full"
                 resizeMode="cover"
               />
@@ -202,7 +228,9 @@ export default function CharacterAdd1() {
 
         {/* 3. 이름 입력 */}
         <View className="mb-8">
-          <MandarinText className="text-[23px] font-bold mb-3">이름</MandarinText>
+          <MandarinText className="text-[23px] font-bold mb-3">
+            이름
+          </MandarinText>
           <TextInput
             placeholder="이름"
             placeholderTextColor="#9999A9"
@@ -214,34 +242,36 @@ export default function CharacterAdd1() {
 
         {/* 4. 나이 입력 (WheelPicker 통합) */}
         <View className="mb-8">
-          <MandarinText className="text-[23px] font-bold mb-3">나이</MandarinText>
+          <MandarinText className="text-[23px] font-bold mb-3">
+            나이
+          </MandarinText>
           <View className="w-[332px] h-[49px] bg-[#F2F2F2] rounded-xl self-center justify-center">
             <RNPickerSelect
               onValueChange={(value) => setAge(value)}
               items={AGE_ITEMS}
-              placeholder={{ 
-                label: "나이", 
-                value: null, 
-                color: '#9999A9' 
+              placeholder={{
+                label: "나이",
+                value: null,
+                color: "#9999A9",
               }}
               style={{
                 inputIOS: {
                   fontSize: 20,
-                  fontWeight: '400',
+                  fontWeight: "400",
                   paddingHorizontal: 16,
-                  color: age ? '#1F2937' : '#9999A9',
+                  color: age ? "#1F2937" : "#9999A9",
                 },
                 inputAndroid: {
                   fontSize: 20,
-                  fontWeight: '400',
+                  fontWeight: "400",
                   paddingHorizontal: 16,
-                  color: age ? '#1F2937' : '#9999A9',
+                  color: age ? "#1F2937" : "#9999A9",
                 },
                 placeholder: {
-                  color: '#9999A9',
+                  color: "#9999A9",
                   fontSize: 30,
-                  fontWeight: '400',
-                }
+                  fontWeight: "400",
+                },
               }}
               value={age}
             />
@@ -281,19 +311,21 @@ export default function CharacterAdd1() {
             onPress={() => setShowDatePicker(true)}
             className="w-[332px] h-[49px] bg-[#F2F2F2] rounded-xl items-center justify-center self-center"
           >
-            <MandarinText 
-              className={`text-[20px] ${dateMet ? 'text-gray-800' : 'text-[#9999A9]'}`}
+            <MandarinText
+              className={`text-[20px] ${
+                dateMet ? "text-gray-800" : "text-[#9999A9]"
+              }`}
             >
-              {dateMet ? dateMet.toLocaleDateString('ko-KR') : "날짜 선택"}
+              {dateMet ? dateMet.toLocaleDateString("ko-KR") : "날짜 선택"}
             </MandarinText>
           </Pressable>
-          
+
           {/* DateTimePicker 렌더링 */}
           {showDatePicker && (
             <DateTimePicker
               value={dateMet || new Date()}
               mode="date"
-              display={Platform.OS === 'ios' ? 'spinner' : 'default'}
+              display={Platform.OS === "ios" ? "spinner" : "default"}
               onChange={onDateChange}
               maximumDate={new Date()}
             />
@@ -302,21 +334,18 @@ export default function CharacterAdd1() {
 
         {/* 7. 계속하기 버튼 */}
         <View className="mb-20 px-5">
-          <Button 
-            label="계속하기" 
-            onPress={handleNext}
-          />
+          <Button label="계속하기" onPress={handleNext} />
         </View>
-        
       </ScrollView>
 
       {/* 나가기 확인 다이얼로그 */}
       <ConfirmDialog
         visible={showExitDialog}
         title="정말 나가시나요?"
-        message={isEditMode 
-          ? `지금 나가시면 캐릭터 수정을 처음부터\n다시 시작해야해요.`
-          : `지금 나가시면 캐릭터 생성을 처음부터\n다시 시작해야해요.`
+        message={
+          isEditMode
+            ? `지금 나가시면 캐릭터 수정을 처음부터\n다시 시작해야해요.`
+            : `지금 나가시면 캐릭터 생성을 처음부터\n다시 시작해야해요.`
         }
         confirmText="나가기"
         cancelText="취소"
@@ -326,4 +355,3 @@ export default function CharacterAdd1() {
     </SafeAreaView>
   );
 }
-

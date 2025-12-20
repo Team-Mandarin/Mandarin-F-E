@@ -1,16 +1,19 @@
-import { Image, ImageSourcePropType, View } from "react-native";
+import { Image, View } from "react-native";
 import MandarinText from "../ui/MandarinText";
 
 interface AiChatProps {
   label: string;
-  image?: ImageSourcePropType;
+  image?: string;
 }
 
 export default function AiChat({ label, image }: AiChatProps) {
   return (
     <View className="flex-row items-start mt-2 mb-2">
       {image ? (
-        <Image source={image} className="w-10 h-10 rounded-full mr-2" />
+        <Image
+          source={{ uri: image }}
+          className="w-10 h-10 rounded-full mr-2"
+        />
       ) : (
         <View className="w-10 h-10 rounded-full mr-2" />
       )}

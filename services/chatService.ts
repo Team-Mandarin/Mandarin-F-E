@@ -194,13 +194,10 @@ export const chatService = {
   createReport: async (
     data: CreateReportRequest
   ): Promise<CreateReportResponse> => {
-    const response = await api.post<CreateReportResponse>(
-      `/chat/report/create`,
-      {
-        simulation_id: data.simulationId,
-        id: data.id,
-      }
-    );
+    const response = await api.post<CreateReportResponse>(`/api/chat/report`, {
+      simulation_id: data.simulationId,
+      id: data.id,
+    });
     return response.data;
   },
 
