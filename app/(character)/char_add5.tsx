@@ -5,6 +5,8 @@ import MandarinText from "@/components/ui/MandarinText";
 import { useCharacterCreate } from "@/contexts/CharacterCreateContext";
 import { authService } from "@/services/authService";
 import { chatService } from "@/services/chatService";
+import { userService } from "@/services/userService";
+import { User } from "@/types/api";
 import { router } from "expo-router";
 import React, { useEffect, useState } from "react";
 import {
@@ -35,7 +37,16 @@ export default function CharacterAdd4() {
 
   // [수정 1] uploadedFile을 Context인 data에서 직접 가져옵니다.
   const { data, updateData, isEditMode, resetData } = useCharacterCreate();
+  const [user, setUser] = useState<User | null>(null);
 
+  useEffect(() => {
+    const fetchUser = async () => {
+      const id = await authService.getId();
+      const user = await userService.getUser(Number(id));
+      setUser(user);
+    };
+    fetchUser();
+  }, []);
   // [수정 1] 불필요한 로컬 state 삭제 (const [uploadedFile, setUploadedFile]...)
 
   const [showExitDialog, setShowExitDialog] = useState(false);
@@ -173,7 +184,19 @@ export default function CharacterAdd4() {
           <MandarinText className="text-[32px] font-bold mb-2">
             카카오톡 닉네임
           </MandarinText>
-          {/* 내용 추가 */}
+          <MandarinText className="text-sm text-[##737373]">
+            카카오톡 대화를 통한 AI 분석안을 제공드리기 위해{"\n"}
+            {user?.data.username}님이 사용하는 카카오톡 닉네임을 확인해주셔야
+            해요.{"\n"}
+            {"\n"}
+            아래 이름이 카카오톡에서 사용하는 닉네임과 다르다면 카카오톡에서
+            {"\n"}
+            사용하는 닉네임을 알려주세요.{"\n"}
+            {"\n"}
+            만약 아래 이름이 카카오톡에서 사용하는 닉네임과 같다면 {"\n"}
+            생성하기 버튼을 눌러 캐릭터를 생성해주세요.{"\n"}
+            {"\n"}
+          </MandarinText>
         </View>
 
         <TextInput
