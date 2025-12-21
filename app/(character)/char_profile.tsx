@@ -1,5 +1,6 @@
 // app/(character)/char_profile.tsx
 
+import { loveTypeInfo } from "@/constants/loveTypeInfo";
 import { Ionicons } from "@expo/vector-icons";
 import { router, useLocalSearchParams } from "expo-router";
 import React, { useEffect, useState } from "react";
@@ -194,16 +195,18 @@ function ProfileTabContent({ character }: { character: Character }) {
     2: "결별",
   };
 
+  const lovetype = loveTypeInfo[character.loveType];
+
   const infoItems = [
     { label: "나이", value: `${character.characterAge}세` },
-    { label: "만난 날짜", value: character.meetDate },
+    { label: "만난 날짜", value: character.meetDate.slice(0, 10) },
     {
       label: "관계 유형",
       value:
         relationshipTypeLabelMap[character.relationType] ||
         character.relationType,
     },
-    { label: "연애 타입", value: character.loveType },
+    { label: "연애 타입", value: lovetype.name },
   ];
 
   return (

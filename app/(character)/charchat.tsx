@@ -8,6 +8,7 @@ import { Simulation } from "@/types/api";
 import { useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
+import ReportCreateLoad from "./reportcreateload";
 
 export default function CharChat() {
   const { simulationId } = useLocalSearchParams<{ simulationId: string }>();
@@ -29,7 +30,7 @@ export default function CharChat() {
 
   return isCreatedReport ? (
     <SafeAreaView className="flex-1 bg-white">
-      <MandarinText>리포트 생성 중</MandarinText>
+      <ReportCreateLoad />
     </SafeAreaView>
   ) : isLoading ? (
     <SafeAreaView className="flex-1 bg-white">

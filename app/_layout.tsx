@@ -10,6 +10,7 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import Toast from "react-native-toast-message";
 import { toastConfig } from "../components/ui/ToastConfig";
 import { CharacterCreateProvider } from "../contexts/CharacterCreateContext";
+import { CharIdProvider } from "../contexts/CharIdContext";
 import { MissionProvider } from "../contexts/MissionContext";
 import "../global.css";
 
@@ -57,10 +58,12 @@ export default function RootLayout() {
     <SafeAreaProvider>
       <ThemeProvider value={DefaultTheme}>
         <CharacterCreateProvider>
-          <MissionProvider>
-            <Stack screenOptions={{ headerShown: false }} />
-            <Toast config={toastConfig} />
-          </MissionProvider>
+          <CharIdProvider>
+            <MissionProvider>
+              <Stack screenOptions={{ headerShown: false }} />
+              <Toast config={toastConfig} />
+            </MissionProvider>
+          </CharIdProvider>
         </CharacterCreateProvider>
       </ThemeProvider>
     </SafeAreaProvider>

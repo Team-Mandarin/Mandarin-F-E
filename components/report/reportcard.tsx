@@ -1,38 +1,57 @@
+import {
+  CATEGORY_OPTIONS,
+  CategoryType,
+  PURPOSE_LABELS,
+  PurposeType,
+} from "@/constants/simulationType";
+import { reportService } from "@/services/reportService";
+import { Report } from "@/types/api";
 import { router } from "expo-router";
+import { useEffect, useState } from "react";
 import { Pressable, View } from "react-native";
 import MandarinText from "../ui/MandarinText";
 
-interface ReportCardProps {
-  title: string;
+type CustomSimulation = {
+  simulationId: number;
+  simulationName: string;
   purpose: string;
   category: string;
-  date: string;
-  score: number;
-  label_key: number[];
-  label_score: number[];
-  report_content: {
-    conversation_log: string;
-    caution: {
-      message: string;
-      content: string;
-    };
-    suggestion: {
-      message: string;
-      content: string;
-    };
-  };
-}
+  time: string;
+};
 
 export default function ReportCard({
-  title,
+  simulationId,
+  simulationName,
   purpose,
   category,
-  date,
-  score,
-  label_key,
-  label_score,
-  report_content,
-}: ReportCardProps) {
+  time,
+}: CustomSimulation) {
+  const [report, setReport] = useState<Report | null>(null);
+  useEffect(() => {
+    const getSimulation = async () => {
+      const response = await reportService.getChatReports();
+
+      const matchedReport = response.data?.find(
+        (report) => report.simulationId === simulationId
+      );
+
+      setReport(matchedReport ?? null);
+    };
+    getSimulation();
+  }, [simulationId]);
+
+  const purposeLabel = PURPOSE_LABELS[purpose as PurposeType] || purpose;
+
+  // category를 한글로 변환
+  const categoryLabel =
+    CATEGORY_OPTIONS[purpose as PurposeType]?.find(
+      (opt) => opt.value === (category as CategoryType)
+    )?.label || category;
+
+  const parsedReportContent = report?.reportContent
+    ? JSON.parse(report.reportContent)
+    : null;
+
   return (
     <View>
       <Pressable
@@ -40,24 +59,23 @@ export default function ReportCard({
           router.push({
             pathname: "/chatreport",
             params: {
-              score,
-              label_key: JSON.stringify(label_key),
-              label_score: JSON.stringify(label_score),
-              report_content: JSON.stringify(report_content),
+              report: JSON.stringify({ report: parsedReportContent }),
             },
           })
         }
       >
         <View className="flex-row w-96 justify-between items-center p-6 bg-[#FCFCFC] rounded-2xl">
           <View>
-            <MandarinText>{title}</MandarinText>
+            <MandarinText>{simulationName}</MandarinText>
             <View className="flex-row">
-              <MandarinText>
-                {purpose} | {category} | {date}
+              <MandarinText className="text-sm text-[#8E8E8E]">
+                {purposeLabel} | {categoryLabel} | {time.slice(0, 10)}
               </MandarinText>
             </View>
           </View>
-          <MandarinText>{score}</MandarinText>
+          <MandarinText className="text-lg font-bold">
+            {report?.scoreAvg}
+          </MandarinText>
         </View>
       </Pressable>
     </View>

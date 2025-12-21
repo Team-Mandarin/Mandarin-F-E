@@ -9,6 +9,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 export default function ChatReport() {
   const { report } = useLocalSearchParams<{ report: string }>();
   const parsedReportResponse = report ? JSON.parse(report) : null;
+  console.log(parsedReportResponse);
 
   const scenarioType = parsedReportResponse?.report?.scenario_type;
 
@@ -25,7 +26,7 @@ export default function ChatReport() {
     : [];
 
   const message =
-    parsedReportResponse?.report.scores.metric_1.key_conversations;
+    parsedReportResponse?.report?.scores?.metric_1?.key_conversations || [];
 
   return (
     <SafeAreaView className="flex-1 bg-white">
@@ -38,7 +39,9 @@ export default function ChatReport() {
         </MandarinText>
         <View className="items-center mt-12">
           <ScoreCircle
-            score={Number(parsedReportResponse.report.report.overall_rating)}
+            score={Number(
+              parsedReportResponse?.report?.report?.overall_rating || 0
+            )}
           />
         </View>
         <View className="w-full border-b border-gray-300 my-4" />
@@ -54,7 +57,7 @@ export default function ChatReport() {
           "
         </MandarinText>
         <View className="px-4 py-2">
-          {message.map((item: any, index: number) =>
+          {message?.map((item: any, index: number) =>
             item.role === "assistant" ? (
               // AI 메시지 - 왼쪽 정렬, 프로필 이미지 포함
               <View key={index} className="flex-row items-start mb-3">
@@ -84,19 +87,19 @@ export default function ChatReport() {
           이런 대화를 했어요
         </MandarinText>
         <MandarinText className="text-base font-light text-left mx-8 mt-4 mb-4">
-          {parsedReportResponse.report.summary}
+          {parsedReportResponse?.report?.summary || ""}
         </MandarinText>
         <MandarinText className="text-2xl font-medium text-left ml-8 mt-8">
           대화를 분석해 봤어요
         </MandarinText>
         <MandarinText className="text-base font-light text-left mx-8 mt-4 mb-4">
-          {parsedReportResponse.report.report.analysis}
+          {parsedReportResponse?.report?.report?.analysis || ""}
         </MandarinText>
         <MandarinText className="text-2xl font-medium text-left ml-8 mt-8">
           이렇게는 어때요?
         </MandarinText>
         <MandarinText className="text-base font-light text-left mx-8 mt-4 mb-4">
-          {parsedReportResponse.report.report.feedback}
+          {parsedReportResponse?.report?.report?.feedback || ""}
         </MandarinText>
       </ScrollView>
     </SafeAreaView>

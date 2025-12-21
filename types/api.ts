@@ -177,6 +177,17 @@ export interface Chat {
   full_dialogue: string;
 }
 
+export interface Simulation {
+  category: string;
+  characterId: number;
+  isFinished: boolean;
+  lastUpdateTime: string;
+  purpose: string;
+  simulationId: number;
+  simulationName: string;
+  time: string;
+}
+
 export interface Chats {
   code: number;
   message?: string;
@@ -342,4 +353,33 @@ export interface CharacterReports {
   code: number;
   message?: string;
   data?: CharacterReport[];
+}
+
+export interface ChatReportAvgResponse {
+  code?: number;
+  message?: string;
+  data?: ReportAvg[];
+}
+
+export interface ReportAvg {
+  avgMandarinScore: number;
+  totalLabelKey: "F1" | "F2" | "F3" | "P1" | "P2" | "P3";
+  totalLabelScore: number;
+}
+
+export interface chatReport {
+  chatReportId: number;
+  simulationId: number;
+  characterId: number;
+  scoreAvg: number;
+  labelKey: number;
+  labelScore: number;
+  reportContent: string;
+  createdAt: string;
+}
+
+export interface chatReports {
+  code: number;
+  message?: string;
+  data?: chatReport[];
 }
