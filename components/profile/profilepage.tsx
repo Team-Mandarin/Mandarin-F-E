@@ -55,6 +55,10 @@ export default function ProfilePage() {
             onPress={() => router.push("/newlovetypetest")}
           />
           <ProfileButton
+            label="연애 타입 정보 보기"
+            onPress={() => router.push("/lovetypeinfo")}
+          />
+          <ProfileButton
             label="자료 출처"
             onPress={() => router.push("/datasource")}
           />

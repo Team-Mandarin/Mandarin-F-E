@@ -4,12 +4,15 @@ import ConfirmDialog from "@/components/ui/ConfirmDialog";
 import Header from "@/components/ui/Header";
 import MandarinText from "@/components/ui/MandarinText";
 import { useCharacterCreate } from "@/contexts/CharacterCreateContext";
+import { authService } from "@/services/authService";
 import { chatService } from "@/services/chatService";
+import { userService } from "@/services/userService";
+import { User } from "@/types/api";
 import { Ionicons } from "@expo/vector-icons";
 import * as DocumentPicker from "expo-document-picker";
 import * as FileSystem from "expo-file-system/legacy";
 import { router } from "expo-router";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ActivityIndicator, Pressable, ScrollView, View } from "react-native";
 import {
   SafeAreaView,
@@ -18,7 +21,16 @@ import {
 
 export default function CharacterAdd4() {
   const insets = useSafeAreaInsets();
+  const [user, setUser] = useState<User | null>(null);
 
+  useEffect(() => {
+    const fetchUser = async () => {
+      const id = await authService.getId();
+      const user = await userService.getUser(Number(id));
+      setUser(user);
+    };
+    fetchUser();
+  }, []);
   // [수정 1] uploadedFile을 Context인 data에서 직접 가져옵니다.
   const { data, updateData, isEditMode, resetData } = useCharacterCreate();
   const [fileUri, setFileUri] = useState<string | null>(null);
@@ -114,7 +126,28 @@ export default function CharacterAdd4() {
           <MandarinText className="text-[32px] font-bold mb-2">
             대화 내용 입력
           </MandarinText>
-          {/* 내용 추가 */}
+          <MandarinText className="text-sm text-black">
+            {user?.data.username}님의 연인과 나눴던 카카오톡 대화 내용을
+            업로드할 수 있어요.{"\n"}
+          </MandarinText>
+          <MandarinText className="text-sm text-[#737373]">
+            AI 말투 학습에 사용되는 주요 데이터이므로 높은 몰입감을 경험할 수
+            있어요.{"\n"}
+            {"\n"}
+            대화에 포함된 주요 개인정보는 모두 마스킹하여 안전하게 {"\n"}
+            처리 및 관리되며 저희를 포함한 그 누구도 확인할 수 없으니{"\n"}
+            안심하셔도 돼요.{"\n"}
+            {"\n"}
+            아래와 같은방법으로 대화 데이터를 다운로드할 수 있어요.
+          </MandarinText>
+          <MandarinText className="text-sm text-[#FF9D00]">
+            대화방 {">"} 오른쪽 상단 석 삼자 모양 메뉴 {">"} 채팅방 설정 {"\n"}
+            {">"} 대화 내용 내보내기{"\n"}
+          </MandarinText>
+          <MandarinText className="text-sm text-[#737373]">
+            다운로드한 카카오톡 대화 데이터 .txt 파일을{"\n"}
+            아래 첨부 버튼을 통해 업로드해주세요.
+          </MandarinText>
         </View>
 
         {/* 2. 파일 업로드 버튼 */}
