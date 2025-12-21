@@ -10,8 +10,7 @@ import MandarinText from "../ui/MandarinText";
 
 const JUICE_HEIGHT = 96;
 
-export default function Juice() {
-  const score = 77;
+export default function Juice({ score }: { score: number }) {
   const [juiceName, setJuiceName] = useState("");
   const [juiceImage, setJuiceImage] = useState<React.ReactNode>(
     <Juice75 height={JUICE_HEIGHT} />
@@ -34,7 +33,17 @@ export default function Juice() {
   }, [score]);
   return (
     <View className="bg-[white] w-96 rounded-2xl p-6 items-center justify-between">
-      <Pressable className="gap-4" onPress={() => router.push("/juicedatail")}>
+      <Pressable
+        className="gap-4"
+        onPress={() =>
+          router.push({
+            pathname: "/juicedatail",
+            params: {
+              score: score,
+            },
+          })
+        }
+      >
         <View className="flex-row items-center justify-between w-full">
           <MandarinText className="text-2xl font-semibold">
             나의 채팅
