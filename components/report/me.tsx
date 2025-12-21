@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { ScrollView, View } from "react-native";
 import MandarinText from "../ui/MandarinText";
 import Juice from "./juice";
@@ -5,6 +6,7 @@ import LineChart from "./LineChart";
 import Score from "./score";
 
 export default function Me() {
+  const [chatReportAvg, setChatReportAvg] = useState<number>(0);
   // 예시 점수 데이터 (7개)
   const scoreData = [65, 78, 72, 85, 80, 92, 88, 50];
   const scoreLabels = ["1일", "2일", "3일", "4일", "5일", "6일", "7일", "8일"];
