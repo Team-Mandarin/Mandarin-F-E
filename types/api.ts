@@ -288,9 +288,34 @@ export interface CreateReportRequest {
   id: number;
 }
 
+export interface KeyConversation {
+  role: string;
+  content: string;
+}
+
+export interface Metric {
+  code: string;
+  name: string;
+  score: number;
+  reason: string;
+  key_conversations: KeyConversation[];
+}
+
 export interface CreateReportResponse {
-  success: boolean;
-  data: Report;
+  report: {
+    summary: string;
+    scores: {
+      metric_1: Metric;
+      metric_2: Metric;
+      metric_3: Metric;
+    };
+    report: {
+      analysis: string;
+      feedback: string;
+      overall_rating: number;
+    };
+    scenario_type: string;
+  };
 }
 
 export interface Report {

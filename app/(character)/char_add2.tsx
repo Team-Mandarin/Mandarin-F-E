@@ -1,7 +1,9 @@
 // app/(character)/char_add2.tsx
 
+import { authService } from "@/services/authService";
+import { userService } from "@/services/userService";
 import { router } from "expo-router";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ScrollView, View } from "react-native";
 import {
   SafeAreaView,
@@ -16,6 +18,7 @@ import Header from "@/components/ui/Header";
 import MandarinText from "@/components/ui/MandarinText";
 import { questions as allQuestions } from "@/constants/lovetypeData";
 import { useCharacterCreate } from "@/contexts/CharacterCreateContext";
+import { User } from "@/types/api";
 
 // id가 1, 5, 2, 10인 질문만 순서대로 가져오기
 const selectedQuestionIds = [1, 5, 2, 10];
@@ -28,6 +31,16 @@ export default function CharacterAdd2() {
   const { data, updateData, isEditMode, resetData } = useCharacterCreate();
   const answers = data.loveTypeAnswers;
   const [showExitDialog, setShowExitDialog] = useState(false);
+  const [user, setUser] = useState<User | null>(null);
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      const id = await authService.getId();
+      const user = await userService.getUser(Number(id));
+      setUser(user);
+    };
+    fetchUser();
+  }, []);
 
   const handleAnswerSelect = (questionId: number, selectedAnswer: number) => {
     updateData({
@@ -102,7 +115,7 @@ export default function CharacterAdd2() {
             상대방 연애 타입
           </MandarinText>
           <MandarinText className="text-[12px] text-[#737373] leading-4">
-            [user_name]님의 연인은 연애 시에 어떤 편인지{"\n"}
+            {user?.data.username}님의 연인은 연애 시에 어떤 편인지{"\n"}
             질문을 읽고 가장 적절하게 선택지를 골라주세요.
           </MandarinText>
         </View>
