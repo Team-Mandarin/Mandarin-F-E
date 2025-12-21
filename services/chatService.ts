@@ -189,15 +189,16 @@ export const chatService = {
 
   /**
    * 보고서 생성
-   * POST /chat/report/create
+   * POST /chat/report
    */
   createReport: async (
     data: CreateReportRequest
   ): Promise<CreateReportResponse> => {
     const response = await api.post<CreateReportResponse>(`/api/chat/report`, {
-      simulation_id: data.simulationId,
+      simulationId: data.simulationId,
       id: data.id,
     });
+
     return response.data;
   },
 

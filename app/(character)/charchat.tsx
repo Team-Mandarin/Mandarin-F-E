@@ -7,12 +7,14 @@ import { chatService } from "@/services/chatService";
 import { Simulation } from "@/types/api";
 import { useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function CharChat() {
   const { simulationId } = useLocalSearchParams<{ simulationId: string }>();
   const [simulation, setSimulation] = useState<Simulation | null>(null);
   const [isFinished, setIsFinished] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [isCreatedReport, setIsCreatedReport] = useState(false);
 
   useEffect(() => {
     const fetchSimulation = async () => {
@@ -21,11 +23,18 @@ export default function CharChat() {
       setIsLoading(false);
       setIsFinished(response.data.isFinished);
     };
+
     fetchSimulation();
   }, [simulationId]);
 
-  return isLoading ? (
-    <MandarinText>Loading...</MandarinText>
+  return isCreatedReport ? (
+    <SafeAreaView className="flex-1 bg-white">
+      <MandarinText>리포트 생성 중</MandarinText>
+    </SafeAreaView>
+  ) : isLoading ? (
+    <SafeAreaView className="flex-1 bg-white">
+      <MandarinText>Loading...</MandarinText>
+    </SafeAreaView>
   ) : (
     <KeyboardAwareView className="flex-1 bg-white">
       <Header
@@ -33,7 +42,10 @@ export default function CharChat() {
         className="w-full text-left"
       >
         {!isFinished && (
-          <CreateReport simulationId={simulation?.simulationId || 0} />
+          <CreateReport
+            simulationId={simulation?.simulationId || 0}
+            setIsCreatedReport={setIsCreatedReport}
+          />
         )}
       </Header>
       <ChatPage simulationId={String(simulation?.simulationId)} />
