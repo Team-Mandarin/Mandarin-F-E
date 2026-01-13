@@ -2,6 +2,7 @@ import { SERVER_URL } from "@/lib/api";
 import { authService } from "@/services/authService";
 import { chatService } from "@/services/chatService";
 import { Character } from "@/types/api";
+import { Ionicons } from "@expo/vector-icons";
 import { useEffect, useRef, useState } from "react";
 import {
   ActivityIndicator,
@@ -65,21 +66,32 @@ export default function CharacterPage() {
             onScroll={handleScroll}
             scrollEventThrottle={16}
             keyExtractor={(item) => item.characterId.toString()}
-            renderItem={({ item }) => (
-              <View
-                className="rounded-2xl overflow-hidden bg-white h-24 mt-4 flex-row justify-between items-center px-4"
-                style={{ width: CARD_WIDTH - 16, marginHorizontal: 8 }}
-              >
-                <Image
-                  source={{ uri: `${SERVER_URL}/uploads/${item.characterImg}` }}
-                  className="w-20 h-20 rounded-full"
-                  resizeMode="cover"
-                />
-                <MandarinText className="text-black text-xl font-bold">
-                  {item.characterName}
-                </MandarinText>
-              </View>
-            )}
+            renderItem={({ item }) => {
+              const itemImageUrl = item.characterImg
+                ? `${SERVER_URL}/uploads/${item.characterImg}`
+                : null;
+              return (
+                <View
+                  className="rounded-2xl overflow-hidden bg-white h-24 mt-4 flex-row justify-between items-center px-4"
+                  style={{ width: CARD_WIDTH - 16, marginHorizontal: 8 }}
+                >
+                  <View className="w-[60px] h-[60px] rounded-full overflow-hidden mr-4 bg-gray-200 items-center justify-center">
+                    {itemImageUrl ? (
+                      <Image
+                        source={{ uri: itemImageUrl }}
+                        className="w-[60px] h-[60px]"
+                        resizeMode="cover"
+                      />
+                    ) : (
+                      <Ionicons name="person" size={30} color="#9CA3AF" />
+                    )}
+                  </View>
+                  <MandarinText className="text-black text-xl font-bold">
+                    {item.characterName}
+                  </MandarinText>
+                </View>
+              );
+            }}
           />
 
           <View className="flex-row justify-center mt-4 gap-2">
@@ -93,7 +105,9 @@ export default function CharacterPage() {
             ))}
           </View>
 
-          <CharacterInfo currentCharacter={currentCharacter} />
+          {currentCharacter && (
+            <CharacterInfo currentCharacter={currentCharacter} />
+          )}
         </>
       ) : (
         <MandarinText>캐릭터가 없습니다.</MandarinText>

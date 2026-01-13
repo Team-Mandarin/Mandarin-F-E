@@ -138,7 +138,7 @@ export default function ChatPage({ simulationId }: { simulationId?: string }) {
       ) : (
         <View className="flex-row items-center justify-between mt-2 px-8 py-2 bg-[#FFB846]">
           <TextInput
-            className="bg-white w-80 text-[#FF9D00] px-2"
+            className="bg-white w-[90%] text-[#FF9D00] px-2"
             placeholder="메시지를 입력해 주세요"
             placeholderTextColor={"#FF9D00"}
             value={message}

@@ -100,7 +100,7 @@ export default function LoginPage() {
                 placeholder="패스워드"
                 editable={!isLoading}
               />
-              <View className="w-full items-start ml-16">
+              <View className="w-96 items-center">
                 <CheckBox
                   label="자동 로그인"
                   checked={autoLogin}

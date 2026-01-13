@@ -38,7 +38,7 @@ export default function CharacterInfo({
   return (
     <View>
       <View className="items-center mt-6 gap-4">
-        <View className="flex-1 items-center w-96 bg-white rounded-2xl p-4">
+        <View className="flex-1 items-center w-96 h-56 bg-white rounded-2xl p-4">
           <Pressable
             className="w-full items-center"
             onPress={() =>
